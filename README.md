@@ -42,26 +42,27 @@ A team event graph over all 18,715 merged PRs records who approves, corrects, re
 **3. A funnel that spends judgment where it matters.**
 Rules on all 208 people, a cheap model on all 16,318 human-authored PRs, an agentic analyst for each of 22 finalists, then two blind decisions, head-to-head checks, a devil's-advocate round and an independent audit. Total LLM cost about $8.
 
+**The funnel**: who runs each stage, and how many people survive it.
+
 ```mermaid
 flowchart LR
-    A["208 people<br/>18,715 merged PRs"] --> R["Recall<br/>rules · script · $0<br/>208 → 82 people"]
-    R --> C["Coarse<br/>DeepSeek V4.1 Flash · $5.6<br/>16,318 PRs triaged → 22 finalists"]
-    C --> F["Fine<br/>Claude analyst × 22<br/>399 deep reads · $0.59"]
-    F --> D["Decision<br/>Claude × 2 blind + checks"]
-    D --> T(["Top 5"])
+    A["208 people<br/>18,715 PRs"] --> R["Recall · rules<br/>→ 82 people<br/>script · $0"]
+    R --> C["Coarse · Flash<br/>16,318 PRs triaged<br/>→ 22 finalists"]
+    C --> F["Fine · Claude<br/>analyst × 22<br/>399 deep reads"]
+    F --> D(["Claude × 2<br/>blind decisions<br/>→ Top 5"])
 ```
+
+**Fine-ranking layers**: each layer up sees less detail and makes more judgment; only the numbers bypass the chain.
 
 ```mermaid
 flowchart BT
-    L0["L0 · rules and raw events (script)<br/>PRs · reviews · commit lineage · changelog"]
-    L1["L1 · PR reads (Flash)<br/>triage every PR · deep-read a stratified sample"]
-    L2["L2 · workstreams and role profile (script, $0)<br/>3–8 streams per person · who reviews whom"]
-    L3["L3 · analyst × 22 (Claude)<br/>one structured report per finalist"]
-    L4["L4 · decisions × 2 (Claude)<br/>blind, names replaced by C01–C22"]
-    G["pairwise in both orders · devil's advocate<br/>fixed gates · independent audit"]
-    M[("comparison matrix<br/>22 people × 14 columns")]
-    L0 --> L1 --> L2 --> L3 --> L4 --> G --> T(["Top 5"])
-    L0 -. numbers skip the chain .-> M -.-> L4
+    L0["L0 · rules and raw events<br/>script"] --> L1["L1 · PR reads<br/>Flash triage + deep-read sample"]
+    L1 --> L2["L2 · workstreams, role profile<br/>script · $0"]
+    L2 --> L3["L3 · analyst × 22<br/>Claude · one report each"]
+    L3 --> L4["L4 · decisions × 2<br/>Claude · blind C01–C22"]
+    L4 --> G["pairwise · devil's advocate<br/>gates · independent audit"]
+    G --> T(["Top 5"])
+    L0 -. "numbers skip the chain" .-> M[("matrix<br/>22 × 14")] -.-> L4
 ```
 
 ## Screenshots
