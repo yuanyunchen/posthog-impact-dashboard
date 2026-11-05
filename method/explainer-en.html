@@ -1,0 +1,811 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How the Ranking Works</title>
+<style>
+:root{
+  --bg:#FBFAF8; --panel:#FFFFFF; --panel-2:#F4F2EE; --line:#E6E2DB; --line-strong:#C7CFD3;
+  --ink:#1C2630; --ink-2:#4A5560; --ink-3:#75838B;
+  --accent:#2C7A9B; --accent-bg:#E4F1F7; --hl-bg:#EEF5F8;
+  --focus:#C8811F; --focus-bg:#FDF1DE; --ok:#3F7A4E; --ok-bg:#E7F1E8;
+  --d-bg:#FBFAF8; --d-border:#E6E2DB; --d-ink:#2A3640; --d-ink-strong:#1C2630; --d-ink-2:#5C6870; --d-cap:#8E9AA1;
+  --d-edge:#8C99A0; --d-rule:#E0DCD4; --d-lane:#F2EFEA;
+  --d-node:#FFFFFF; --d-node-s:#C7CFD3;
+  --d-up:#EAEEF7; --d-up-s:#4A5E8C; --d-main:#E4F1F7; --d-main-s:#2C7A9B;
+  --d-focus:#FDF1DE; --d-focus-s:#C8811F; --d-risk:#FBEAE6; --d-risk-s:#B5462F;
+  --d-ok:#E7F1E8; --d-ok-s:#3F7A4E; --d-neu:#F1F0EC; --d-neu-s:#8B8F86;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"SF Mono",Menlo,Consolas,"DejaVu Sans Mono",monospace;
+  --maxw:1080px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14181C; --panel:#1C2228; --panel-2:#232A31; --line:#2E363E; --line-strong:#3D4851;
+    --ink:#E6EAED; --ink-2:#B4BEC6; --ink-3:#8A96A0; --accent:#6FB6D3; --accent-bg:#1B3440; --hl-bg:#172229;
+    --focus:#E2A651; --focus-bg:#3A2C15; --ok:#86C095; --ok-bg:#1E3324;
+    --d-bg:#1A2026; --d-border:#2E363E; --d-ink:#D8DFE4; --d-ink-strong:#F1F4F6; --d-ink-2:#A9B4BC; --d-cap:#7F8C95;
+    --d-edge:#7C8A93; --d-rule:#323B43; --d-lane:#20272E;
+    --d-node:#222A31; --d-node-s:#4A5761;
+    --d-up:#232C42; --d-up-s:#8C9DD0; --d-main:#17323D; --d-main-s:#5FA8C6;
+    --d-focus:#3A2C15; --d-focus-s:#E2A651; --d-risk:#3D2019; --d-risk-s:#E08A74;
+    --d-ok:#1C3323; --d-ok-s:#7DB88C; --d-neu:#272B28; --d-neu-s:#8F948B;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14181C; --panel:#1C2228; --panel-2:#232A31; --line:#2E363E; --line-strong:#3D4851;
+  --ink:#E6EAED; --ink-2:#B4BEC6; --ink-3:#8A96A0; --accent:#6FB6D3; --accent-bg:#1B3440; --hl-bg:#172229;
+  --focus:#E2A651; --focus-bg:#3A2C15; --ok:#86C095; --ok-bg:#1E3324;
+  --d-bg:#1A2026; --d-border:#2E363E; --d-ink:#D8DFE4; --d-ink-strong:#F1F4F6; --d-ink-2:#A9B4BC; --d-cap:#7F8C95;
+  --d-edge:#7C8A93; --d-rule:#323B43; --d-lane:#20272E;
+  --d-node:#222A31; --d-node-s:#4A5761;
+  --d-up:#232C42; --d-up-s:#8C9DD0; --d-main:#17323D; --d-main-s:#5FA8C6;
+  --d-focus:#3A2C15; --d-focus-s:#E2A651; --d-risk:#3D2019; --d-risk-s:#E08A74;
+  --d-ok:#1C3323; --d-ok-s:#7DB88C; --d-neu:#272B28; --d-neu-s:#8F948B;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px 80px}
+a{color:var(--accent)}
+h1{font-size:29px;line-height:1.28;margin:0 0 10px;letter-spacing:-.01em}
+h2{font-size:21px;line-height:1.35;margin:0 0 14px}
+h3{font-size:16.5px;margin:26px 0 10px}
+p{margin:8px 0} ul,ol{margin:8px 0;padding-left:22px} li{margin:3px 0}
+
+header.top{padding:40px 0 18px}
+.eyebrow{font-size:12.5px;letter-spacing:.12em;color:var(--ink-3);margin-bottom:8px;text-transform:uppercase}
+.lede{font-size:16.5px;color:var(--ink-2);max-width:68ch;margin:0}
+.ids{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.ids span{font:12.5px/1 var(--mono);color:var(--ink-2);background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:5px 8px}
+
+.stats{display:grid;grid-template-columns:1fr 1.6fr 1fr 1fr 1fr 1fr;gap:10px;margin:18px 0 24px}
+.stat{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--line-strong);border-radius:10px;padding:11px 14px}
+.stat .v{white-space:nowrap;font-size:22px;font-weight:650;font-variant-numeric:tabular-nums;line-height:1.25}
+.stat .k{font-size:12.5px;color:var(--ink-3)}
+.stat.ok{border-top-color:var(--ok)}
+
+nav.toc{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);margin:0 -24px;padding:8px 24px;overflow-x:auto;white-space:nowrap}
+nav.toc a{display:inline-block;font-size:13.5px;color:var(--ink-2);text-decoration:none;padding:4px 10px;border-radius:999px}
+nav.toc a:hover,nav.toc a.on{background:var(--accent-bg);color:var(--ink)}
+
+section{padding:34px 0 10px;border-bottom:1px solid var(--line);scroll-margin-top:48px}
+section.hl{background:var(--hl-bg);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:28px 22px 16px;margin:28px 0}
+.badge{display:inline-block;font-size:12px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:var(--panel);border:1px solid var(--accent);border-radius:999px;padding:2px 10px;margin-bottom:10px}
+ul.pts{list-style:none;padding:0;margin:12px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:8px}
+ul.pts li{margin:0;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:8px 12px;font-size:14.5px}
+a.btn{display:inline-block;margin:10px 0 2px;padding:8px 14px;border-radius:8px;background:var(--accent);color:var(--bg);font-weight:600;font-size:14.5px;text-decoration:none}
+a.btn:hover{filter:brightness(1.08)}
+
+figure{margin:0}
+.diagram{background:var(--d-bg);border:1px solid var(--d-border);border-radius:10px;padding:10px;overflow-x:auto}
+.diagram svg{display:block;width:100%;height:auto;min-width:820px}
+.diagram text{font-family:var(--sans);font-size:13px;fill:var(--d-ink)}
+.diagram .t{font-size:14.5px;font-weight:600;fill:var(--d-ink-strong)}
+.diagram .lbl{fill:var(--d-ink-2)}
+.diagram .cap{font-size:12.5px;font-weight:600;fill:var(--d-cap);letter-spacing:.06em;text-transform:uppercase}
+.diagram marker path{stroke:var(--d-edge)}
+.n rect,.n circle{stroke-width:1.4px;fill:var(--d-node);stroke:var(--d-node-s)}
+.n rect{rx:8px;ry:8px}
+.n.up rect,.n.up circle{fill:var(--d-up);stroke:var(--d-up-s)} .n.main rect,.n.main circle{fill:var(--d-main);stroke:var(--d-main-s)}
+.n.focus rect,.n.focus circle{fill:var(--d-focus);stroke:var(--d-focus-s)} .n.risk rect{fill:var(--d-risk);stroke:var(--d-risk-s)}
+.n.ok rect,.n.ok circle{fill:var(--d-ok);stroke:var(--d-ok-s)} .n.neutral rect{fill:var(--d-neu);stroke:var(--d-neu-s);stroke-dasharray:4 3}
+.n.data rect{rx:18px;ry:18px}
+.n.bar rect{rx:3px;ry:3px}
+.edge{fill:none;stroke:var(--d-edge);stroke-width:1.4px;marker-end:url(#arr)}
+.edge.weak{stroke-dasharray:5 4}
+.edge.nm{marker-end:none}
+.rule{stroke:var(--d-rule);stroke-width:1.2px}
+.lane{fill:var(--d-lane)}
+.ic{fill:none;stroke:var(--d-main-s);stroke-width:2px;stroke-linecap:round;stroke-linejoin:round}
+.icf{fill:var(--d-main-s)}
+.er{fill:none;stroke:var(--d-edge);stroke-width:2.4px}
+.ec{fill:none;stroke:var(--d-ok-s);stroke-width:2.4px}
+.ef{fill:none;stroke:var(--d-risk-s);stroke-width:2.4px}
+.dot{fill:var(--d-node-s)} .dot.hi{fill:var(--d-main-s)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--ink-2);margin-top:8px}
+.legend i{display:inline-block;width:13px;height:9px;border-radius:2px;border:1.4px solid;margin-right:5px;vertical-align:middle}
+.legend .up{background:var(--d-up);border-color:var(--d-up-s)} .legend .main{background:var(--d-main);border-color:var(--d-main-s)}
+.legend .focus{background:var(--d-focus);border-color:var(--d-focus-s)}
+.legend .ok{background:var(--d-ok);border-color:var(--d-ok-s)} .legend .neutral{background:var(--d-neu);border-color:var(--d-neu-s);border-style:dashed}
+.legend .plain{background:var(--d-node);border-color:var(--d-node-s)}
+figcaption{font-size:14px;color:var(--ink-2);margin-top:6px}
+figcaption b{color:var(--ink)}
+
+.tbl{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:14px;background:var(--panel)}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--panel-2);font-weight:600}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.nw{white-space:nowrap}
+tr.top td{background:var(--ok-bg)}
+.chip{display:inline-block;font-size:12.5px;border-radius:999px;padding:1px 9px;border:1px solid var(--line-strong);white-space:nowrap}
+.chip.s{border-color:var(--ok);color:var(--ok)} .chip.b{border-color:var(--focus);color:var(--focus)} .chip.v{border-color:var(--ink-3);color:var(--ink-2)}
+
+details{background:var(--panel);border:1px solid var(--line);border-radius:8px;margin:10px 0}
+details>summary{cursor:pointer;padding:8px 14px;font-size:14px;color:var(--ink-2)}
+details[open]>summary{border-bottom:1px solid var(--line)}
+details>div{padding:10px 14px;font-size:14.5px}
+dl.qa dt{font-weight:600;margin-top:8px} dl.qa dd{margin:2px 0 0;color:var(--ink-2)}
+.src{font-size:12.5px;color:var(--ink-3)}
+
+footer{padding:24px 0;color:var(--ink-3);font-size:13px}
+@media (max-width:720px){
+  .wrap{padding:0 16px 60px} nav.toc{margin:0 -16px;padding:8px 16px}
+  h1{font-size:24px} .stats{grid-template-columns:repeat(2,minmax(0,1fr))} .stat.wide{grid-column:span 2}
+  section.hl{padding:22px 14px 12px}
+}
+@media print{nav.toc{display:none} details{break-inside:avoid}}
+.back{display:flex;flex-wrap:wrap;gap:6px 16px;padding:14px 0 0;font-size:14px}
+.back a{text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="back"><a href="../index.html">← Back to dashboard</a><a href="../network.html">Team network</a></div>
+
+<header class="top">
+  <div class="eyebrow">Appendix · how the ranking works · 2026-11-03</div>
+  <h1>A three-stage funnel narrows 208 engineers to 5, spending expensive judgment only where it matters</h1>
+  <p class="lede">Rules recall broadly, a cheap model grades every PR, and Claude studies each finalist before comparing them. Scores advise; agents decide, and every claim cites a PR.</p>
+  <div class="ids"><span>PostHog/posthog</span><span>2026-08-05 → 2026-11-03 (90 days)</span><span>full run 2026-11-03</span></div>
+</header>
+
+<div class="stats">
+  <div class="stat"><div class="k">Merged PRs</div><div class="v">18,715</div></div>
+  <div class="stat wide"><div class="k">People left after each stage</div><div class="v">208→84→22→5</div></div>
+  <div class="stat ok"><div class="k">Triaged · $5.62</div><div class="v">16,318</div></div>
+  <div class="stat ok"><div class="k">Deep reads · $0.59</div><div class="v">399</div></div>
+  <div class="stat ok"><div class="k">Analyst reports</div><div class="v">22</div></div>
+  <div class="stat ok"><div class="k">All model calls</div><div class="v">$7.35</div></div>
+</div>
+
+<nav class="toc" aria-label="Contents">
+  <a href="#s0">Architecture</a><a href="#s1">① Funnel</a><a href="#s2">② Relationships ★</a><a href="#s3">③ Roles</a><a href="#s4">④ Multiple angles</a><a href="#s4b">Audit</a><a href="#s5">Known limits</a><a href="#s6">Validation</a>
+</nav>
+
+<!-- ============ architecture ============ -->
+<section id="s0">
+  <h2>One main chain, two side channels: rules filter, a model grades, Claude judges</h2>
+  <figure>
+    <div class="diagram">
+      <svg viewBox="0 0 960 350" role="img" aria-label="Architecture: data flows through recall and coarse ranking to the analysts and the final decision; side channels are the recall audit, the team event graph and the company brief">
+        <defs><marker id="arr" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M2 1.6L8 5L2 8.4" fill="none" stroke-width="1.6"/></marker></defs>
+        <text class="cap" x="88" y="40" text-anchor="middle">Input</text>
+        <text class="cap" x="244" y="40" text-anchor="middle">Rules · everyone</text>
+        <text class="cap" x="400" y="40" text-anchor="middle">Graded · additive</text>
+        <text class="cap" x="634" y="40" text-anchor="middle">Agentic · comparative</text>
+        <text class="cap" x="868" y="40" text-anchor="middle">Output</text>
+
+        <g class="n up data"><rect x="20" y="60" width="136" height="96"/><text class="t" x="88" y="90" text-anchor="middle">Merged PRs</text><text x="88" y="112" text-anchor="middle">18,715</text><text x="88" y="134" text-anchor="middle">208 people</text></g>
+        <path class="edge" d="M156 108 H176"/>
+        <g class="n main"><rect x="176" y="60" width="136" height="96"/><text class="t" x="244" y="90" text-anchor="middle">Recall</text><text x="244" y="112" text-anchor="middle">5 rule routes</text><text x="244" y="134" text-anchor="middle">→ 84 people · $0</text></g>
+        <path class="edge" d="M312 108 H332"/>
+        <g class="n main"><rect x="332" y="60" width="136" height="96"/><text class="t" x="400" y="90" text-anchor="middle">Coarse rank</text><text x="400" y="112" text-anchor="middle">Flash grades all</text><text x="400" y="134" text-anchor="middle">→ 22 people · $5.62</text></g>
+        <path class="edge" d="M468 108 H488"/>
+        <g class="n main"><rect x="488" y="60" width="136" height="96"/><text class="t" x="556" y="90" text-anchor="middle">Analysts</text><text x="556" y="112" text-anchor="middle">Claude × 22</text><text x="556" y="134" text-anchor="middle">399 deep reads</text></g>
+        <path class="edge" d="M624 108 H644"/>
+        <g class="n main"><rect x="644" y="60" width="136" height="96"/><text class="t" x="712" y="90" text-anchor="middle">Final decision</text><text x="712" y="112" text-anchor="middle">Claude × 2</text><text x="712" y="134" text-anchor="middle">+ 4 checks</text></g>
+        <path class="edge" d="M780 108 H800"/>
+        <g class="n ok data"><rect x="800" y="60" width="136" height="96"/><text class="t" x="868" y="90" text-anchor="middle">Top 5</text><text x="868" y="112" text-anchor="middle">+ ranks 6–10</text><text x="868" y="134" text-anchor="middle">each argued</text></g>
+
+        <path class="edge" d="M244 156 V236"/><text class="lbl" x="252" y="200">non-recalled PRs</text>
+        <g class="n neutral"><rect x="176" y="236" width="136" height="64"/><text class="t" x="244" y="262" text-anchor="middle">Recall audit</text><text x="244" y="284" text-anchor="middle">300 random PRs</text></g>
+        <path class="edge" d="M312 268 H400 V156"/><text class="lbl" x="408" y="215">+2 people</text>
+
+        <g class="n main data"><rect x="488" y="236" width="136" height="64"/><text class="t" x="556" y="262" text-anchor="middle">Team event graph</text><text x="556" y="284" text-anchor="middle">7 events · 204 people</text></g>
+        <path class="edge" d="M556 236 V156"/><text class="lbl" x="564" y="200">network position</text>
+        <g class="n main data"><rect x="644" y="236" width="136" height="64"/><text class="t" x="712" y="262" text-anchor="middle">Company brief</text><text x="712" y="284" text-anchor="middle">facts, no verdicts</text></g>
+        <path class="edge" d="M712 236 V156"/><text class="lbl" x="720" y="200">company context</text>
+
+        <path class="edge" d="M88 156 V330 H712 V300"/>
+        <path class="edge" d="M556 330 V300"/>
+        <text class="lbl" x="330" y="322" text-anchor="middle">reviews · commit lineage · changelog · team pages</text>
+      </svg>
+    </div>
+    <div class="legend"><span><i class="up"></i>input data</span><span><i class="main"></i>processing (all run on full data)</span><span><i class="neutral"></i>side check</span><span><i class="ok"></i>output</span><span>main-chain arrow = next step</span></div>
+    <figcaption><b>Reading it:</b> left to right the pool shrinks from 208 to 5 while the judgment per person gets more expensive.</figcaption>
+  </figure>
+  <ul class="pts">
+    <li>Rules see everyone for $0; Flash grades all 16k PRs for $5.62</li>
+    <li>Claude only ever sees 22 people</li>
+    <li>Side channels: an audit for rule blind spots, a graph for team position</li>
+  </ul>
+  <details><summary>Details</summary><div>
+    <p>"Flash" is a low-cost DeepSeek model: about $0.00034 per triage and $0.0015 per deep read. Claude runs as agent sessions and is not billed per call. The $7.35 total covers every cached DeepSeek call, development runs included.</p>
+  </div></details>
+</section>
+
+<!-- ============ ① funnel ============ -->
+<section id="s1">
+  <h2>① Funnel: fewer people at each stage, deeper reading of each PR</h2>
+  <figure>
+    <div class="diagram">
+      <svg viewBox="0 0 960 330" role="img" aria-label="Three-stage funnel: people in and kept, reading depth, executor and cost per stage">
+        <text class="cap" x="20" y="30">Stage</text>
+        <text class="cap" x="130" y="30">In → kept (bar = people)</text>
+        <text class="cap" x="545" y="30">How deep each PR is read</text>
+        <text class="cap" x="785" y="30">Who · cost</text>
+        <path class="rule" d="M20 42 H940"/>
+
+        <text class="t" x="20" y="80">Recall</text><text class="lbl" x="20" y="100">rules · all</text>
+        <g class="n neutral bar"><rect x="130" y="68" width="330" height="34"/></g>
+        <g class="n main bar"><rect x="130" y="68" width="133" height="34"/></g>
+        <text x="468" y="90">208 → 84</text>
+        <text x="545" y="80">No content: PR and review</text><text x="545" y="100">counts, file paths, line counts</text>
+        <text x="785" y="80">Script · $0 · seconds</text><text x="785" y="100">Audit 300 PRs → +2</text>
+        <path class="rule" d="M20 125 H940"/>
+
+        <text class="t" x="20" y="170">Coarse</text><text class="lbl" x="20" y="190">additive</text>
+        <g class="n neutral bar"><rect x="130" y="158" width="133" height="34"/></g>
+        <g class="n main bar"><rect x="130" y="158" width="35" height="34"/></g>
+        <text x="271" y="180">84 → 22</text>
+        <text x="545" y="170">All 16,318 human PRs: title, body</text><text x="545" y="190">(6,000 chars), 60 paths; no diff</text>
+        <text x="785" y="170">Flash · $5.62 · 0 errors</text><text x="785" y="190">routes: score, team, major</text>
+        <path class="rule" d="M20 215 H940"/>
+
+        <text class="t" x="20" y="258">Fine</text><text class="lbl" x="20" y="278">comparative</text>
+        <g class="n neutral bar"><rect x="130" y="248" width="35" height="34"/></g>
+        <g class="n main bar"><rect x="130" y="248" width="8" height="34"/></g>
+        <text x="173" y="270">22 → 5</text>
+        <text x="545" y="252">Full diff (≤24,000 chars) and</text><text x="545" y="272">reviews; analysts read whole packs</text>
+        <text x="785" y="250">399 deep reads · $0.59</text><text x="785" y="270">Claude analysts × 22</text><text x="785" y="290">Claude deciders × 2</text>
+      </svg>
+    </div>
+    <div class="legend"><span><i class="neutral"></i>people entering the stage</span><span><i class="main"></i>people kept</span><span>one scale for all bars</span></div>
+    <figcaption><b>Reading it:</b> the pool shrinks about 2.5×, 4× and 4× while each PR is read more deeply.</figcaption>
+  </figure>
+  <ul class="pts">
+    <li>Recall errs wide: everyone over the planned cap of 60 stays</li>
+    <li>Coarse ranking only adds up tier points; it judges nothing</li>
+    <li>A "major work" route checks every author; it added eli-r-ph</li>
+  </ul>
+  <details><summary>Details</summary><div>
+    <div class="tbl"><table>
+      <tr><th>Stage</th><th>Selection rule</th><th>Result</th></tr>
+      <tr><td class="nw">Recall</td><td>≥5 PRs or ≥20 reviews (three exemptions), then any of 5 routes; plus the random audit</td><td>208 → 139 active → 82, + 2 from the audit</td></tr>
+      <tr><td class="nw">Coarse</td><td>every human PR graded; tier → episode → × quality factor. Shortlist = top 15 by score ∪ top 5 by team leverage ∪ top 15 by major episodes (ties kept)</td><td>16,318 PRs, 0 LLM errors → 22</td></tr>
+      <tr><td class="nw">Fine</td><td>4 angles × 3 evidence types; one analyst per person; two deciders compare</td><td>22 → 5</td></tr>
+    </table></div>
+    <div class="tbl"><table>
+      <tr><th>Recall route</th><th>Hits</th><th>Only route</th></tr>
+      <tr><td>Rule delivery score, top 40 (path weight × log₂(1+lines))</td><td class="num">40</td><td class="num">7</td></tr>
+      <tr><td>Team leverage, top 15 (reviews × ln(1+authors served))</td><td class="num">15</td><td class="num">4</td></tr>
+      <tr><td>Core-path rule score, top 10</td><td class="num">10</td><td class="num">0</td></tr>
+      <tr><td>Has a PR in the public changelog</td><td class="num">62</td><td class="num">38</td></tr>
+      <tr><td>Has an incident / security / billing label</td><td class="num">1</td><td class="num">0</td></tr>
+    </table></div>
+    <p>The audit samples 300 of the 2,229 PRs by people the rules missed; Piccirello (42 "major" PRs, final #6) and MattBro came in that way. Path weights: generated code 0, docs 0.2, migrations and CI 0.3, tests 0.5, source 1.0 × area factor (core 1.5).</p>
+  </div></details>
+</section>
+
+<!-- ============ ② relationships (highlight) ============ -->
+<section id="s2" class="hl">
+  <span class="badge">★ The main differentiator</span>
+  <h2>② Relationships: impact also shows in what colleagues do with your work</h2>
+  <figure>
+    <div class="diagram">
+      <svg viewBox="0 0 960 400" role="img" aria-label="Team event graph: seven kinds of colleague action point at one engineer and roll up into team position, trust weighting and team structure">
+        <g class="n up"><rect x="20" y="40" width="130" height="110"/><text class="t" x="85" y="90" text-anchor="middle">Reviewers</text><text x="85" y="112" text-anchor="middle">humans only</text></g>
+        <path class="edge" d="M150 62 H420"/><text class="lbl" x="166" y="56">Approved 11,803</text>
+        <path class="edge" d="M150 95 H420"/><text class="lbl" x="166" y="89">Requested changes 216</text>
+        <path class="edge" d="M150 128 H420"/><text class="lbl" x="166" y="122">Commented 383</text>
+        <g class="n up"><rect x="20" y="170" width="130" height="40"/><text class="t" x="85" y="195" text-anchor="middle">Requesters</text></g>
+        <path class="edge" d="M150 190 H420"/><text class="lbl" x="166" y="184">Asked him to review 1,341</text>
+        <g class="n up"><rect x="20" y="225" width="130" height="40"/><text class="t" x="85" y="250" text-anchor="middle">Fixers</text></g>
+        <path class="edge" d="M150 245 H420"/><text class="lbl" x="166" y="239">Follow-up fix to his PR 295</text>
+        <g class="n up"><rect x="20" y="280" width="130" height="40"/><text class="t" x="85" y="305" text-anchor="middle">Reverters</text></g>
+        <path class="edge" d="M150 300 H420"/><text class="lbl" x="166" y="294">Reverted his PR 5</text>
+        <g class="n up"><rect x="20" y="335" width="130" height="40"/><text class="t" x="85" y="360" text-anchor="middle">Later authors</text></g>
+        <path class="edge" d="M150 355 H420"/><text class="lbl" x="166" y="349">Later edited files he changed 37,116</text>
+
+        <g class="n main"><rect x="420" y="40" width="120" height="335"/><text class="t" x="480" y="200" text-anchor="middle">Engineer X</text><text x="480" y="222" text-anchor="middle">one of 204</text></g>
+
+        <path class="edge" d="M540 90 H640"/><text class="lbl" x="552" y="84">per person</text>
+        <path class="edge" d="M540 210 H640"/><text class="lbl" x="552" y="204">weighted</text>
+        <path class="edge" d="M540 330 H640"/><text class="lbl" x="552" y="324">clustered</text>
+        <g class="n ok"><rect x="640" y="40" width="300" height="100"/><text class="t" x="790" y="66" text-anchor="middle">Position in the team</text><text x="790" y="90" text-anchor="middle">first-pass rate, change-request rate</text><text x="790" y="110" text-anchor="middle">how many authors and teams he approves</text><text x="790" y="130" text-anchor="middle">self-repair and AI-only approvals</text></g>
+        <g class="n ok"><rect x="640" y="160" width="300" height="100"/><text class="t" x="790" y="186" text-anchor="middle">Approval-network centrality</text><text x="790" y="210" text-anchor="middle">PageRank on approvals: approvals from</text><text x="790" y="230" text-anchor="middle">central reviewers count more; points flow</text><text x="790" y="250" text-anchor="middle">to author (1.0) and reviewers (0.3)</text></g>
+        <g class="n ok"><rect x="640" y="280" width="300" height="100"/><text class="t" x="790" y="306" text-anchor="middle">Team structure</text><text x="790" y="330" text-anchor="middle">14 review communities; only 18–46%</text><text x="790" y="350" text-anchor="middle">of members share one official team</text><text x="790" y="370" text-anchor="middle">bridges: 9 of the top 10 are finalists</text></g>
+      </svg>
+    </div>
+    <div class="legend"><span><i class="up"></i>colleagues acting</span><span><i class="main"></i>person assessed</span><span><i class="ok"></i>what the graph yields</span><span>edge numbers = full-window event counts</span></div>
+    <figcaption><b>Reading it:</b> approvals and later edits to the same files dominate; reverts are rare (5). Each event is a colleague's verdict.</figcaption>
+  </figure>
+  <ul class="pts">
+    <li>What colleagues do outweighs what a PR description claims</li>
+    <li>Up to 106 later authors edited one engineer's files</li>
+    <li>Review crosses teams: communities match teams at most 46%</li>
+  </ul>
+
+  <h3>Every judgment is relative: within the 22, head to head, in company context</h3>
+  <figure>
+    <div class="diagram">
+      <svg viewBox="0 0 960 290" role="img" aria-label="Three forms of relative judgment: percentiles among the 20, head-to-head comparisons in both orders, and placing each person in company context">
+        <g class="n main"><rect x="20" y="20" width="300" height="250"/>
+          <text class="t" x="170" y="50" text-anchor="middle">Percentile among the 22</text>
+          <path class="rule" d="M50 120 H290"/>
+          <circle class="dot" cx="52" cy="120" r="4"/><circle class="dot" cx="64" cy="120" r="4"/><circle class="dot" cx="77" cy="120" r="4"/><circle class="dot" cx="89" cy="120" r="4"/><circle class="dot" cx="102" cy="120" r="4"/><circle class="dot" cx="114" cy="120" r="4"/><circle class="dot" cx="127" cy="120" r="4"/><circle class="dot" cx="139" cy="120" r="4"/><circle class="dot" cx="152" cy="120" r="4"/><circle class="dot" cx="164" cy="120" r="4"/><circle class="dot" cx="177" cy="120" r="4"/><circle class="dot" cx="189" cy="120" r="4"/><circle class="dot" cx="202" cy="120" r="4"/><circle class="dot" cx="214" cy="120" r="4"/><circle class="dot" cx="227" cy="120" r="4"/><circle class="dot" cx="239" cy="120" r="4"/><circle class="dot hi" cx="252" cy="120" r="6"/><circle class="dot" cx="264" cy="120" r="4"/><circle class="dot" cx="277" cy="120" r="4"/><circle class="dot" cx="289" cy="120" r="4"/>
+          <text class="lbl" x="50" y="100">P0</text><text class="lbl" x="290" y="100" text-anchor="end">P100</text><text x="252" y="146" text-anchor="middle">P84</text>
+          <text x="170" y="190" text-anchor="middle">every signal ranked inside the pool</text>
+          <text x="170" y="212" text-anchor="middle">lower-is-better metrics are flipped,</text>
+          <text x="170" y="234" text-anchor="middle">so P100 always means best</text>
+        </g>
+        <g class="n main"><rect x="330" y="20" width="300" height="250"/>
+          <text class="t" x="480" y="50" text-anchor="middle">Head to head, both orders</text>
+          <g class="n"><rect x="360" y="72" width="240" height="34"/><text x="480" y="94" text-anchor="middle">A shown first → A wins</text></g>
+          <g class="n"><rect x="360" y="116" width="240" height="34"/><text x="480" y="138" text-anchor="middle">B shown first → A wins</text></g>
+          <text x="480" y="190" text-anchor="middle">both agree → a win; otherwise a tie</text>
+          <text x="480" y="212" text-anchor="middle">cancels the model's position bias</text>
+          <text class="t" x="480" y="242" text-anchor="middle">5 of 5 pairs agreed</text>
+        </g>
+        <g class="n main"><rect x="640" y="20" width="300" height="250"/>
+          <text class="t" x="790" y="50" text-anchor="middle">Placed in company context</text>
+          <g class="n"><rect x="670" y="68" width="240" height="30"/><text x="790" y="88" text-anchor="middle">Company brief (facts only)</text></g>
+          <path class="edge" d="M790 98 V110"/>
+          <g class="n"><rect x="670" y="110" width="240" height="30"/><text x="790" y="130" text-anchor="middle">Decider's own read of priorities</text></g>
+          <path class="edge" d="M790 140 V152"/>
+          <g class="n"><rect x="670" y="152" width="240" height="30"/><text x="790" y="172" text-anchor="middle">Each person's role in that picture</text></g>
+          <text x="790" y="212" text-anchor="middle">e.g. "top changer of the area with</text>
+          <text x="790" y="234" text-anchor="middle">15.2% of all major episodes"</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption><b>Reading it:</b> no absolute score decides anything; each person is compared with the others and with the company's needs.</figcaption>
+  </figure>
+  <ul class="pts">
+    <li>A grade means "where among these 22", not a raw number</li>
+    <li>The decider writes its own read of the company first</li>
+    <li>Then places each person: sole approver, bridge, foundation</li>
+  </ul>
+
+  <h3>The interactive network shows who reviews, later edits and fixes whom</h3>
+  <figure>
+    <div class="diagram">
+      <svg viewBox="0 0 960 250" role="img" aria-label="How to read the team network: nodes are people, edges are review, builds-on-code and fix or revert relations">
+        <path class="er" d="M120 90 L260 70"/><path class="ec" d="M120 90 L200 190"/><path class="er" d="M260 70 L340 160"/><path class="ef" d="M200 190 L340 160"/><path class="ec" d="M340 160 L420 80"/>
+        <g class="n main"><circle cx="120" cy="90" r="30"/></g><text class="t" x="120" y="95" text-anchor="middle">#1</text>
+        <g class="n main"><circle cx="260" cy="70" r="16"/></g>
+        <g class="n focus"><circle cx="200" cy="190" r="20"/></g><text class="t" x="200" y="195" text-anchor="middle">#4</text>
+        <g class="n focus"><circle cx="340" cy="160" r="12"/></g>
+        <g class="n main"><circle cx="420" cy="80" r="10"/></g>
+
+        <text class="t" x="500" y="40">Nodes = people</text>
+        <text x="500" y="62">the finalists plus top importance flow, bridges, hubs</text>
+        <text x="500" y="82">size = importance flow · colour = review community · #n = rank</text>
+        <text class="t" x="500" y="120">Edges = relations</text>
+        <path class="er" d="M500 140 H540"/><text x="552" y="145">Review — weight = tier points of reviewed PRs</text>
+        <path class="ec" d="M500 166 H540"/><text x="552" y="171">Same files — later edits to files he wrote</text>
+        <path class="ef" d="M500 192 H540"/><text x="552" y="197">Fix / revert — count of explicit references</text>
+        <text class="lbl" x="500" y="228">click any line for the PRs behind it</text>
+      </svg>
+    </div>
+    <figcaption><b>Reading it:</b> a static key to the live graph, where every line opens the PRs behind it.</figcaption>
+  </figure>
+  <a class="btn" href="../network.html">Open the interactive team network →</a>
+  <ul class="pts">
+    <li>Bots and unattributed AI-agent PRs never appear</li>
+    <li>Focus a person to see their 30 strongest links</li>
+    <li>Colour follows review communities, not the org chart</li>
+  </ul>
+  <details><summary>Details</summary><div>
+    <dl class="qa">
+      <dt>Does high approval-network centrality mean a trusted gatekeeper?</dt><dd>No. It means receiving approvals from central reviewers. fuziontech gave 912 approvals but wrote 9 PRs, so he ranks 139th of 200 on it. He is the hub of a 15-person review community, which is a different kind of leverage.</dd>
+      <dt>Can the company brief mislead?</dt><dd>Yes. Warehouse sources alone holds 18.7% of human PRs. The decider was told to judge whether that is important work or templated breadth, and it concluded much of it is templated catalogue additions (about 870 add-source and add-table PRs).</dd>
+    </dl>
+    <ul>
+      <li>Top bridges by betweenness: rafaeelaudibert (reaches 12 communities), gantoine (13), Gilbert09 (11). 9 of the top 10 bridges are among the 22 finalists. Most later authors of the same files: Gilbert09 and webjunkie, 106 each, a proxy for shared code rather than proof of adoption.</li>
+      <li>Single points of approval (one person giving ≥80% of ≥5 approvals in an area): none found in the full run, not yet verified whether that is real or a strict threshold.</li>
+      <li>Review requests are only known for the 2,905 PRs whose review details were fetched; elsewhere they count as unknown, never as 0.</li>
+      <li>Follow-up fix: a fix PR within 14 days that explicitly cites the original, excluding "unrelated / flake / see also" sentences. Later authors of the same files: a later change to a source file he edited by ≥20 lines; files touched by ≥25 people are ignored.</li>
+      <li>Communities: Louvain on the review graph. Person-level metrics with fewer than 5 samples are unknown.</li>
+    </ul>
+  </div></details>
+</section>
+
+<!-- ============ ③ roles ============ -->
+<section id="s3">
+  <h2>③ Roles: abstract upward from PRs to "who is this person"</h2>
+  <figure>
+    <div class="diagram">
+      <svg viewBox="0 0 960 490" role="img" aria-label="Fine-stage hierarchy: raw events, PR assessment, workstreams and role profile, analysts, final decision; the comparison matrix goes straight to the top">
+        <text class="t" x="20" y="54">L4</text><text class="lbl" x="20" y="74">Claude × 2</text>
+        <text class="t" x="20" y="154">L3</text><text class="lbl" x="20" y="174">Claude × 22</text>
+        <text class="t" x="20" y="254">L2</text><text class="lbl" x="20" y="274">script · $0</text>
+        <text class="t" x="20" y="354">L1</text><text class="lbl" x="20" y="374">Flash</text>
+        <text class="t" x="20" y="440">L0</text><text class="lbl" x="20" y="460">script</text>
+
+        <g class="n main"><rect x="400" y="30" width="240" height="56"/><text class="t" x="520" y="54" text-anchor="middle">Final decision × 2</text><text x="520" y="75" text-anchor="middle">rank · compare · argue the top 5</text></g>
+
+        <path class="edge nm" d="M290 130 V110 H735"/><path class="edge nm" d="M550 130 V110"/><path class="edge nm" d="M735 130 V110"/>
+        <path class="edge" d="M520 110 V86"/>
+        <text class="lbl" x="300" y="104">reported up: claim + number + evidence ID</text>
+        <g class="n main"><rect x="200" y="130" width="180" height="56"/><text class="t" x="290" y="154" text-anchor="middle">Analyst · person A</text><text x="290" y="175" text-anchor="middle">role · work · 4 grades</text></g>
+        <g class="n main"><rect x="470" y="130" width="160" height="56"/><text class="t" x="550" y="154" text-anchor="middle">Analyst · person B</text><text x="550" y="175" text-anchor="middle">same report contract</text></g>
+        <g class="n neutral"><rect x="670" y="130" width="130" height="56"/><text class="t" x="735" y="154" text-anchor="middle">… 22 in all</text><text x="735" y="175" text-anchor="middle">one each</text></g>
+
+        <path class="edge nm" d="M180 230 V210 H475"/><path class="edge nm" d="M340 230 V210"/><path class="edge nm" d="M475 230 V210"/>
+        <path class="edge" d="M290 210 V186"/>
+        <g class="n main"><rect x="110" y="230" width="140" height="56"/><text class="t" x="180" y="254" text-anchor="middle">Role profile</text><text x="180" y="275" text-anchor="middle">who reviews whom</text></g>
+        <g class="n main"><rect x="270" y="230" width="140" height="56"/><text class="t" x="340" y="254" text-anchor="middle">Workstream W1</text><text x="340" y="275" text-anchor="middle">top 3 PRs · partners</text></g>
+        <g class="n neutral"><rect x="430" y="230" width="90" height="56"/><text class="t" x="475" y="254" text-anchor="middle">… 3–8</text><text x="475" y="275" text-anchor="middle">streams</text></g>
+
+        <path class="edge nm" d="M265 330 V310 H425"/><path class="edge nm" d="M425 330 V310"/>
+        <path class="edge" d="M340 310 V286"/>
+        <g class="n main"><rect x="195" y="330" width="140" height="56"/><text class="t" x="265" y="354" text-anchor="middle">Triage · all PRs</text><text x="265" y="375" text-anchor="middle">tier + one line</text></g>
+        <g class="n main"><rect x="350" y="330" width="150" height="56"/><text class="t" x="425" y="354" text-anchor="middle">Deep read · sample</text><text x="425" y="375" text-anchor="middle">5 scores + quotes</text></g>
+
+        <g class="n up data"><rect x="110" y="420" width="530" height="46"/><text class="t" x="375" y="448" text-anchor="middle">Raw events: PRs · reviews · commit lineage · changelog</text></g>
+        <path class="edge" d="M180 420 V286"/><path class="edge" d="M265 420 V386"/><path class="edge" d="M425 420 V386"/>
+        <path class="edge" d="M640 443 H760"/><text class="lbl" x="700" y="437" text-anchor="middle">aggregate</text>
+        <g class="n main data"><rect x="760" y="420" width="180" height="46"/><text class="t" x="850" y="440" text-anchor="middle">Comparison matrix</text><text x="850" y="459" text-anchor="middle">22 people × 14 columns</text></g>
+        <path class="edge weak" d="M850 420 V58 H640"/>
+        <text class="lbl" x="840" y="250" text-anchor="end">numbers go straight up,</text><text class="lbl" x="840" y="268" text-anchor="end">never retold by a model</text>
+      </svg>
+    </div>
+    <div class="legend"><span><i class="up"></i>raw data</span><span><i class="main"></i>processing</span><span><i class="neutral"></i>elided siblings</span><span>upward arrow = reports to · dashed = skips layers</span></div>
+    <figcaption><b>Reading it:</b> each layer up sees less detail and makes more judgment; only the numbers bypass the chain.</figcaption>
+  </figure>
+  <ul class="pts">
+    <li>One-to-many: 1 decision → 22 reports → 3–8 workstreams each</li>
+    <li>Workstreams are clustered by script, removing one retelling</li>
+    <li>Analysts never see the reference score</li>
+  </ul>
+
+  <h3>Five controls against information loss between layers</h3>
+  <figure>
+    <div class="diagram">
+      <svg viewBox="0 0 960 200" role="img" aria-label="Five rules that reduce information loss">
+        <g class="n main"><rect x="20" y="20" width="172" height="160"/>
+        <path class="ic" d="M86 46 H118 L128 58 L118 70 H86 Z"/><circle class="icf" cx="94" cy="58" r="3"/>
+        <text class="t" x="106" y="106" text-anchor="middle">Evidence IDs</text><text x="106" y="130" text-anchor="middle">every claim carries a</text><text x="106" y="150" text-anchor="middle">number and PR/metric ID</text></g>
+
+        <g class="n main"><rect x="207" y="20" width="172" height="160"/>
+        <path class="ic" d="M265 72 V62 M277 72 V56 M289 72 V40 M301 72 V60 M313 72 V64"/><circle class="icf" cx="289" cy="40" r="3"/>
+        <text class="t" x="293" y="106" text-anchor="middle">Keep extremes</text><text x="293" y="130" text-anchor="middle">top 3 items and every</text><text x="293" y="150" text-anchor="middle">red flag pass up verbatim</text></g>
+
+        <g class="n main"><rect x="394" y="20" width="172" height="160"/>
+        <path class="ic" d="M454 70 H506 M454 70 V50 H506 V62"/><path class="ic" d="M500 64 L506 70 L500 76"/>
+        <text class="t" x="480" y="106" text-anchor="middle">Numbers by script</text><text x="480" y="130" text-anchor="middle">the matrix goes up as is;</text><text x="480" y="150" text-anchor="middle">models only explain it</text></g>
+
+        <g class="n main"><rect x="581" y="20" width="172" height="160"/>
+        <circle class="ic" cx="667" cy="57" r="16"/><path class="icf" d="M667 57 L667 41 A16 16 0 0 1 682.2 62 Z"/>
+        <text class="t" x="667" y="106" text-anchor="middle">Coverage attached</text><text x="667" y="130" text-anchor="middle">sample size, missing</text><text x="667" y="150" text-anchor="middle">data, diff truncation</text></g>
+
+        <g class="n main"><rect x="768" y="20" width="172" height="160"/>
+        <circle class="ic" cx="848" cy="53" r="12"/><path class="ic" d="M857 62 L868 73"/>
+        <text class="t" x="854" y="106" text-anchor="middle">Drill-down</text><text x="854" y="130" text-anchor="middle">the decider can request</text><text x="854" y="150" text-anchor="middle">more evidence</text></g>
+      </svg>
+    </div>
+    <figcaption><b>Reading it:</b> each control targets one way detail gets lost when a layer summarises the one below.</figcaption>
+  </figure>
+  <ul class="pts">
+    <li>Analysts: a fixed report plus at least 2 questions of their own</li>
+    <li>They check 4 metrics against the 22 before grading</li>
+    <li>When behaviour and PR text disagree, behaviour wins</li>
+  </ul>
+  <details><summary>Details</summary><div>
+    <div class="tbl"><table>
+      <tr><th>Layer</th><th>Reads</th><th>Never reads</th></tr>
+      <tr><td class="nw">L4 decision</td><td>company brief, network summary, 22 reports with names replaced by IDs, comparison matrix and R</td><td>PR text, diffs, raw events</td></tr>
+      <tr><td class="nw">L3 analyst</td><td>one person's pack (profile, workstreams, network position, all PR summaries); 8 query commands; up to 6 extra deep reads</td><td>PR text and diffs; R</td></tr>
+      <tr><td class="nw">L2</td><td>episodes clustered by main product area; review network and team map</td><td>no model calls</td></tr>
+      <tr><td class="nw">L1</td><td>triage: title, body, paths; deep read: full diff and review thread</td><td>other PRs</td></tr>
+    </table></div>
+    <p><b>Fixed report:</b> one-line positioning, 2–3 core contributions, team position, four 1–10 grades (9–10 company-critical · 7–8 team pillar · 5–6 steady · 3–4 local · 1–2 marginal), red flags and counter-evidence, coverage.</p>
+    <p><b>Own questions:</b> for example "is the work bunched around one launch?", "how good is the AI-assisted output?", "did he pick up problems others had dropped?". Each states why, which queries ran, what was found and how it moved a grade.</p>
+  </div></details>
+</section>
+
+<!-- ============ ④ multiple angles ============ -->
+<section id="s4">
+  <h2>④ Multiple angles: scores set the scale, evidence-backed arguments decide</h2>
+  <h3>Each tier doubles the points; splitting one change earns only a quarter per extra PR</h3>
+  <figure>
+    <div class="diagram">
+      <svg viewBox="0 0 960 330" role="img" aria-label="Points per tier with full-run shares, and an episode example">
+        <text class="cap" x="60" y="34">Points per tier</text>
+        <path class="rule" d="M60 250 H500"/>
+        <text x="100" y="242" text-anchor="middle">0</text>
+        <g class="n main bar"><rect x="149" y="238" width="46" height="12"/></g><text x="172" y="230" text-anchor="middle">1</text>
+        <g class="n main bar"><rect x="221" y="226" width="46" height="24"/></g><text x="244" y="218" text-anchor="middle">2</text>
+        <g class="n main bar"><rect x="293" y="202" width="46" height="48"/></g><text x="316" y="194" text-anchor="middle">4</text>
+        <g class="n main bar"><rect x="365" y="154" width="46" height="96"/></g><text x="388" y="146" text-anchor="middle">8</text>
+        <g class="n main bar"><rect x="437" y="58" width="46" height="192"/></g><text x="460" y="50" text-anchor="middle">16</text>
+        <text x="100" y="272" text-anchor="middle">Mechanical</text><text x="172" y="272" text-anchor="middle">Trivial</text><text x="244" y="272" text-anchor="middle">Routine</text><text x="316" y="272" text-anchor="middle">Substantive</text><text x="388" y="272" text-anchor="middle">Major</text><text x="460" y="272" text-anchor="middle">Landmark</text>
+        <text class="lbl" x="100" y="292" text-anchor="middle">2.5%</text><text class="lbl" x="172" y="292" text-anchor="middle">3.6%</text><text class="lbl" x="244" y="292" text-anchor="middle">24.1%</text><text class="lbl" x="316" y="292" text-anchor="middle">60.2%</text><text class="lbl" x="388" y="292" text-anchor="middle">9.6%</text><text class="lbl" x="460" y="292" text-anchor="middle">0</text>
+        <text class="lbl" x="60" y="318">bottom row: share of all 16,318 human PRs</text>
+
+        <text class="cap" x="545" y="34">Episode rule</text>
+        <text x="545" y="76">Unsplit</text>
+        <g class="n main bar"><rect x="630" y="56" width="192" height="28"/></g><text x="832" y="76">landmark = 16</text>
+        <text x="545" y="120">Split in 4</text>
+        <g class="n neutral bar"><rect x="630" y="100" width="44" height="28"/></g><g class="n neutral bar"><rect x="680" y="100" width="44" height="28"/></g><g class="n neutral bar"><rect x="730" y="100" width="44" height="28"/></g><g class="n neutral bar"><rect x="780" y="100" width="44" height="28"/></g>
+        <text x="832" y="120">4 × substantive</text>
+        <text class="lbl" x="630" y="148">same author, shared files, within 7 days → 1 episode</text>
+        <text x="545" y="180">Episode</text>
+        <g class="n main bar"><rect x="630" y="160" width="84" height="28"/></g><text x="724" y="180">max + 0.25 × rest = 4 + 3 = 7</text>
+        <path class="rule" d="M545 205 H940"/>
+        <text x="545" y="230">Control: 80 unrelated routine PRs = 80 × 2 = 160</text>
+        <text x="545" y="256">Observed: most prolific author, 2,901 scored PRs</text>
+        <text x="545" y="276">→ 987 episodes; 10,524 → 5,324 points (−49%)</text>
+      </svg>
+    </div>
+    <div class="legend"><span><i class="main"></i>points counted</span><span><i class="neutral"></i>individual PRs merged into one episode</span><span>bar height scales with points, from 0</span></div>
+    <figcaption><b>Reading it:</b> one major PR (8) equals four routine ones (2); a landmark split four ways keeps only 7 of its 16.</figcaption>
+  </figure>
+  <ul class="pts">
+    <li>Tiers reflect impact, not size of the change</li>
+    <li>"Major" requires a verbatim quote from the PR body</li>
+    <li>Two majors in one episode score 10, not 16</li>
+  </ul>
+
+  <h3>Four angles, each checked by three kinds of evidence</h3>
+  <figure>
+    <div class="diagram">
+      <svg viewBox="0 0 960 440" role="img" aria-label="Evidence matrix: delivery, system, quality and team angles, each with three evidence types">
+        <path class="ic" d="M242 52 V40 M252 52 V30 M262 52 V36"/>
+        <text class="t" x="276" y="46">Quantitative</text><text class="lbl" x="276" y="66">computed by script</text>
+        <rect class="ic" x="498" y="28" width="18" height="24" rx="2"/><path class="ic" d="M502 36 H512 M502 42 H512"/>
+        <text class="t" x="528" y="46">Model judgment</text><text class="lbl" x="528" y="66">deep read + analyst</text>
+        <circle class="ic" cx="748" cy="34" r="5"/><circle class="ic" cx="764" cy="34" r="5"/><path class="ic" d="M740 52 Q748 42 756 52 M756 52 Q764 42 772 52"/>
+        <text class="t" x="784" y="46">Peer behaviour</text><text class="lbl" x="784" y="66">what colleagues did</text>
+
+        <text class="t" x="20" y="108">Delivery</text><g class="n ok bar"><rect x="20" y="118" width="120" height="12"/></g><text class="lbl" x="148" y="129">50%</text>
+        <g class="n"><rect x="200" y="82" width="240" height="60"/><text x="320" y="108" text-anchor="middle">Delivery estimate</text><text class="lbl" x="320" y="128" text-anchor="middle">episode points, deep-read P</text></g>
+        <g class="n"><rect x="460" y="82" width="240" height="60"/><text x="580" y="117" text-anchor="middle">Analyst delivery grade</text></g>
+        <g class="n"><rect x="720" y="82" width="220" height="60"/><text x="830" y="108" text-anchor="middle">PRs in the changelog</text><text class="lbl" x="830" y="128" text-anchor="middle">+ reactions on closed issues</text></g>
+
+        <text class="t" x="20" y="178">System</text><g class="n ok bar"><rect x="20" y="188" width="48" height="12"/></g><text class="lbl" x="76" y="199">20%</text>
+        <g class="n"><rect x="200" y="152" width="240" height="60"/><text x="320" y="187" text-anchor="middle">Share on core paths</text></g>
+        <g class="n"><rect x="460" y="152" width="240" height="60"/><text x="580" y="178" text-anchor="middle">Deep-read leverage</text><text class="lbl" x="580" y="198" text-anchor="middle">+ analyst grade</text></g>
+        <g class="n"><rect x="720" y="152" width="220" height="60"/><text x="830" y="187" text-anchor="middle">Later authors of his files</text></g>
+
+        <text class="t" x="20" y="248">Quality</text><g class="n ok bar"><rect x="20" y="258" width="36" height="12"/></g><text class="lbl" x="64" y="269">15%</text>
+        <g class="n"><rect x="200" y="222" width="240" height="60"/><text x="320" y="248" text-anchor="middle">Quality rate q</text><text class="lbl" x="320" y="268" text-anchor="middle">1 − share reverted or fixed</text></g>
+        <g class="n"><rect x="460" y="222" width="240" height="60"/><text x="580" y="248" text-anchor="middle">Deep-read quality</text><text class="lbl" x="580" y="268" text-anchor="middle">+ analyst grade</text></g>
+        <g class="n"><rect x="720" y="222" width="220" height="60"/><text x="830" y="257" text-anchor="middle">Change-request rounds ↓</text></g>
+
+        <text class="t" x="20" y="318">Team</text><g class="n ok bar"><rect x="20" y="328" width="36" height="12"/></g><text class="lbl" x="64" y="339">15%</text>
+        <g class="n"><rect x="200" y="292" width="240" height="60"/><text x="320" y="327" text-anchor="middle">Reviews × ln(1 + authors served)</text></g>
+        <g class="n"><rect x="460" y="292" width="240" height="60"/><text x="580" y="327" text-anchor="middle">Analyst team grade</text></g>
+        <g class="n"><rect x="720" y="292" width="220" height="60"/><text x="830" y="318" text-anchor="middle">Code changed after his note</text><text class="lbl" x="830" y="338" text-anchor="middle">+ people asking his review</text></g>
+
+        <g class="n neutral"><rect x="20" y="372" width="920" height="54"/><text x="480" y="396" text-anchor="middle">percentile among the 22 → average per evidence type → angle score (missing data is not 0)</text><text x="480" y="415" text-anchor="middle">reference R = Σ weight × angle · analysts never see R · R only breaks ties</text></g>
+      </svg>
+    </div>
+    <div class="legend"><span><i class="ok"></i>reference weight (bar length)</span><span><i class="plain"></i>one evidence signal</span><span>↓ = fewer is better</span></div>
+    <figcaption><b>Reading it:</b> 12 cells of evidence; R is only their weighted summary.</figcaption>
+  </figure>
+  <ul class="pts">
+    <li>Delivery carries half the weight; quality and team can still sink a case</li>
+    <li>Missing data is skipped and shown as coverage</li>
+    <li>R is computed after the analysts grade, to avoid circularity</li>
+  </ul>
+
+  <h3>Both decisions named the same five; head to head and the devil's case set the order</h3>
+  <figure>
+    <div class="diagram">
+      <svg viewBox="0 0 960 400" role="img" aria-label="Decision swimlane: Claude decisions, script rules, and the reference score as tie-breaker only">
+        <rect class="lane" x="20" y="40" width="920" height="160" rx="8"/>
+        <rect class="lane" x="20" y="210" width="920" height="110" rx="8"/>
+        <rect class="lane" x="20" y="330" width="920" height="60" rx="8"/>
+        <text class="t" x="34" y="115">Claude</text><text class="lbl" x="34" y="135">judges</text>
+        <text class="t" x="34" y="258">Script</text><text class="lbl" x="34" y="278">rules</text>
+        <text class="t" x="34" y="358">Score R</text><text class="lbl" x="34" y="376">advisory</text>
+        <text class="cap" x="185" y="28" text-anchor="middle">Vote</text><text class="cap" x="305" y="28" text-anchor="middle">Merge</text><text class="cap" x="425" y="28" text-anchor="middle">Compare</text><text class="cap" x="545" y="28" text-anchor="middle">Challenge</text><text class="cap" x="665" y="28" text-anchor="middle">Gate</text><text class="cap" x="785" y="28" text-anchor="middle">Stability</text><text class="cap" x="895" y="28" text-anchor="middle">Result</text>
+
+        <g class="n main"><rect x="130" y="52" width="110" height="58"/><text class="t" x="185" y="76" text-anchor="middle">Decision A</text><text x="185" y="97" text-anchor="middle">company first</text></g>
+        <g class="n main"><rect x="130" y="122" width="110" height="58"/><text class="t" x="185" y="146" text-anchor="middle">Decision B</text><text x="185" y="167" text-anchor="middle">blind, reshuffled</text></g>
+        <g class="n neutral data"><rect x="130" y="338" width="110" height="44"/><text class="t" x="185" y="365" text-anchor="middle">R rank</text></g>
+
+        <path class="edge nm" d="M240 81 H282 V151"/><path class="edge nm" d="M240 151 H282"/>
+        <path class="edge" d="M282 151 V225"/>
+        <path class="edge weak" d="M240 360 H305 V285"/><text class="lbl" x="248" y="352">ties only</text>
+        <g class="n main"><rect x="250" y="225" width="110" height="60"/><text class="t" x="305" y="250" text-anchor="middle">Consensus</text><text x="305" y="271" text-anchor="middle">Borda, 2 votes</text></g>
+        <text class="lbl" x="315" y="305">top 5 agreed</text>
+
+        <path class="edge" d="M360 255 H425 V148"/>
+        <g class="n main"><rect x="370" y="90" width="110" height="58"/><text class="t" x="425" y="114" text-anchor="middle">Head to head</text><text x="425" y="135" text-anchor="middle">disputed pairs</text></g>
+        <text class="lbl" x="425" y="82" text-anchor="middle">5/5 consistent</text>
+        <path class="edge" d="M480 119 H490"/>
+        <g class="n main"><rect x="490" y="90" width="110" height="58"/><text class="t" x="545" y="114" text-anchor="middle">Devil's case</text><text x="545" y="135" text-anchor="middle">challenge all 5</text></g>
+        <text class="lbl" x="545" y="82" text-anchor="middle">4 tested, 1 swap</text>
+        <path class="edge" d="M545 148 V255 H610"/>
+        <g class="n main"><rect x="610" y="225" width="110" height="60"/><text class="t" x="665" y="250" text-anchor="middle">Gates</text><text x="665" y="271" text-anchor="middle">fail → next up</text></g>
+        <text class="lbl" x="665" y="305" text-anchor="middle">all 5 pass</text>
+        <path class="edge" d="M720 255 H730"/>
+        <g class="n main"><rect x="730" y="225" width="110" height="60"/><text class="t" x="785" y="250" text-anchor="middle">Sensitivity</text><text x="785" y="271" text-anchor="middle">1,000 weightings</text></g>
+        <text class="lbl" x="785" y="305" text-anchor="middle">4 of 5 stable</text>
+        <path class="edge" d="M840 255 H850"/>
+        <g class="n ok data"><rect x="850" y="225" width="86" height="60"/><text class="t" x="893" y="250" text-anchor="middle">Top 5</text><text x="893" y="271" text-anchor="middle">+ 6–10</text></g>
+      </svg>
+    </div>
+    <div class="legend"><span><i class="main"></i>step (all run on full data)</span><span><i class="neutral"></i>reference score, tie-break only</span><span><i class="ok"></i>result</span><span>grey text = what happened</span></div>
+    <figcaption><b>Reading it:</b> only the two agent decisions vote; detailed comparison is spent only where they disagree.</figcaption>
+  </figure>
+  <div class="tbl"><table>
+    <tr><th>Final</th><th>Engineer</th><th>Decision A</th><th>Decision B</th><th>R rank</th><th>Stability</th></tr>
+    <tr class="top"><td class="num">1</td><td>Gilbert09</td><td class="num">1</td><td class="num">1</td><td class="num">1</td><td><span class="chip s">stable</span> 100%</td></tr>
+    <tr class="top"><td class="num">2</td><td>webjunkie</td><td class="num">2</td><td class="num">2</td><td class="num">2</td><td><span class="chip s">stable</span> 100%</td></tr>
+    <tr class="top"><td class="num">3</td><td>pauldambra</td><td class="num">3</td><td class="num">3</td><td class="num">4</td><td><span class="chip s">stable</span> 100%</td></tr>
+    <tr class="top"><td class="num">4</td><td>rafaeelaudibert</td><td class="num">4</td><td class="num">5</td><td class="num">3</td><td><span class="chip s">stable</span> 100%</td></tr>
+    <tr class="top"><td class="num">5</td><td>haacked</td><td class="num">6</td><td class="num">6</td><td class="num">5</td><td><span class="chip b">borderline</span> 69.9%</td></tr>
+    <tr><td class="num">6</td><td>Piccirello</td><td class="num">5</td><td class="num">4</td><td class="num">10</td><td><span class="chip v">verdict-only</span> 0%</td></tr>
+    <tr><td class="num">7</td><td>eli-r-ph</td><td class="num">7</td><td class="num">7</td><td class="num">18</td><td><span class="chip v">verdict-only</span> 0%</td></tr>
+    <tr><td class="num">8</td><td>TueHaulund</td><td class="num">9</td><td class="num">8</td><td class="num">9</td><td><span class="chip v">verdict-only</span> 0%</td></tr>
+    <tr><td class="num">9</td><td>mayteio</td><td class="num">8</td><td class="num">12</td><td class="num">8</td><td><span class="chip v">verdict-only</span> 0%</td></tr>
+    <tr><td class="num">10</td><td>tatoalo</td><td class="num">10</td><td class="num">10</td><td class="num">6</td><td><span class="chip v">verdict-only</span> 27.8%</td></tr>
+  </table></div>
+  <ul class="pts">
+    <li>Same five names in both decisions; τ = 0.922 over 22</li>
+    <li>haacked beat Piccirello in both orders and took #5</li>
+    <li>mayteio beat rafaeelaudibert twice but failed the top-7 gate</li>
+  </ul>
+
+  <h3>Three rules were corrected during the run, and now hold by construction</h3>
+  <figure>
+    <div class="diagram">
+      <svg viewBox="0 0 960 190" role="img" aria-label="Three aggregation rules corrected during the run">
+        <g class="n main"><rect x="20" y="20" width="300" height="150"/>
+        <path class="ic" d="M150 40 V70 M134 48 H166 M134 48 L126 62 H142 Z M166 48 L158 62 H174 Z"/>
+        <text class="t" x="170" y="100" text-anchor="middle">Scores advise, agents decide</text><text x="170" y="124" text-anchor="middle">consensus = the two decisions;</text><text x="170" y="144" text-anchor="middle">R is not a voter, it only breaks ties</text></g>
+        <g class="n main"><rect x="330" y="20" width="300" height="150"/>
+        <path class="ic" d="M440 66 H520 M450 66 V56 M470 66 V50 M490 66 V60"/><path class="ic weak" d="M436 44 H524"/>
+        <text class="t" x="480" y="100" text-anchor="middle">Relative and absolute gates</text><text x="480" y="124" text-anchor="middle">follow-up-fix flag needs ≥8%, not</text><text x="480" y="144" text-anchor="middle">just bottom 20%: candidates span 2–4%</text></g>
+        <g class="n main"><rect x="640" y="20" width="300" height="150"/>
+        <path class="ic" d="M770 70 V42 M762 50 L770 42 L778 50 M810 42 V70 M802 62 L810 70 L818 62"/>
+        <text class="t" x="790" y="100" text-anchor="middle">Higher always means better</text><text x="790" y="124" text-anchor="middle">percentiles of lower-is-better</text><text x="790" y="144" text-anchor="middle">metrics are flipped before use</text></g>
+      </svg>
+    </div>
+    <figcaption><b>Reading it:</b> each fix lives in code or configuration, so a rerun cannot silently undo it.</figcaption>
+  </figure>
+  <ul class="pts">
+    <li>A rank among near-identical rates is noise, not a red flag</li>
+    <li>Both decisions must list a finalist in their top 7, or justify</li>
+    <li>Any rank more than 3 away from R must be explained</li>
+  </ul>
+  <details><summary>Details</summary><div>
+    <ul>
+      <li>Consensus: Borda over the two decisions (rank 1 = 10 points … rank 10 = 1); ties go to the higher R. Head-to-head only for pairs in consensus ranks 4–8 that the two decisions order differently; in round 2 only rafaeelaudibert vs Piccirello, won by rafaeelaudibert in both orders.</li>
+      <li>Devil's advocate: for each of the 5 it wrote the strongest objection and a likely replacement. Gilbert09 was kept without a re-test (the objection rated itself weak). Four challenges were tested head to head in both orders: webjunkie beat haacked and pauldambra beat tatoalo; haacked beat Piccirello, so they swapped; mayteio beat rafaeelaudibert, but the second decision ranked him 12th, so gate (c) blocked the swap.</li>
+      <li>Gates, all three must pass: (a) ≥2 major PRs, or ≥1 landmark, or top 3 in team leverage; (b) fewer than 3 reverts, and not a follow-up-fix rate that is both in the worst 20% and ≥8%; (c) both decisions place him in their top 7. Failing without a written case means the next person moves up.</li>
+      <li>Stability = share of 1,000 weightings in which R puts him in the top 5: each weight × U(0.5, 1.5), renormalised; ≥70% stable, 40–70% borderline, below 40% verdict-only, which needs a written justification.</li>
+      <li>The two decisions agree closely overall: Kendall τ = 0.922 across all 22.</li>
+      <li>Impact points P = 2^(4ℓ/3), where ℓ (0–3) weights user value, criticality and novelty from the deep read; same scale as tiers. A quote not found in the source costs a point.</li>
+    </ul>
+  </div></details>
+</section>
+
+<!-- ============ audit ============ -->
+<section id="s4b" class="hl">
+  <span class="badge">Independent audit</span>
+  <h2>An independent audit reopened the ranking; round 2 fixed six things and moved two people</h2>
+  <figure>
+    <div class="diagram">
+      <svg viewBox="0 0 960 300" role="img" aria-label="Round 1, then an independent audit, six fixes, and round 2">
+        <g class="n neutral"><rect x="20" y="70" width="150" height="150"/><text class="t" x="95" y="100" text-anchor="middle">Round 1</text><text x="95" y="126" text-anchor="middle">20 finalists</text><text x="95" y="150" text-anchor="middle">#4 Piccirello</text><text x="95" y="172" text-anchor="middle">#5 haacked</text><text x="95" y="194" text-anchor="middle">#6 rafaeelaudibert</text></g>
+        <path class="edge" d="M170 145 H200"/>
+        <g class="n focus"><rect x="200" y="70" width="140" height="150"/><text class="t" x="270" y="100" text-anchor="middle">Audit</text><text x="270" y="126" text-anchor="middle">re-checked every</text><text x="270" y="148" text-anchor="middle">input against the</text><text x="270" y="170" text-anchor="middle">raw PR data</text></g>
+        <path class="edge nm" d="M340 145 H355"/><path class="edge nm" d="M355 37 V253"/>
+        <path class="edge" d="M355 37 H370"/><path class="edge" d="M355 81 H370"/><path class="edge" d="M355 125 H370"/><path class="edge" d="M355 169 H370"/><path class="edge" d="M355 213 H370"/><path class="edge" d="M355 253 H370"/>
+        <g class="n main"><rect x="370" y="20" width="280" height="34"/><text x="510" y="42" text-anchor="middle">Triage all 16,318 human PRs (+845)</text></g>
+        <g class="n main"><rect x="370" y="64" width="280" height="34"/><text x="510" y="86" text-anchor="middle">"Major work" route: + eli-r-ph, MattBro</text></g>
+        <g class="n main"><rect x="370" y="108" width="280" height="34"/><text x="510" y="130" text-anchor="middle">Quality rate: one PR set, top and bottom</text></g>
+        <g class="n main"><rect x="370" y="152" width="280" height="34"/><text x="510" y="174" text-anchor="middle">New: self-repair, AI-only approvals</text></g>
+        <g class="n main"><rect x="370" y="196" width="280" height="34"/><text x="510" y="218" text-anchor="middle">Metric labels say what they count</text></g>
+        <g class="n main"><rect x="370" y="240" width="280" height="34"/><text x="510" y="262" text-anchor="middle">74 claims checked: 53 held, 21 reworded</text></g>
+        <path class="edge nm" d="M650 37 H665"/><path class="edge nm" d="M650 81 H665"/><path class="edge nm" d="M650 125 H665"/><path class="edge nm" d="M650 169 H665"/><path class="edge nm" d="M650 213 H665"/><path class="edge nm" d="M650 257 H665"/><path class="edge nm" d="M665 37 V257"/>
+        <path class="edge" d="M665 145 H690"/>
+        <g class="n ok"><rect x="690" y="50" width="250" height="190"/><text class="t" x="815" y="80" text-anchor="middle">Round 2</text><text x="815" y="106" text-anchor="middle">22 finalists, decisions agree 5/5</text><text x="815" y="130" text-anchor="middle">top 3 unchanged</text><text x="815" y="154" text-anchor="middle">#4 rafaeelaudibert (was #6)</text><text x="815" y="178" text-anchor="middle">#5 haacked</text><text x="815" y="202" text-anchor="middle">#6 Piccirello (was #4)</text><text class="lbl" x="815" y="226" text-anchor="middle">Kendall τ 0.922 across 22</text></g>
+      </svg>
+    </div>
+    <div class="legend"><span><i class="neutral"></i>superseded result</span><span><i class="focus"></i>independent audit</span><span><i class="main"></i>fix, now in code</span><span><i class="ok"></i>published result</span></div>
+    <figcaption><b>Reading it:</b> the audit questioned inputs, not opinions; every fix changed data or wording before the decisions were re-run.</figcaption>
+  </figure>
+  <ul class="pts">
+    <li>Top 3 held; rafaeelaudibert rose from #6 to #4</li>
+    <li>haacked beat Piccirello in both orders: #5 vs #6</li>
+    <li>Gilbert09's lead restated: 3.5× the next, not 6.5×</li>
+  </ul>
+  <details><summary>Details</summary><div>
+    <div class="tbl"><table>
+      <tr><th>What</th><th>Round 1</th><th>Round 2</th><th>Why</th></tr>
+      <tr><td>rafaeelaudibert</td><td class="nw">#6</td><td class="nw">#4</td><td>both decisions placed him 4th and 5th; beat Piccirello in both orders</td></tr>
+      <tr><td>haacked</td><td class="nw">#5</td><td class="nw">#5</td><td>6th in both decisions; took #5 after beating Piccirello in both orders and passing every gate</td></tr>
+      <tr><td>Piccirello</td><td class="nw">#4</td><td class="nw">#6</td><td>lost to haacked and to rafaeelaudibert, each in both orders</td></tr>
+      <tr><td>eli-r-ph</td><td class="nw">not analysed</td><td class="nw">#7</td><td>missed by the old shortlist; 32 major episodes, tied 3rd of 22</td></tr>
+      <tr><td>MattBro</td><td class="nw">not analysed</td><td class="nw">#19</td><td>added by the audit, judged on the same standard</td></tr>
+      <tr><td>Quality rate</td><td>failures of all tiers ÷ substantive-or-higher PRs</td><td>same PR set top and bottom</td><td>pauldambra 0.934 (lowest) → 0.952 (3rd lowest of 22)</td></tr>
+      <tr><td>Network labels</td><td>trust, building on his work</td><td>approval-network centrality, later authors of the same files</td><td>the metrics count graph position and file edits, not trust or adoption</td></tr>
+    </table></div>
+    <p>The claim check covers every number and PR reference in the published text: 74 claims, 53 verified as stated and 21 rewritten to remove an overstatement. Work merged after 2026-10-20 still has no observable quality signal.</p>
+  </div></details>
+</section>
+
+<!-- ============ limits ============ -->
+<section id="s5">
+  <h2>Known limits: review signals are uneven, and deep reads score high</h2>
+  <figure>
+    <div class="diagram">
+      <svg viewBox="0 0 960 260" role="img" aria-label="Deep-read mean impact points versus coarse tier points">
+        <text class="cap" x="670" y="50">Same PRs · 396 valid reads</text>
+        <path class="rule" d="M60 210 H620"/>
+        <g class="n neutral bar"><rect x="90" y="190" width="40" height="20"/></g><g class="n main bar"><rect x="134" y="156" width="40" height="54"/></g>
+        <text x="110" y="182" text-anchor="middle">1</text><text x="154" y="148" text-anchor="middle">2.72</text><text class="t" x="132" y="232" text-anchor="middle">Trivial</text>
+        <g class="n neutral bar"><rect x="230" y="170" width="40" height="40"/></g><g class="n main bar"><rect x="274" y="142" width="40" height="68"/></g>
+        <text x="250" y="162" text-anchor="middle">2</text><text x="294" y="134" text-anchor="middle">3.38</text><text class="t" x="272" y="232" text-anchor="middle">Routine</text>
+        <g class="n neutral bar"><rect x="370" y="130" width="40" height="80"/></g><g class="n main bar"><rect x="414" y="97" width="40" height="113"/></g>
+        <text x="390" y="122" text-anchor="middle">4</text><text x="434" y="89" text-anchor="middle">5.66</text><text class="t" x="412" y="232" text-anchor="middle">Substantive</text>
+        <g class="n neutral bar"><rect x="510" y="50" width="40" height="160"/></g><g class="n main bar"><rect x="554" y="34" width="40" height="176"/></g>
+        <text x="530" y="42" text-anchor="middle">8</text><text x="574" y="26" text-anchor="middle">8.81</text><text class="t" x="552" y="232" text-anchor="middle">Major</text>
+        <text class="t" x="670" y="80">Heavily sampled people gain</text>
+        <text x="670" y="106">low tiers lifted most: trivial ×2.72</text>
+        <text x="670" y="130">diffs truncated: 159 of 399 (40%)</text>
+        <text x="670" y="154">quote-check failures: 1.0%</text>
+        <text class="lbl" x="670" y="190">not yet recalibrated</text>
+      </svg>
+    </div>
+    <div class="legend"><span><i class="neutral"></i>coarse tier points</span><span><i class="main"></i>deep-read impact points (mean)</span><span>bar height scales with points, from 0</span></div>
+    <figcaption><b>Reading it:</b> deep reads score every tier higher than triage did, most of all at the bottom.</figcaption>
+  </figure>
+  <div class="tbl"><table>
+    <tr><th>Caveat</th><th>Size</th><th>What we do about it</th></tr>
+    <tr><td>Many PRs are approved only by an AI bot</td><td>37% of all merged PRs (6,867 of 18,715); 40% of human-authored</td><td>review-based quality shown as context only</td></tr>
+    <tr><td>Review details were capped</td><td>60 authored + 80 reviewed PRs per finalist</td><td>coverage disclosed</td></tr>
+    <tr><td>AI-agent PRs have no traceable requester</td><td>2,024 PRs</td><td>excluded from every individual</td></tr>
+    <tr><td>Coarse score still grows with volume</td><td>#1 at 5,252 vs #2 at 1,331</td><td>left to the agents to weigh</td></tr>
+    <tr><td>Recent work has no quality signal yet</td><td>PRs merged after Oct 20</td><td>flagged on the cards</td></tr>
+    <tr><td>No single points of approval found</td><td>0 areas</td><td>not yet verified</td></tr>
+    <tr><td>Score vs. lines-changed correlation</td><td>—</td><td>not yet computed</td></tr>
+  </table></div>
+  <details><summary>Details</summary><div>
+    <ul>
+      <li>Counted over any bot; Stamphog alone accounts for 36.2% of all merged PRs. On those PRs, first-pass and change-request rates say little about the author.</li>
+      <li>The cap comes from GitHub's 5,000-points-per-hour GraphQL limit; fetching every review for the first 20 finalists would have cost about 5,800 points. Review requests and "code changed after a comment" are known only within that coverage.</li>
+      <li>Triage does not read diffs, so tiers wobble; no PR in the full run was graded "landmark".</li>
+      <li>The changelog recall route is wide: 62 people hit it, 38 only through it.</li>
+    </ul>
+  </div></details>
+</section>
+
+<!-- ============ validation ============ -->
+<section id="s6">
+  <h2>Validation: every fetched day reconciles, and all model calls cost $7.35</h2>
+  <div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))">
+    <div class="stat ok"><div class="k">Days reconciled with GitHub</div><div class="v">91 / 91</div></div>
+    <div class="stat ok"><div class="k">PRs = GitHub search count</div><div class="v">18,715</div></div>
+    <div class="stat ok"><div class="k">Quote-check failures</div><div class="v">20 / 1,980</div></div>
+    <div class="stat ok"><div class="k">Triage LLM errors</div><div class="v">0 / 16,318</div></div>
+    <div class="stat ok"><div class="k">Deep-read errors</div><div class="v">3 / 399</div></div>
+  </div>
+  <details><summary>All numbers by stage</summary><div>
+    <div class="tbl"><table>
+    <tr><th>Stage</th><th>Numbers</th></tr>
+    <tr><td class="nw">Data</td><td>18,715 PRs; 2,397 by bots (2,024 by the AI agent); 16,318 human PRs by 188 authors</td></tr>
+    <tr><td class="nw">Recall</td><td>208 people → 139 active → 82, + 2 from the audit (300 of 2,229 PRs sampled)</td></tr>
+    <tr><td class="nw">Coarse</td><td>all 16,318 human PRs, 0 errors, $5.62; 22 shortlisted by score, team and major routes</td></tr>
+    <tr><td class="nw">Fine</td><td>399 deep reads, $0.59; 22 analyst reports; 2 decisions; 5 head-to-head pairs × 2 orders, all consistent</td></tr>
+    <tr><td class="nw">Event graph</td><td>204 people, 7 event types, 14 communities</td></tr>
+    <tr><td class="nw">Cost</td><td>$7.35 across all DeepSeek calls, development runs included; Claude sessions not billed per call</td></tr>
+  </table></div>
+  </div></details>
+</section>
+
+<footer>
+  Public PostHog/posthog repository · full run of 2026-11-03 · every number comes from the run's outputs · handles are GitHub logins
+</footer>
+</div>
+<script>
+(function(){try{
+  var links=[].slice.call(document.querySelectorAll('nav.toc a'));
+  var secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))}).filter(Boolean);
+  if(!('IntersectionObserver' in window)||!secs.length)return;
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){
+    links.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+  secs.forEach(function(s){io.observe(s)});
+}catch(e){}})();
+</script>
+</body>
+</html>
