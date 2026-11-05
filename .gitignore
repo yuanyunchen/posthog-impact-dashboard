@@ -6,3 +6,4 @@ out/*
 !out/site_data.json
 .agents/
 out_full/
+.DS_Store
