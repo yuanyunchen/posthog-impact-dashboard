@@ -1,0 +1,147 @@
+{
+  "cid": "dmarchuk",
+  "positioning": "Lead author of PostHog Workflows (rank 1 of 41 authors in that area) who also acted as the de facto security owner of CDP destination secrets this quarter, shipping a coordinated leak-remediation campaign alongside the Broadcasts and Customer.io-migration features.",
+  "role": {
+    "primary_role": "product builder",
+    "team": "workflows",
+    "how_they_create_impact": "Ships high volumes of well-scoped Workflows/CDP PRs (265 in 13 active weeks, 26 triaged major) that combine new product surface (Broadcasts, tile canvas editor, Customer.io import) with production hardening found by querying live data: secret redaction, billing/quota correctness, Kafka offset safety and worker-crash prevention.",
+    "network_summary": "A trusted, low-friction author inside a tight three-person Workflows core (with mayteio and meikelmosby) rather than a cross-org hub. His PRs pass first review 99% of the time (role.network.first_pass_rate.value=0.99, n=142) with one CHANGES_REQUESTED ever (role.network.events_received.changes_requested=1) and zero reverts (role.network.reverts_received.value=0). Others keep building on his files (role.network.built_on_by_n.value=66). But his approval reach is narrow: 9 teams covered (role.network.teams_covered_n.value=9, 18th of 20), 5 people ever requested his review (role.network.requested_by_n.value=5), and trust_rank 0.01 (role.network.trust_rank, 16th of 20). Almost all of his importance flow comes from authoring, not reviewing (role.network.importance_flow.author=1089.99 vs role.network.importance_flow.reviewer=5.4)."
+  },
+  "core_contributions": [
+    {
+      "workstream_id": "ws2",
+      "title": "CDP destination secret-leak remediation and platform hardening",
+      "what": "Found (by querying production) that destination API keys were persisted in plain text and then closed every exposure path: redaction of invocation errors stored in ClickHouse (#80919), exclusion of site functions whose secrets would be inlined into visitors' browser bundles (#109384), masking in activity logs, audit exports, notifications and AI context (#109381), validation that rejects secret inputs in mappings (#102673), a dry-run-by-default purge command for already-leaked data (#108965), credential query params stripped from tracking-pixel events (#105619), and a fix for auto-save wiping stored secrets (#121243). In the same workstream he fixed a Kafka rebalance bug that replayed committed work and duplicated side effects (#80897) and blocked user hog from calling reserved async functions that could wedge a shared queue partition for all teams (#89177).",
+      "why_it_matters": "Plaintext customer credentials in ClickHouse for 30 days and in browser JavaScript is a company-level security and trust risk; the queue-wedge and duplicate-delivery bugs affected every team on the shared CDP workers.",
+      "outcome": "Seven major-tier secret-handling PRs merged, five of them inside 2026-10-06 to 2026-10-11, including remediation of historical data, not just forward fixes. Deep reads score the core fixes P=13.0 (#80919, #109384, #108965, on-demand #89177). No reverts or follow-up fixes recorded on any of them.",
+      "his_role": "lead",
+      "evidence_prs": [80919, 109384, 109381, 102673, 108965, 105619, 121243, 80897, 89177],
+      "numbers": {"ws2_prs": 64, "ws2_major_prs": 14, "secret_leak_major_prs": 7, "max_P": 13.0, "ws2_points_sum": 294.46}
+    },
+    {
+      "workstream_id": "ws1",
+      "title": "Workflows product surface: Broadcasts, tile canvas editor, Customer.io migration",
+      "what": "Built Broadcasts (one-time or scheduled emails to filtered audiences via a five-step wizard, #82343, publicly changelogged 2026-10-05), a flag-gated tile canvas editor replacing the graph and list views (#119738, 9,571 lines), AI-generated email drafts (#114832), and a competitor-migration path: an API plus MCP tools and an agent skill to import Customer.io automations as draft workflows (#122456, #122457), with a bulk push-token import endpoint (#120090). He then spread Broadcasts into 5 other product surfaces through 11 small entry-point PRs (see custom analysis 3).",
+      "why_it_matters": "Broadcasts and Customer.io import widen the Workflows product from triggered automations to a full messaging tool and lower switching cost from a direct competitor; the MCP import was the highest-scoring deep read in his pack.",
+      "outcome": "172 PRs in ws1 (9 major, 135 substantive) over 82 days; #122457 deep-read P=16.0 (V3 C3 N2); Broadcasts shipped to the public changelog. The tile canvas editor is flag-gated and its on-demand deep read gave Q=0 on a truncated diff, so its quality is not yet established.",
+      "his_role": "lead",
+      "evidence_prs": [82343, 119738, 114832, 122456, 122457, 120090],
+      "numbers": {"ws1_prs": 172, "ws1_major_prs": 9, "ws1_points_sum": 679.22, "max_P": 16.0, "changelog_prs": 3}
+    },
+    {
+      "workstream_id": "ws2",
+      "title": "Billing and metrics correctness for Workflows",
+      "what": "Routed push sends into destination billing and quota (#101716), stopped billing push steps that reached no recipient (#105196), added per-run conversion watchers so goal conversions are counted after a run ends (#82953), migrated conversion windows to explicit duration strings (#93258, #93543) and attributed metrics to workflow versions (#75100).",
+      "why_it_matters": "These fix both directions of billing error (a quota bypass and an overcharge) and conversion metrics that previously reported 0% for some workflows: data correctness that customers act on.",
+      "outcome": "Six major-tier PRs; #82953 on-demand deep read P=16.0 with V3 C3 N2, but Q=0 (the reader thought the branch would not compile on a truncated diff; it merged and has no recorded revert or follow-up fix).",
+      "his_role": "lead",
+      "evidence_prs": [101716, 105196, 82953, 93258, 93543, 75100],
+      "numbers": {"major_prs": 6, "P_82953": 16.0, "P_101716": 6.3}
+    }
+  ],
+  "angles": {
+    "delivery": {
+      "grade": 7,
+      "rationale": "Strong team-pillar delivery with a clear critical-work slant: 11 of 26 major PRs are security or access-control fixes and 2 more are billing correctness. Several of those (plaintext secrets in ClickHouse and browser bundles, a queue partition wedge for all teams) are close to company-level, which argues for 8. Holding at 7 because the delivery estimate sits exactly at the 20-person median (616.02, p47.4), no PR is landmark, and a large share of his count is many small substantive PRs rather than additional big bets.",
+      "claims": [
+        {"statement": "Over 40% of his major-tier work is security or access-control remediation, the most critical category in the scale.", "numbers": {"major_prs": 26, "security_major_prs": 11, "billing_major_prs": 2}, "evidence_ids": [80919, 109384, 108965, 109381, 102673, 105619, 121243, 103644, 117210, 125927, 89177, "tier_counts.major"]},
+        {"statement": "His best deep-read PRs score at the top of the P range.", "numbers": {"P_122457": 16.0, "P_82953": 16.0, "P_80919": 13.0, "P_109384": 13.0, "P_108965": 13.0}, "evidence_ids": [122457, 82953, 80919, 109384, 108965]},
+        {"statement": "Overall delivery volume and episode count are median among the 20 candidates.", "numbers": {"delivery": 616.02, "delivery_percentile": 47.4, "major_episodes": 21, "major_episodes_percentile": 47.4}, "evidence_ids": ["delivery", "major_episodes"]}
+      ]
+    },
+    "system": {
+      "grade": 6,
+      "rationale": "He builds reusable pieces inside his domain (shared redactSensitiveValues helper, per-run conversion watchers, per-partition Kafka fencing, CODEOWNERS gate, a tile-canvas editor framework) and 66 other authors later changed his files. But the reuse is mostly within Workflows/CDP, downstream_authors is below the median (p34.2), and his work is product-level more than platform-level.",
+      "claims": [
+        {"statement": "Introduced shared infrastructure that other code paths route through: a redaction helper used by native, segment and hog executor error paths, and per-partition offset fencing in the shared Kafka consumer.", "numbers": {"P_80919": 13.0, "P_80897": 7.82}, "evidence_ids": [80919, 80897]},
+        {"statement": "Added a CODEOWNERS rule requiring Team Workflows approval on CDP API and worker changes, a process-level safeguard.", "numbers": {"P_87095": 5.9}, "evidence_ids": [87095]},
+        {"statement": "Other engineers build on his files, but fewer than for the median candidate.", "numbers": {"downstream_authors": 66, "downstream_authors_percentile": 34.2, "core_share": 0.21}, "evidence_ids": ["downstream_authors", "role.network.built_on_by_n", "metrics.core_share"]}
+      ]
+    },
+    "quality": {
+      "grade": 7,
+      "rationale": "Behavioural quality signals are excellent: zero reverts, 2 follow-up fixes on 201 mature PRs, one CHANGES_REQUESTED across 142 reviewed PRs, quality_rate 0.99 (p84.2), and 55 AI-co-authored PRs with none reverted or fixed. His PR descriptions show verification habits (headless agent test for #122457, unit tests running real serialization for #109384). Not graded higher because 88% of his reviewed PRs were reviewed only by his two closest teammates, 123 of 265 PRs have no recorded review at all, and two large PRs got Q=0 in deep reads.",
+      "claims": [
+        {"statement": "Peers almost never had to undo or correct his work.", "numbers": {"reverted": 0, "followup_fixed": 2, "mature_prs": 201, "quality_rate": 0.99, "quality_rate_percentile": 84.2}, "evidence_ids": ["metrics.reverted", "metrics.followup_fixed", "quality_rate", 84891, 108214]},
+        {"statement": "Reviewers rarely ask him for changes; the single CHANGES_REQUESTED came from an outside reviewer on a security PR.", "numbers": {"first_pass_rate": 0.99, "changes_requested": 1, "reviewed_prs": 142}, "evidence_ids": ["role.network.first_pass_rate", 109381]},
+        {"statement": "AI-assisted output shows no quality penalty.", "numbers": {"ai_coauthored_prs": 55, "ai_share": 0.21, "ai_reverted_or_fixed": 0}, "evidence_ids": ["metrics.ai_coauthored_prs", "metrics.ai_reverted_or_fixed"]}
+      ]
+    },
+    "team": {
+      "grade": 5,
+      "rationale": "He reviews a lot (213 reviews on 206 PRs) and some reviews catch real bugs that were then fixed, but 77% of those PRs belong to two teammates, reach is narrow (9 teams, 18th of 20) and the network does not treat him as a sought-after reviewer (requested_by 5, trust_rank p21.1, team_leverage p33.3). This is a solid, reliable in-team reviewer, not a multiplier across the org.",
+      "claims": [
+        {"statement": "His review comments find real defects that authors then change: double invocations on batch failure, blank CSV cells wiping person properties, a filter global that would throw at execution, and missing production-data checks.", "numbers": {"comment_reviews": 9, "fixes_given": 9}, "evidence_ids": [100792, 113268, 103913, 94119, "role.network.fixes_given"]},
+        {"statement": "Review effort is concentrated on two teammates.", "numbers": {"reviewed_prs": 206, "prs_by_mayteio_or_meikelmosby": 158, "authors_served": 28}, "evidence_ids": ["role.reviews_given_prs", "role.top_reviewed"]},
+        {"statement": "Cross-team pull and trust are below the candidate median.", "numbers": {"team_leverage": 707.45, "team_leverage_percentile": 33.3, "trust_rank_percentile": 21.1, "cross_team": 9, "cross_team_percentile": 10.5, "requested_by": 5}, "evidence_ids": ["team_leverage", "trust_rank", "cross_team", "requested_by"]}
+      ]
+    }
+  },
+  "overall": {"grade": 7, "confidence": "medium"},
+  "key_numbers": [
+    {"label": "Major-tier PRs (11 security)", "value": 26, "metric_key": "tier_counts.major"},
+    {"label": "Quality rate", "value": 0.99, "metric_key": "quality_rate"},
+    {"label": "Delivery estimate", "value": 616.02, "metric_key": "delivery"}
+  ],
+  "calibration": {
+    "ranks": {"delivery": 47.4, "quality_rate": 84.2, "team_leverage": 33.3, "trust_rank": 21.1},
+    "note": "He sits at the median of the 20 on delivery (11th), near the top on quality (4th), and in the bottom half on team leverage (13th of 19) and trust_rank (16th). Grades follow that shape: quality 7, delivery 7, team 5, system 6. Delivery is graded at the team-pillar level rather than lower because the episode estimate weights volume and does not distinguish his security remediation from ordinary features; the critical share (11 of 26 majors) is what lifts it. Team is held at 5 to match the low network percentiles. Overall 7 (team core pillar) is consistent with a median position in a pre-filtered set of strong engineers."
+  },
+  "custom_analyses": [
+    {
+      "question": "Is his high-severity work a one-off or a deliberate security campaign, and how much of his major tier does it account for?",
+      "why": "The dossier lists many secret-related majors across two workstreams; if they form one coordinated effort, it is stronger evidence of critical ownership than the episode estimate shows.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query dmarchuk prs --tier major",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query dmarchuk prs --since 2026-10-05 --until 2026-10-12 --tier major",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query dmarchuk deepread 89177",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query dmarchuk deepread 121243"
+      ],
+      "finding": "It is a campaign. It starts with #80919 on 2026-08-12 (found by querying production), peaks with five major secret fixes on 2026-10-06 to 2026-10-11 (#109381, #109384, #102673, #108965, #105619), and ends with #121243 on 2026-10-21. It covers storage, browser bundles, logs and audit exports, input validation, and a purge of already-leaked data. Adding #103644 (algorithm-confusion), #117210 (notification leak), #125927 (domain-block bypass) and #89177 (queue wedge, on-demand P=13.0), 11 of his 26 major PRs are security or access-control. The on-demand deep reads confirm the tier of #89177 (P=13.0) and #121243 (P=7.82, data-loss fix).",
+      "evidence_ids": [80919, 109381, 109384, 102673, 108965, 105619, 121243, 103644, 117210, 125927, 89177],
+      "effect": "delivery 6 → 7: the critical share offsets the median delivery estimate; not raised to 8 because there is no landmark PR and the fixes are mostly within his own team's product."
+    },
+    {
+      "question": "Is his near-perfect first-pass review rate earned, or a product of a closed review loop?",
+      "why": "A 0.99 first-pass rate with almost all reviews from two people could mean high quality or low scrutiny; peer behaviour must outweigh self-description.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query dmarchuk reviews-received --top 10",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query dmarchuk reviews-given --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query dmarchuk compare mayteio",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query dmarchuk rank first_pass_rate"
+      ],
+      "finding": "The loop is tight: meikelmosby and mayteio reviewed 128 of his 142 reviewed PRs, and 125 of those 142 were reviewed by nobody else (counted from reviews.json). 123 of his 265 PRs, including majors #114832, #121243 and #120090, have no recorded review in the data. In return, 158 of the 206 PRs he reviewed belong to those two. Still, outside signals do not contradict his quality: the one CHANGES_REQUESTED came from an outsider (yasen-posthog on #109381), cross-team reviewers approved #113009 and others, and nobody has reverted his work. His teammate mayteio, with a similar profile, has a lower quality_rate (0.95 vs 0.99) and more follow-up fixes (6 vs 2), so the loop is not hiding a pattern of defects.",
+      "evidence_ids": [109381, 113009, 114832, 121243, 120090, "role.top_reviewers", "role.network.first_pass_rate", "quality_rate"],
+      "effect": "quality stays at 7 (not 8): behaviour is clean, but scrutiny is narrow and confidence is lowered to medium; team held at 5 because the same concentration shows up in reviews he gives."
+    },
+    {
+      "question": "Does the late-quarter jump in PR count reflect more impact or splitting one initiative into many small PRs?",
+      "why": "Weekly volume rises from 0-16 PRs before 2026-09-14 to 25-38 PRs per week afterwards; volume alone should not raise the grade.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query dmarchuk timeline",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query dmarchuk prs --ws ws3",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query dmarchuk prs --ws ws5",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query dmarchuk prs --ws misc"
+      ],
+      "finding": "Partly splitting. After Broadcasts landed (#82343, 2026-09-22), he shipped 11 entry-point PRs between 2026-10-08 and 2026-10-22 that add 'email these people' or 'create a workflow' buttons on cohorts, feature flags, surveys, error tracking and early-access pages (#112993, #113009, #119893, #120554, #120555, #113008, #112988, #112998, #118448, #120557, #120556). Each is triaged substantive, but the only one deep-read scored P=4.5. Points per PR stayed around 4 throughout (e.g. 128.2 points for 36 PRs in the week of 2026-09-28, with 0 majors). The growth tactic is sensible, and it pulled in a cross-team reviewer (haacked on #113009), but these PRs are one initiative, not eleven contributions.",
+      "evidence_ids": [82343, 112993, 113009, 119893, 120554, 120555, 113008, 112988, 112998, 118448, 120557, 120556, "ws3", "ws5"],
+      "effect": "no upward change: delivery stays at 7 instead of being nudged to 8 by raw PR count (265, among the highest), consistent with the rule that count alone earns nothing."
+    }
+  ],
+  "insights": [
+    {"insight": "He finds his own critical work: the secret-leak campaign began with him querying production and noticing a destination's rejected key stored in full, and he followed through to remediating historical data, not just new writes.", "evidence_ids": [80919, 108965, "ws2"]},
+    {"insight": "He treats competitive migration as an agent problem: the Customer.io import ships as an API plus MCP tools and a guided skill, tested by running a headless Claude Code agent against the branch. It is his highest-scoring deep read (P=16.0).", "evidence_ids": [122457, 122456]},
+    {"insight": "Fixes to his work are rare and small: the two follow-up fixes are on an email-sender fallback and a semgrep rule, and the only CHANGES_REQUESTED he received was on a security masking PR from an outside reviewer.", "evidence_ids": [84891, 108214, 109381]}
+  ],
+  "red_flags": [
+    {"flag": "Two of his PRs were later follow-up-fixed by others (peer.followup_fixed=2): #84891 (email sender override fallback, on-demand P=8.0) and #108214 (semgrep rule for deprecated UUIDT models). Both are small and neither was reverted.", "evidence_ids": [84891, 108214, "peer.followup_fixed"]},
+    {"flag": "On-demand deep reads gave Q=0 to two large PRs: #82953 (conversion watchers, 1,637 lines; the reader believed the branch would not compile) and #119738 (tile canvas editor, 9,571 lines). Both diffs were truncated and both merged without a recorded revert or fix, so this is likely a reading artefact, but it is unverified.", "evidence_ids": [82953, 119738]},
+    {"flag": "Review scrutiny is narrow: 125 of his 142 reviewed PRs were reviewed only by mayteio and/or meikelmosby, and 123 of 265 PRs (including majors #114832, #121243, #120090) have no recorded review.", "evidence_ids": [114832, 121243, 120090, "role.top_reviewers"]}
+  ],
+  "counter_evidence": "His PR descriptions frame several items as fixing 'badly wrong' metrics or closing security exposures, and peer behaviour mostly supports that: no reverts, one outside CHANGES_REQUESTED, others continuing to build on his files. Two points cut against the strongest reading. First, the near-perfect first-pass rate comes almost entirely from his two closest teammates, and nearly half his PRs have no recorded review, so the clean quality record has had little outside scrutiny. Second, the high PR count overstates breadth: 11 late-October PRs are entry points for one Broadcasts initiative, and the delivery estimate (median of 20) and downstream_authors (p34.2) do not show the outsized reach that 265 PRs might suggest. The Q=0 deep reads on #82953 and #119738 conflict with peer behaviour (both merged, no fixes); behaviour wins here, but they stay listed as flags.",
+  "coverage": {
+    "sampled_prs": 25,
+    "missing_data": ["review_requested_by", "issue_reactions", "review records for 123 of 265 PRs", "deep reads for 3 of the 11 security majors (#109381, #105619, #125927)"],
+    "diff_truncated_share": 0.47
+  }
+}

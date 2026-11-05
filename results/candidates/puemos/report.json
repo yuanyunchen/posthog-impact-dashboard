@@ -1,0 +1,419 @@
+{
+ "cid": "puemos",
+ "positioning": "The highest-volume product builder on the surfaces team and the top author in PostHog Desktop (55% of his work, area leader among 78 authors), who also rebuilt the web Today home page and owns the bring-your-own-subscription billing path for agent tasks.",
+ "role": {
+  "primary_role": "product builder",
+  "team": "surfaces",
+  "how_they_create_impact": "Ships end-to-end user-facing features at very high cadence across Desktop, the web Today home, PostHog AI tasks and Canvas, often porting Desktop capabilities to web behind feature flags; adds security and authorization hardening and measured latency work alongside the features.",
+  "network_summary": "A trusted, fast-moving author inside a tight surfaces / agent-infrastructure / platform-ux cluster rather than a hub reviewer. Peers approve his work almost unconditionally (first_pass_rate 0.99 on 171 reviewed PRs, changes_requested_rate 0.01) and 77 other authors later built on files he touched (built_on_by_n, median among the 20). He reviews a lot for his close collaborators (188 reviews on 183 PRs, 94% approvals) but is almost never sought out as a reviewer (requested_by_n 2, 19th of 20) and his approvals cover only 11 teams (teams_covered_n, 16th of 20). Nearly all of his importance flow comes from authoring (importance_flow.author 1631.34 of 1638.54; reviewer 7.2)."
+ },
+ "core_contributions": [
+  {
+   "workstream_id": "ws1",
+   "title": "Desktop agent platform: bring-your-own subscriptions, spend controls and credential safety",
+   "what": "Built the path that lets Desktop and web users run Codex and Claude agent tasks on their own ChatGPT or Claude plans instead of PostHog credits (local #89077, #90933; cloud #95656, #97543; web #108909), added spend limits with warn and stop lines (#87675), redacted authorization headers and token shapes across every event-stream path (#97450), and shipped Desktop UX such as tab tiling (#102062).",
+   "why_it_matters": "This touches billing and credentials directly: it moves agent compute cost off PostHog, caps runaway agent spend, and closed a credential leak to teammates with read-only access.",
+   "outcome": "Shipped behind flags across local, cloud and web; deep reads score the top items at P 7.5 to 16 (#97450 P=16.0, #95656 P=16.0, #89077 P=9.2, #102062 P=9.2). Two items in this line were later follow-up-fixed (#90933, #97543) and the deep read of #95656 notes unresolved credential-exposure gaps (Q=0).",
+   "his_role": "lead",
+   "evidence_prs": [
+    89077,
+    90933,
+    95656,
+    97543,
+    108909,
+    87675,
+    97450,
+    102062
+   ],
+   "numbers": {
+    "prs": 155,
+    "major_prs": 14,
+    "points_sum": 591.29,
+    "max_deepread_P": 16.0
+   }
+  },
+  {
+   "workstream_id": "ws2",
+   "title": "Today home page redesign, highlights framework and Cmd+K search",
+   "what": "Reworked the Today home into a single ranked 'For you today' list with a backend-owned report page (#116128, #111471), an extensible highlights framework whose sources he then filled in (feature flags #117292, alerts #117266, experiments #117283, rage clicks #117302), pulse tiles with hover cards (#119029), and a rebuilt Cmd+K ranking with a team-scoped trigram index (#119600, #120317, #127831).",
+   "why_it_matters": "Today is the landing surface for every PostHog project, including non-AI ones; the redesign addresses empty dashboards and the search work targets latency for large teams.",
+   "outcome": "Measured gains: median time to first number on Today cut from 8.31s to 2.79s (#127509); Cmd+K per-keystroke processing roughly halved (#123542). #116128 deep-read at P=9.2; #111471 at P=4.5 (layer 1 of a 3-part epic, not yet called at merge).",
+   "his_role": "lead",
+   "evidence_prs": [
+    116128,
+    111471,
+    117292,
+    119029,
+    120317,
+    127831,
+    127509,
+    123542
+   ],
+   "numbers": {
+    "prs": 167,
+    "major_prs": 5,
+    "points_sum": 524.29,
+    "first_number_s_before": 8.31,
+    "first_number_s_after": 2.79
+   }
+  },
+  {
+   "workstream_id": "ws4",
+   "title": "Task authorization boundary and task-chat performance",
+   "what": "Made the space the single authorization boundary for private tasks across tasks, Canvas, conversations, Slack, HogQL and MCP (#80869), and ran a performance pass on task chat: gzip log responses (#120617), tail_bytes pagination (#121113), and visibility queries without channel joins (#126085).",
+   "why_it_matters": "#80869 replaces inconsistent per-surface access rules for private tasks, which is a data-access correctness issue; the performance work removes multi-second waits when opening task chats.",
+   "outcome": "#80869 deep-read at P=7.8 but was later follow-up-fixed; log payload 4.2 MB to 1.2 MB (#120617), visibility query 33ms to 0.5ms (#126085), long chats load latest turns in about 2s (#121113).",
+   "his_role": "lead",
+   "evidence_prs": [
+    80869,
+    120617,
+    121113,
+    126085,
+    81230
+   ],
+   "numbers": {
+    "prs": 40,
+    "major_prs": 2,
+    "points_sum": 154.41,
+    "log_mb_before": 4.2,
+    "log_mb_after": 1.2
+   }
+  }
+ ],
+ "angles": {
+  "delivery": {
+   "grade": 8,
+   "rationale": "Fourth of 20 on the delivery estimate (769.22, p84.2) with 23 major PRs and several deep reads at the top of the scale, including billing and credential work. Held at 8, not 9: his 23 major PRs collapse into only 14 major episodes (15th of 20), much of the volume is flag-gated parity porting, and the dossier records 0 critical_prs.",
+   "claims": [
+    {
+     "statement": "Delivery estimate ranks 4th of 20 and importance flow 4th of 20.",
+     "numbers": {
+      "delivery": 769.22,
+      "delivery_percentile": 84.2,
+      "importance_flow": 1638.54
+     },
+     "evidence_ids": [
+      "delivery",
+      "importance_flow"
+     ]
+    },
+    {
+     "statement": "Two on-demand deep reads hit the maximum P: the credential-leak fix and cloud Claude subscriptions.",
+     "numbers": {
+      "P_97450": 16.0,
+      "P_95656": 16.0
+     },
+     "evidence_ids": [
+      97450,
+      95656,
+      "ws1"
+     ]
+    },
+    {
+     "statement": "Major work is concentrated in few episodes compared with peers.",
+     "numbers": {
+      "major_prs": 23,
+      "major_episodes": 14,
+      "major_episodes_percentile": 26.3
+     },
+     "evidence_ids": [
+      "major_episodes",
+      "tier_counts.major"
+     ]
+    }
+   ]
+  },
+  "system": {
+   "grade": 6,
+   "rationale": "He builds reusable product-layer pieces (a data-driven secret-rule table, space visibility predicates, a highlights framework, a model-catalog codegen) and does measured performance work, but downstream reuse is only median and his share of core-path work is small.",
+   "claims": [
+    {
+     "statement": "Introduced shared abstractions others plug into: a highlights endpoint with sources in follow-ups, reusable visibility predicates, a model catalog replacing about 10 drifted hand-written lists.",
+     "numbers": {
+      "framework_prs": 3,
+      "drifted_lists_removed": 10
+     },
+     "evidence_ids": [
+      116128,
+      80869,
+      100919
+     ]
+    },
+    {
+     "statement": "Measured latency wins on hot paths.",
+     "numbers": {
+      "today_first_number_s_before": 8.31,
+      "today_first_number_s_after": 2.79,
+      "visibility_query_ms_before": 33,
+      "visibility_query_ms_after": 0.5
+     },
+     "evidence_ids": [
+      127509,
+      126085,
+      120317
+     ]
+    },
+    {
+     "statement": "Downstream reuse is median and core share low.",
+     "numbers": {
+      "built_on_by_n": 77,
+      "downstream_percentile": 50.0,
+      "core_share": 0.12
+     },
+     "evidence_ids": [
+      "role.network.built_on_by_n.value",
+      "metrics.core_share"
+     ]
+    }
+   ]
+  },
+  "quality": {
+   "grade": 5,
+   "rationale": "No reverts and near-perfect first-pass approval, but 10 PRs were follow-up-fixed by others (quality_rate 0.96, 12th of 20), the follow-ups cluster in billing, credentials and authorization, and the deep read of #95656 found shipped credential-exposure gaps. The near-zero changes-requested rate reflects light scrutiny inside his cluster as much as quality.",
+   "claims": [
+    {
+     "statement": "Zero reverts and very high first-pass approval.",
+     "numbers": {
+      "reverted": 0,
+      "first_pass_rate": 0.99,
+      "first_pass_n": 171
+     },
+     "evidence_ids": [
+      "metrics.reverted",
+      "first_pass_rate"
+     ]
+    },
+    {
+     "statement": "Ten PRs were follow-up-fixed, including the authorization boundary and two subscription PRs.",
+     "numbers": {
+      "followup_fixed": 10,
+      "quality_rate": 0.96,
+      "quality_rate_percentile": 42.1
+     },
+     "evidence_ids": [
+      "metrics.followup_fixed",
+      80869,
+      90933,
+      97543
+     ]
+    },
+    {
+     "statement": "The cloud Claude subscription PR scored Q=0 in deep read for unresolved credential-exposure and redaction gaps.",
+     "numbers": {
+      "Q_95656": 0,
+      "P_95656": 16.0
+     },
+     "evidence_ids": [
+      95656
+     ]
+    },
+    {
+     "statement": "He also fixes flaky CI that blocks others' merges.",
+     "numbers": {
+      "ci_fix_prs": 4,
+      "macos_e2e_speedup_x": 5
+     },
+     "evidence_ids": [
+      107425,
+      121865,
+      111480,
+      97145
+     ]
+    }
+   ]
+  },
+  "team": {
+   "grade": 4,
+   "rationale": "High review volume but low leverage: 94% of his reviews are approvals, he requested changes once, almost nobody asks for his review, and coverage is concentrated in his own cluster. A few written reviews show real depth, which keeps this above 3.",
+   "claims": [
+    {
+     "statement": "Reviews are mostly approvals for close collaborators.",
+     "numbers": {
+      "reviews": 188,
+      "approved": 177,
+      "changes_requested": 1,
+      "authors": 17
+     },
+     "evidence_ids": [
+      "metrics.reviews_given",
+      "role.reviewed_authors_n"
+     ]
+    },
+    {
+     "statement": "Rarely sought out as a reviewer and narrow cross-team reach.",
+     "numbers": {
+      "requested_by_n": 2,
+      "requested_by_percentile": 2.6,
+      "teams_covered_n": 11,
+      "cross_team_percentile": 18.4,
+      "team_leverage_percentile": 22.2
+     },
+     "evidence_ids": [
+      "requested_by",
+      "cross_team",
+      "team_leverage"
+     ]
+    },
+    {
+     "statement": "Some reviews catch real issues, e.g. a flag-failure caching bug and a traced dispatch-path analysis.",
+     "numbers": {
+      "deep_review_examples": 2
+     },
+     "evidence_ids": [
+      125122,
+      82993
+     ]
+    }
+   ]
+  }
+ },
+ "overall": {
+  "grade": 7,
+  "confidence": "medium"
+ },
+ "key_numbers": [
+  {
+   "label": "Delivery estimate (4th of 20)",
+   "value": 769.22,
+   "metric_key": "delivery"
+  },
+  {
+   "label": "Major PRs",
+   "value": 23,
+   "metric_key": "tier_counts.major"
+  },
+  {
+   "label": "PRs follow-up-fixed by others",
+   "value": 10,
+   "metric_key": "metrics.followup_fixed"
+  }
+ ],
+ "calibration": {
+  "ranks": {
+   "delivery": 84.2,
+   "quality_rate": 42.1,
+   "team_leverage": 22.2,
+   "trust_rank": 57.9
+  },
+  "note": "Among the 20 he is 4th on delivery, 12th on quality_rate, 15th of 19 on team_leverage and 9th on trust_rank. The grades follow that shape: delivery 8 matches a top-quartile position; quality 5 matches a middling quality rate with follow-ups in sensitive areas; team 4 matches the low leverage and requested_by (19th of 20). Overall 7 (team core pillar) rather than 8 because the delivery lead is not matched by system reach or team multiplication, and part of the volume is fragmented flag-gated porting."
+ },
+ "custom_analyses": [
+  {
+   "question": "Is his volume lead driven by one burst of small PRs, and does that burst carry real impact?",
+   "why": "The timeline shows 188 PRs in the week of 2026-09-28 against a typical 8 to 35, and 472 PRs overall is the kind of count that can inflate delivery.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query puemos timeline",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query puemos prs --since 2026-09-28 --until 2026-10-04"
+   ],
+   "finding": "The week of 2026-09-28 holds 188 of 472 PRs (40%) and 580.7 of 1641.3 points (35%), but only 4 major PRs; 102 substantive, 60 routine, 20 trivial, 2 mechanical. The items are mostly flag-gated (today-rail-nav) ports of Desktop sidebar, feed, filter and settings behavior to the web Today rail (e.g. #109247, #109441, #109611, #109670), sliced into many small PRs merged within days. The real high-value work sits outside the burst (#97450, #95656, #89077, #102062, #116128).",
+   "evidence_ids": [
+    109247,
+    109441,
+    109611,
+    109670,
+    108987,
+    "ws2"
+   ],
+   "effect": "No upgrade from volume: delivery stays at 8 on the strength of the deep-read majors, and overall stays at 7 because a large share of the count is parity slicing rather than distinct outcomes."
+  },
+  {
+   "question": "How well-controlled is his billing and credential work, given that it is his most valuable line?",
+   "why": "The bring-your-own-subscription and spend-limit work touches credentials and billing, and three of the ten follow-up-fixed PRs sit in this or the authorization area.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query puemos deepread 95656",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query puemos deepread 97450",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query puemos deepread 80869",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query puemos pr 90933",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query puemos pr 97543",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query puemos prs --tier major"
+   ],
+   "finding": "The line is high value: #95656 and #97450 both deep-read at P=16.0 and #89077, #108909 at P=9.2. Risk control is mixed: #95656 scored Q=0 for shipping with unresolved credential-exposure and redaction-coverage gaps; one day later he merged #97450, which closes a credential leak on the event stream (the data does not prove the two are linked). #90933 and #97543 (subscriptions) and #80869 (authorization boundary, P=7.8) were each follow-up-fixed by others. No reverts anywhere.",
+   "evidence_ids": [
+    95656,
+    97450,
+    80869,
+    90933,
+    97543,
+    89077,
+    108909
+   ],
+   "effect": "quality 6 → 5 because the follow-ups and the Q=0 deep read concentrate in security- and billing-sensitive code; delivery keeps its 8 because the same line carries his top-scoring work."
+  },
+  {
+   "question": "Does his review activity multiply the team, or is it approval throughput inside his cluster?",
+   "why": "He gave 188 reviews, but team_leverage is 15th of 19 and requested_by is 19th of 20, which suggests volume without pull.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query puemos reviews-given --top 12",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query puemos rank requested_by",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query puemos rank cross_team",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query puemos compare tatoalo"
+   ],
+   "finding": "177 of 188 reviews are approvals and 1 requested changes; 141 of 183 reviewed PRs come from five close collaborators (VojtechBartos 45, adamleithp 33, tatoalo 28, k11kirky 19, adboio 16) on surfaces, agent-infrastructure and platform-ux. Only 2 people requested his review. Against teammate tatoalo, he has more delivery (769 vs 719) but less team reach (team_leverage 556.5 vs 902.1, requested_by 2 vs 6, trust_rank p57.9 vs p94.7). Written reviews in the sample can be deep (#125122 caught a flag-failure path that caches an unresolved access decision; #82993 traced every dispatch path against a live stack).",
+   "evidence_ids": [
+    125122,
+    82993,
+    "requested_by",
+    "team_leverage"
+   ],
+   "effect": "team held at 4: the depth examples prevent a 3, but the approval-heavy, in-cluster pattern does not support 5."
+  }
+ ],
+ "insights": [
+  {
+   "insight": "He pairs feature shipping with measured performance work: he quotes before/after numbers on his own PRs (8.31s to 2.79s, 4.2 MB to 1.2 MB, 33ms to 0.5ms), which is a strong habit for a product builder.",
+   "evidence_ids": [
+    127509,
+    120617,
+    126085
+   ]
+  },
+  {
+   "insight": "His leverage is authoring, not reviewing: 1631.34 of 1638.54 importance flow comes from authored PRs, so his value would not survive a move to a lead-reviewer role without changes in how he reviews.",
+   "evidence_ids": [
+    "role.network.importance_flow.author",
+    "role.network.importance_flow.reviewer"
+   ]
+  },
+  {
+   "insight": "A large share of his web work is porting Desktop behavior to web behind flags, so actual user reach depends on rollout decisions not visible in this data.",
+   "evidence_ids": [
+    "ws2",
+    109441,
+    108909
+   ]
+  }
+ ],
+ "red_flags": [
+  {
+   "flag": "peer.followup_fixed=10: ten of his PRs were later explicitly fixed by others, including the task authorization boundary, two subscription/billing PRs, a permission-mode fix and CI test fixes.",
+   "evidence_ids": [
+    80869,
+    84646,
+    86171,
+    90933,
+    94261,
+    96218,
+    97145,
+    97543,
+    105645,
+    111480,
+    "metrics.followup_fixed"
+   ]
+  },
+  {
+   "flag": "Deep read of #95656 (cloud Claude subscriptions) scores Q=0: shipped with unresolved credential-exposure and redaction-coverage gaps.",
+   "evidence_ids": [
+    95656
+   ]
+  }
+ ],
+ "counter_evidence": "Peer behaviour cuts both ways. In his favour: 0 reverts across 472 PRs, first_pass_rate 0.99, and 77 downstream authors building on his files. Against the self-described PR summaries: the 'major' framing of many PRs is undercut by 23 major PRs collapsing into 14 major episodes, by the 188-PR burst being mostly flag-gated parity slices, and by 10 follow-up fixes from others, concentrated in authorization and billing code that the summaries present as hardened. The near-zero changes-requested rate comes almost entirely from five close collaborators, so it is weak evidence of quality on its own. #111471 is described as major but deep-reads at P=4.5 and was not yet called at merge.",
+ "coverage": {
+  "sampled_prs": 25,
+  "missing_data": [
+   "review_requested_by",
+   "issue_reactions"
+  ],
+  "diff_truncated_share": 0.68
+ }
+}

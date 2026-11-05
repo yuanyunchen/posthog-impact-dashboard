@@ -1,0 +1,156 @@
+{
+  "cid": "tatoalo",
+  "positioning": "Leading builder of PostHog's cloud agent Tasks product (PostHog Code / Desktop cloud runs): he owns the sandbox lifecycle, run reliability and the agent side of the LLM gateway, and is the top author in Product: Tasks among 58 authors.",
+  "role": {
+    "primary_role": "product builder",
+    "team": "agent-infrastructure",
+    "how_they_create_impact": "Ships a very high volume of narrowly scoped fixes and features (344 merged PRs in 15 active weeks, 26 triaged major) that keep paid cloud agent runs alive: sandbox rotation and checkpointing, exactly-once message delivery, log durability, budget and billing correctness, and sandbox security boundaries. Impact comes mainly from his own code rather than from reviewing others.",
+    "network_summary": "Trusted, rarely-corrected author: his PRs pass review first time (role.network.first_pass_rate.value = 1.0 over n=271; changes_requested_rate 0.007) and he ranks 2nd of 20 on approval-graph trust (trust_rank 0.023, p94.7). He is a steady approver inside his own orbit (236 approvals across 30 authors and 15 teams, mostly surfaces 73 and agent-infrastructure 64 PRs) but not a cross-community hub: bridge_rank is unknown, he sits in community 0, only 6 people explicitly requested his review (requested_by_n), and almost all of his importance flow comes from authoring (importance_flow.author 1241.15 vs importance_flow.reviewer 6). Others build on his files at a below-median rate (built_on_by_n 66 vs candidate median 77)."
+  },
+  "core_contributions": [
+    {
+      "workstream_id": "ws1",
+      "title": "Keeping long-running cloud task runs alive and lossless",
+      "what": "Built and then hardened sandbox rotation before TTL (#86676), the activity guard that stops rotation from discarding live worktrees (#109870), checkpointing that preserves pending user messages and no longer deletes workspace files (#116932), the turn-success flag that records wall-clock-capped runs that delivered a PR as completed (#108247), fail-closed Redis log-append locks (#83195, #99208), and GitHub-verified clone denials so transient token errors stop killing runs (#123981).",
+      "why_it_matters": "These are the failure modes of a paid product: runs dying at sandbox expiry, lost uncommitted work, lost logs and mis-recorded outcomes. #108247 notes that over 90% of implementation runs that opened a PR ended in the mis-recorded state.",
+      "outcome": "209 PRs in the workstream, 16 major; the deep-read PRs here are among his highest scored (#109870 P=16.0, #108247 P=13.0, #116932 P=13.0, #86676 P=12.1). Rotation needed several follow-up fixes before it was stable (see custom analyses).",
+      "his_role": "lead",
+      "evidence_prs": [86676, 109870, 116932, 108247, 83195, 99208, 123981],
+      "numbers": {"prs": 209, "major_prs": 16, "points_sum": 746.53, "max_P": 16.0}
+    },
+    {
+      "workstream_id": "ws3",
+      "title": "LLM gateway routing, billing and spend control for cloud runs",
+      "what": "Fixed streamed token usage and provider labels so Kimi/GLM generations bill real token counts (#94154), added the 70%/85% budget guard that steers runs to commit and open a PR before the gateway cuts them off (#102980) and its retry fix (#115263), opt-in per-user spend caps (#109055), and a series of model-routing fixes where requested models silently fell back to Opus or failed (#116194, #120877, #122180, #106614).",
+      "why_it_matters": "Billing correctness and spend caps directly affect revenue and customer trust; silent model fallbacks charged users for a different model than they chose.",
+      "outcome": "23 PRs in the gateway workstream (4 major) plus the budget guard in Desktop; #115263 deep-read P=5.9 with all quotes verified.",
+      "his_role": "lead",
+      "evidence_prs": [94154, 102980, 115263, 109055, 116194, 120877, 122180, 106614],
+      "numbers": {"prs": 23, "major_prs": 4, "points_sum": 95.59}
+    },
+    {
+      "workstream_id": "ws1",
+      "title": "Security boundaries for cloud agent sandboxes",
+      "what": "Treated cloud checkouts as untrusted so repo-defined extensions, settings and MCP servers cannot load in cloud Pi sessions (#120934), rejected symlink escapes in the desktop clone tool (#90123), enforced Modal egress allowlists for restricted VMs (#79608), enforced model entitlement server-side on every run path (#80331), and closed the Gmail duplicate-mailbox signup gap (#108223, #107552).",
+      "why_it_matters": "Agents running untrusted repository code with user credentials is the main security risk of the product; these PRs close credential-exfiltration and abuse paths.",
+      "outcome": "Five major security-class PRs in the window; #120934 deep-read with C=3 (critical) and P=7.8, and #108223/#107552 are among his 2 changelog entries.",
+      "his_role": "lead",
+      "evidence_prs": [120934, 90123, 79608, 80331, 108223, 107552],
+      "numbers": {"major_prs": 5, "changelog_prs": 2}
+    }
+  ],
+  "angles": {
+    "delivery": {
+      "grade": 8,
+      "rationale": "Area leader of the Tasks product with 26 major PRs, most of them about data loss, billing correctness or security of a paid product. The delivery estimate places him 6th of 20 (p73.7), and the six unsampled majors I deep-read scored higher than the sampled major stratum. Not a 9: no landmark PR, impact stays inside one product line, and much of the volume is incremental fixing of his own systems.",
+      "claims": [
+        {"statement": "Delivery estimate is 719.31, 6th of 20 candidates and above the 616.02 median.", "numbers": {"delivery": 719.31, "percentile": 73.7, "position": 6}, "evidence_ids": ["delivery", "estimate.delivery_hat"]},
+        {"statement": "26 PRs triaged major and 201 substantive; he is the top author in Product: Tasks, which holds 55% of his work.", "numbers": {"major_prs": 26, "substantive_prs": 201, "top_area_share": 0.55, "top_area_authors_n": 58}, "evidence_ids": ["tier_counts.major", "role.top_area_leader", "ws1"]},
+        {"statement": "His highest-value fixes target data loss and mis-recorded outcomes in cloud runs.", "numbers": {"P_109870": 16.0, "P_108247": 13.0, "P_116932": 13.0}, "evidence_ids": [109870, 108247, 116932]}
+      ]
+    },
+    "system": {
+      "grade": 7,
+      "rationale": "He designs real platform mechanisms (sandbox rotation, checkpoint and resume semantics, generation fencing, Redis lock semantics, gateway routing and spend caps, agent peer messaging), not just product surfaces. Held at 7: others build on his files at a below-median rate (66 vs median 77, p34.2), core_share is only 0.03, and the rotation system needed repeated correction after launch.",
+      "claims": [
+        {"statement": "Agent-to-agent peer messaging is a new platform primitive with a visibility chokepoint, idempotent attachments and audit rows.", "numbers": {"P": 9.19, "lines": 3005}, "evidence_ids": [81235]},
+        {"statement": "Sandbox rotation and checkpointing form a sustained subsystem he owns end to end across several PRs.", "numbers": {"rotation_prs": 7}, "evidence_ids": [86676, 101105, 109870, 110028, 118628, 120147, 124065]},
+        {"statement": "Downstream reuse is below the candidate median.", "numbers": {"downstream_authors": 66, "percentile": 34.2, "median": 77}, "evidence_ids": ["downstream_authors", "peer.downstream_authors"]}
+      ]
+    },
+    "quality": {
+      "grade": 7,
+      "rationale": "Zero reverts, first-pass review rate 1.0 and only 2 change requests across 272 reviewed PRs. Against that: 7 PRs were later explicitly fixed by others, the quality rate sits exactly at the median (0.97, p52.6), and his flagship rotation work was followed by six of his own fixes over eight weeks. Reviewers rarely push back on him, but some defects surface in production instead.",
+      "claims": [
+        {"statement": "No reverts and near-zero review corrections.", "numbers": {"reverted": 0, "first_pass_rate": 1.0, "changes_requested": 2, "reviewed_prs": 272}, "evidence_ids": ["metrics.reverted", "first_pass_rate", "role.network.changes_requested_rate.value"]},
+        {"statement": "Seven of his PRs were followed by a fix from someone else, including the major budget-guard fix.", "numbers": {"followup_fixed": 7, "quality_rate": 0.97, "percentile": 52.6}, "evidence_ids": ["peer.followup_fixed", "quality_rate", 88274, 100208, 105218, 109886, 113895, 115263, 115556]},
+        {"statement": "The flagship rotation PR scored Q=0 (test gap on redelivery order) and the clone-path hardening PR still carries a must-fix around in-root symlinks.", "numbers": {"Q_86676": 0, "Q_90123": 1}, "evidence_ids": [86676, 90123]}
+      ]
+    },
+    "team": {
+      "grade": 6,
+      "rationale": "A trusted node in the approval graph (2nd of 20) and a steady approver for 31 authors, with some reviews that catch real billing and budget bugs. Held at 6: team leverage is only p61.1, cross-team reach is at the median (15 teams, p42.1), only 6 people explicitly requested his review, 236 of his 277 reviews are approvals, and reviewing contributes 6 of his 1247.15 importance-flow points.",
+      "claims": [
+        {"statement": "High approval-graph trust and broad approvals.", "numbers": {"trust_rank": 0.02, "percentile": 94.7, "approved_authors_n": 30, "teams_covered_n": 15}, "evidence_ids": ["trust_rank", "role.network.approved_authors_n.value", "role.network.teams_covered_n.value"]},
+        {"statement": "Review comments catch real billing and spend issues that the authors then changed.", "numbers": {"sampled_review_items": 10, "lines_changed_afterwards": 6}, "evidence_ids": [108909, 115212, 125586, 70683]},
+        {"statement": "Review leverage is middling and mostly approvals.", "numbers": {"team_leverage": 902.1, "percentile": 61.1, "approvals": 236, "reviews": 277, "requested_by": 6}, "evidence_ids": ["team_leverage", "requested_by", "role.network.importance_flow.reviewer"]}
+      ]
+    }
+  },
+  "overall": {"grade": 7, "confidence": "medium"},
+  "key_numbers": [
+    {"label": "Delivery estimate", "value": 719.31, "metric_key": "delivery"},
+    {"label": "Major PRs", "value": 26, "metric_key": "tier_counts.major"},
+    {"label": "Approval-graph trust (percentile)", "value": 94.7, "metric_key": "trust_rank"}
+  ],
+  "calibration": {
+    "ranks": {"delivery": 73.7, "quality_rate": 52.6, "team_leverage": 61.1, "trust_rank": 94.7},
+    "note": "He sits in the upper-middle of the 20: 6th on delivery, median on quality rate, 8th of 19 on team leverage, 2nd on trust. The grades follow that shape. Delivery 8 is one notch above what p73.7 alone suggests, justified by area leadership of Tasks and the critical nature of his majors (on-demand deep reads averaged P=9.87 vs the sampled major mean 8.5). Quality 7 matches a median quality rate lifted by a perfect first-pass rate and zero reverts. Team 6 matches p61 leverage; the p94.7 trust rank reflects who approves him, not how much he multiplies others, so it does not raise the team grade. Overall 7: a core pillar of one important product, not a company-wide multiplier."
+  },
+  "custom_analyses": [
+    {
+      "question": "Are his unsampled major PRs as strong as the sampled ones, or is the major tier inflated by self-described urgency?",
+      "why": "Only 7 of 26 major PRs were in the stratified deep-read sample, and fix PRs often describe themselves as critical. The on-demand budget lets me check the most consequential-looking unsampled ones.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query tatoalo prs --tier major",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query tatoalo deepread 120934",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query tatoalo deepread 90123",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query tatoalo deepread 109870",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query tatoalo deepread 81235",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query tatoalo deepread 123981",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query tatoalo deepread 116932"
+      ],
+      "finding": "The six on-demand deep reads scored P = 7.82, 5.92, 16.00, 9.19, 7.29, 13.00 (mean 9.87), above the sampled major stratum mean of 8.5; all quotes verified. Three scored C=3 (critical): #120934 (cloud checkouts treated as untrusted to block credential-reading extensions), #109870 (rotation discarding active worktrees, the highest P in his pack at 16.0) and #116932 (checkpointing that cleared pending messages and deleted live workspace files). #81235 (peer messaging, 3005 lines) is the clearest new capability. The weakest was #90123 (P=5.92), whose summary notes a remaining must-fix around in-root symlinks.",
+      "evidence_ids": [120934, 90123, 109870, 81235, 123981, 116932, "estimate.strata.major+landmark.mean_P"],
+      "effect": "delivery 7 → 8 because the unsampled majors are real data-loss and security fixes, not inflated labels; the #90123 must-fix is carried into red_flags."
+    },
+    {
+      "question": "Was sandbox rotation a clean launch, or a chain of self-corrections?",
+      "why": "His flagship PR #86676 scored Q=0, and his quality metrics (first-pass 1.0, 0 reverts) could hide defects that he fixes himself rather than ones reviewers catch.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query --max-lines 400 tatoalo prs",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query tatoalo pr 86676",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query tatoalo pr 110028",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query tatoalo pr 118628",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query tatoalo pr 120147",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query tatoalo prs --area \"Product: Tasks\" --since 2026-10-01 --tier major"
+      ],
+      "finding": "#86676 (2026-08-24, 1583 lines, flagged rotation) was followed by six of his own PRs on the same mechanism: #101105 (09-18, rotation frames in the desktop watcher), #109870 (10-01, rotation discarded active worktrees), #110028 (10-01, Pi activity not reported before rotation), #118628 (10-16, startup metadata aborted rotation), #120147 (10-20, rotations abandoned after paying for snapshot and boot) and #124065 (10-28, dead-code cleanup). The feature was behind a flag and he owned every fix, but two of the follow-ups were data-loss bugs.",
+      "evidence_ids": [86676, 101105, 109870, 110028, 118628, 120147, 124065],
+      "effect": "quality 8 → 7 because the perfect first-pass rate reflects reviewer trust more than first-time correctness; system stays at 7 because owning the subsystem through to stability is a platform-owner trait."
+    },
+    {
+      "question": "How does his team footprint compare with peers in his orbit who rank higher on leverage or reach?",
+      "why": "He ranks 2nd on trust but only mid-pack on leverage and cross-team reach; comparing with andrewm4894 (top team leverage, a frequent collaborator) and webjunkie (top trust) shows what kind of team member he is.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query tatoalo compare andrewm4894",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query tatoalo compare webjunkie",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query tatoalo reviews-given --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query tatoalo reviews-received --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query tatoalo rank cross_team",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query tatoalo rank importance_flow"
+      ],
+      "finding": "Versus andrewm4894 he has about 1.8x the delivery (719.31 vs 405.78) and far higher trust (p94.7 vs p10.5), but about a third of the team leverage (902.1 vs 2935.77), fewer reviews (258 vs 743) and narrower reach (15 vs 27 teams). Versus webjunkie he trails on downstream authors (66 vs 106) and importance flow (1247.15 vs 2110.64) while matching trust. His reviews are 236 approvals out of 277, concentrated on the Tasks/Desktop group (adboio 31, charlesvien 28, jonathanlab 25 PRs); his first-review median is fast at 3.47h.",
+      "evidence_ids": ["team_leverage", "cross_team", "importance_flow", "trust_rank", "metrics.first_review_median_h"],
+      "effect": "team 7 → 6 because his network value is being a trusted, fast approver within one product group, not multiplying others across teams."
+    }
+  ],
+  "insights": [
+    {"insight": "His work reads as an on-call owner of a young, paid product: most majors are fixes to outage, data-loss, billing or security failure modes of cloud agent runs, shipped in small increments at about 23 PRs per active week.", "evidence_ids": ["ws1", "ws3", "metrics.active_weeks", 108247, 109870]},
+    {"insight": "Reviewers almost never push back on him (2 change requests in 272 reviewed PRs), so peer review is not where his defects get caught; they show up as follow-up fixes after merge, mostly his own.", "evidence_ids": ["first_pass_rate", "peer.followup_fixed", 86676, 120147]},
+    {"insight": "Output dipped to 4 PRs in the week of 2026-09-07 and 10 in the week of 2026-10-05, then recovered; there is no release-driven spike, the throughput is steady across 15 active weeks.", "evidence_ids": ["metrics.active_weeks"]}
+  ],
+  "red_flags": [
+    {"flag": "Seven of his PRs were later explicitly fixed by someone else (peer.followup_fixed = 7), including the major budget-guard retry fix #115263.", "evidence_ids": ["peer.followup_fixed", 88274, 100208, 105218, 109886, 113895, 115263, 115556]},
+    {"flag": "#82711: the deep-read quote for the Q score was not found in the diff, so its quality score is unverified.", "evidence_ids": [82711]},
+    {"flag": "#81972 (major: user prompts lost on cloud task resume) failed deep read and has no P score.", "evidence_ids": [81972]},
+    {"flag": "#90123 merged with a must-fix noted by the deep read: in-root symlinks can make cleanup delete another directory.", "evidence_ids": [90123]},
+    {"flag": "Flagship rotation PR #86676 scored Q=0 (test does not cover the redelivery order) and needed six follow-up fixes, two of them data-loss bugs.", "evidence_ids": [86676, 109870, 110028]}
+  ],
+  "counter_evidence": "His own PR descriptions frame many changes as preventing data loss or outages, and peers' behaviour largely supports that (no reverts, 309 approvals, 2 change requests). Where behaviour and narrative diverge, I weighted behaviour: the rotation feature described as making runs survive their TTL needed six follow-up fixes, and 7 PRs were later fixed by others, so the perfect first-pass rate is read as reviewer trust, not proof of correctness. His high trust_rank (p94.7) is not taken as evidence of team multiplication, because reviewing contributes only 6 of his 1247.15 importance-flow points and only 6 people requested his review. Volume (344 PRs) was not credited on its own; 108 routine, 3 trivial and 6 mechanical PRs add little.",
+  "coverage": {
+    "sampled_prs": 24,
+    "missing_data": ["review_requested_by", "issue_reactions", "changes_adopted_rate", "changes_rounds_mean", "bridge_rank", "deep read of #81972"],
+    "diff_truncated_share": 0.33
+  }
+}

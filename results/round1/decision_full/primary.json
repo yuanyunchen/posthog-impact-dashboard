@@ -1,0 +1,169 @@
+{
+ "context_summary": "Product: Warehouse sources looks like the centre of gravity (`area[Product: Warehouse sources].prs_share` 18.7%, `major_share` 15.9%, `changelog` 46), but much of that is templated catalogue breadth (C10 alone has about 874 add-source/add-table PRs and the changelog themes read '161 new source tables'); the durable leverage in that area is the shared sync pipeline (loader stall #80285, claim-query incident #110610, CDC correctness #82568) and the new credentials service migrated across 21 products (#124844, #125029). The clearest cross-team priority of the quarter was security and data-trust hardening: Django platform has the highest major-to-volume ratio of any area (`area[Django platform (API/models/auth)].major_share` 10.6% on 4.4% of PRs), and at least eight of the twenty candidates carry security majors (C17 with 37 major episodes, C15 with 13 of 26 majors on OAuth/MCP, C12 with 11 of 26 on CDP secrets, plus C10, C03, C02, C14, C01). Ingestion pipeline & CDP (`area[Ingestion pipeline & CDP (nodejs)].major_share` 8.4%, `changelog` 0) is where invisible but critical reliability work lives (C11 #121819, C20 #97591, C12 #89177, C06 #128013), so changelog counts understate it, while the changelog itself is inflated by repeated 'N new MCP tools' entries that count once per area. The script reports no single point of approval, but effective concentration exists: C05 approves 778 of C10's PRs with no blocking review after 2026-08-04 and about 1,200 of C10's 2,939 PRs have no recorded review, so the company's highest-volume stream has the thinnest independent gate; closed review loops (the developer-experience trio C07/C09/C14 in `community[1]` with purity 0.176, the Workflows trio around C12/C20, the C13/C04 pair) mean first_pass_rate is weak evidence and post-merge quality_rate and follow-up fixes are the more reliable quality signals. The structurally critical positions are foundation code (downstream_authors 106 for C10 and C07, 100 for C03, 95 for C15) and cross-community bridging (`bridge[C15].betweenness` 0.0792, `bridge[C14].betweenness` 0.0776, `bridge[C10].betweenness` 0.0746), though C14's bridging comes from CI approvals rather than substantive review.",
+ "ranking": [
+  {"cid": "C10", "rank": 1,
+   "context_role": "Owner and top changer of the area that produced 15.9% of all major+ episodes (87.7% of his work there), with 130 major episodes (6.5x the next candidate), 412 changelog PRs and 106 downstream authors (P97).",
+   "rationale": "Even after discounting about 874 templated add-source and add-table PRs, he leads on durable change: incident and data-correctness fixes on the shared loader path (#110610 and #113196, both P=16.0), billing fixes (#114623, #87465), and a credentials service plus integrations SDK migrated across 21 products (#124844, #125029). Quality is solid for the volume (quality_rate 0.981, P74, 0 reverts) but not clean: 31 follow-up fixes, a self-inflicted two-hour fleet-wide credential outage (#86546 then #122385), and about half his PRs with no recorded review. His team value is reach rather than correction (269 approvals vs 1 changes-requested).",
+   "comparisons": [
+    {"vs": "C07", "why": "Both are platform builders with 106 downstream authors, but C10's 130 vs 31 major episodes and the customer-facing criticality of his pipeline and credentials work outweigh C07's stronger approval trust (trust_rank P100 vs P68) and cleaner post-merge record."},
+    {"vs": "C19", "why": "Same area: C19 owns CDC correctness (32 major episodes), but C10 owns the shared pipeline and the cross-team platform foundations, with twice C19's downstream reach (106 vs 52)."}
+   ],
+   "deviation": ""},
+  {"cid": "C07", "rank": 2,
+   "context_role": "Most trusted approver of the 20 (trust_rank 0.0249, P100) and joint-highest foundation author (downstream_authors 106, P97), inside developer-experience community 1; owns repo-wide CI and the shared webhook ingress used by at least eight providers.",
+   "rationale": "He turns failure classes into shared mechanisms: the posthog/ingress transport ended silent webhook data loss across Slack, SES, Teams and others (#100292, #101508; 12 major of 36 PRs), the granian pin brought web analytics dashboard p90 back from about 15-20s to about 6s (#104208), and the shared ownership reader unified four products (#103852, P=16.0). Post-merge quality is clean (0 reverts, 9 follow-up fixes over 516 mature PRs, quality_rate 0.975), but pre-merge scrutiny sits in a closed loop with C09 and C14 (261 of 341 reviewed PRs) and 218 PRs have no human review. His 24 change requests, 95% adopted, make him a real gate for other teams.",
+   "comparisons": [
+    {"vs": "C03", "why": "Same community and archetype: C03 has higher raw delivery (1404.87 vs 1106.28), but C07 ships customer-visible fixes (webhook data loss, dashboard latency) with a much cleaner record (0 vs 2 reverts, quality_rate 0.975 vs 0.934) and is the stronger reviewer gate (24 change requests vs 1)."},
+    {"vs": "C09", "why": "Same team and CI domain: C07 builds abstractions others extend (106 vs 26 downstream authors), while C09's highest-scored PRs repair his own launch (#106828, #109297)."}
+   ],
+   "deviation": ""},
+  {"cid": "C03", "rank": 3,
+   "context_role": "Top changer of Frontend platform (shared UI/query) among 125 authors and 2nd on delivery (1404.87, P95); 100 downstream authors (P90), trust_rank P90 and 12 review requesters (P92), so his defaults are inherited by every product team.",
+   "rationale": "He changes paths every user and request touch: the boot document went from 544 KB to 10 KB (#94059, P=9.8) and ORM peer-batching now covers 275 team-scoped models (#126463, C3 L3), alongside an incident fix (#83929, P=13.0), an integration-token data-loss fix (#108163, P=16.0) and six security majors such as #102477 (P=16.0), all locked in with CI ratchets (#126768). He is held below C07 because his quality_rate is the lowest of the 20 (0.934, P0; 2 reverts and 13 follow-up fixes clustered in the boot campaign), 368 of 652 PRs have no recorded review, and his riskiest repo-wide changes (#126463, #126421) merged in the final week with Q=1.",
+   "comparisons": [
+    {"vs": "C17", "why": "C03's system leverage (downstream_authors 100 vs 84, trust_rank P90 vs P16) and user-visible performance gains outweigh C17's larger major-episode count (37 vs 20), even though C17's security work is equally company-wide."},
+    {"vs": "C07", "why": "Ranks one place below C07: comparable platform reach, but the worst post-merge correction rate in the pool and immature late-window defaults cost him the tie-break."}
+   ],
+   "deviation": ""},
+  {"cid": "C17", "rank": 4,
+   "context_role": "The pool's only quality guardian: a security engineer whose primary area is Django platform (43.9% of his work), the area holding 10.6% of major episodes on 4.4% of PRs; 2nd of 20 on major episodes (37, P95) but trust_rank P16 because his approvals come mainly from one security colleague.",
+   "rationale": "He makes company-wide security changes on a small-PR budget: a single access-precedence resolver for the core permission layer (#114423, P=16.0, L=3), CSP taken from report-only to enforced on signed-in, shared and embedded pages over about 55 PRs (#106238, #116719), SSRF and DNS-rebinding defences generalised across all warehouse sources (#95376, #101362), and removal of the compromised eMudhra roots from every PostHog runtime within three days (#121580, #122294). He loses points for a repair tail of about 24 PRs after CSP enforcement broke features, a quality_rate of 0.954 (P26), and a thin review network (team_leverage missing, reviewer importance flow 9.6 of 671.84).",
+   "comparisons": [
+    {"vs": "C15", "why": "Both own security: C17 has 37 vs 21 major episodes, and his guardrails reach every tenant and runtime (CSP, CA trust stores, the access resolver), while C15's work covers one auth surface and his security majors mostly passed one teammate's review."},
+    {"vs": "C11", "why": "C11's migration is broader engineering, but C17's major-episode count (37 vs 28) and the critical, cross-tenant nature of every fix put him ahead; both have similar post-merge quality (0.954 vs 0.966)."}
+   ],
+   "deviation": "R rank 11 understates him because R's delivery term rewards volume (delivery P26) and his team metrics are missing (team_leverage null). His 37 major episodes (P95) are privilege escalation, cross-tenant access, SSRF and incident-response fixes across all runtimes, which is the most consequential security record in the pool."},
+  {"cid": "C11", "rank": 5,
+   "context_role": "Feature-flags owner and review hub of community 2 (191 reviews inside it), a bridge reaching 11 communities (betweenness 0.0398); 28 major episodes (P76) and 12 review requesters (P92, 2nd of 20).",
+   "rationale": "He carried the flag_evaluations storage migration from shadow writer (#86291) through cutover (#110254, P=13.0) to a transparent HogQL rewrite and removal of its rollout flag (#124397 P=16.0, #126076), across ingestion, ClickHouse, cohorts, experiments and data deletion (#117395, P=16.0), and separately fixed silent CDP event drops and /flags 503s on a frozen DB (#121819, #108772). Post-merge quality is at the median (0.966, 0 reverts), but pre-merge is second-weakest (first_pass_rate 0.961, P5), and the HogQL rewrite needed four corrective majors within four days (#125115, #125267, #125649, #126076).",
+   "comparisons": [
+    {"vs": "C15", "why": "C11's migration is a completed multi-layer program with privacy-compliance closure inside the window, while C15's largest new platform (the hog CLI) is days old; C11 also has more major episodes (28 vs 21) and a better quality_rate (0.966 vs 0.945)."},
+    {"vs": "C02", "why": "Both enter core HogQL under the same strict owner, but C11's changes reach more teams (flag calls, cohorts, experiments, CDP) and peers seek his review (12 vs 5 requesters)."}
+   ],
+   "deviation": ""},
+  {"cid": "C15", "rank": 6,
+   "context_role": "Top cross-community bridge of the 20 (betweenness 0.0792, 12 communities reached) and de facto OAuth/MCP security owner from the growth team; 95 downstream authors (P84), trust_rank 4/20, cross_team 25 (P84).",
+   "rationale": "He closed account-takeover, privilege-escalation and cross-customer leak paths in OAuth and MCP (13 of 26 majors, including #113013, #113014, #105547 at P=13.0 and #127775) and built agent-facing platform pieces (MCP step-up, WebMCP #109255, tool catalog #125197). He is held at 6 by a quality_rate of 0.945 (P10, 7 follow-up fixes), by security majors mostly approved by one teammate (fercgomes was sole reviewer on 83 PRs; only 3 of 13 security majors had a security-team reviewer), and by a hog CLI burst (19 PRs in 4 days) whose migration is not finished.",
+   "comparisons": [
+    {"vs": "C11", "why": "Ranks below C11: equally critical work, but fewer major episodes (21 vs 28), a weaker post-merge record and newer, less proven platform output."},
+    {"vs": "C16", "why": "C15's security surface is company-wide and his network position is far stronger (bridge rank 1, downstream_authors 95 vs 75), which outweighs C16's cleaner quality (0.993 vs 0.945)."}
+   ],
+   "deviation": ""},
+  {"cid": "C16", "rank": 7,
+   "context_role": "Writes 76% of Product: Replay Vision PRs (top of 46 authors) and is the most-requested reviewer of the 20 (requested_by 17, P100), but his network is narrow (cross_team 14, P29; trust_rank P26) and one reviewer, fasyy612, checks most of his work.",
+   "rationale": "He made a new LLM-spending product billable and compliant: exact credit admission and a metering repair (#116148, #86160), a one-week deletion and privacy sweep built on a reusable Event AsyncDeletion (8 majors; #83017 P=13.0, #101472), and rasterizer hardening (#101761, P=16.0). Quality is second-best in the pool (0.993, P95; 0 reverts, 1 follow-up fix); the main blemish is his own 22-hour metering outage (#84098, fixed by #86160). The impact stays inside one product (downstream_authors 75, P42).",
+   "comparisons": [
+    {"vs": "C12", "why": "Both are product-team pillars with excellent quality; C16 edges ahead with 27 major PRs that are mostly privacy and billing content, a reusable deletion primitive other writers can use, and peers who seek his review (17 vs 5 requesters)."}
+   ],
+   "deviation": ""},
+  {"cid": "C12", "rank": 8,
+   "context_role": "Top changer of Product: Workflows (66.1% of his work, 41 authors in the area) inside the 8-person community 8 whose hub is C20; narrow approval reach (cross_team 9, P10; trust_rank P21).",
+   "rationale": "He ran a secret-leak campaign, started from querying production, that removed plaintext CDP credentials from ClickHouse, browser bundles, logs and audit exports and purged historical copies (7 majors; #80919, #109384 and #108965 all at P=13.0). He also fixed a queue wedge that affected every team on the shared CDP workers (#89177) and shipped Broadcasts, which made the public changelog (#82343). Post-merge quality is among the best (0.988, P84; 0 reverts, 2 follow-up fixes), though scrutiny is narrow: 125 of his 142 reviewed PRs were seen only by C20 or meikelmosby.",
+   "comparisons": [
+    {"vs": "C20", "why": "Same team and review loop: C20 has more major episodes (28 vs 21) and wider reach (23 vs 9 teams), but C12's credential remediation is company-level security and far less of his output needed rework (quality_rate 0.988 vs 0.950, 2 vs 7 corrected PRs)."},
+    {"vs": "C01", "why": "Similar team-pillar delivery, but C12's security campaign included remediating historical leaked data and has almost no correction chain, whereas C01's flagship rotation work needed six self-fixes."}
+   ],
+   "deviation": "R rank 14 reflects median delivery (P47) and low team metrics. It misses that 11 of his 26 majors are security or access-control fixes on customer credentials, which the volume-weighted delivery term scores like ordinary features, and it misses his near-clean post-merge record."},
+  {"cid": "C01", "rank": 9,
+   "context_role": "Top changer of Product: Tasks (55.4% of his work among 58 authors; area major_share 2.7%) and 2nd of 20 on trust_rank (P95), but almost all his importance comes from authoring (1241.15 of 1247.15).",
+   "rationale": "He keeps a young paid product alive: rotation and checkpoint fixes against workspace data loss (#109870 P=16.0, #116932 P=13.0), correctly recorded run outcomes (#108247, P=13.0), LLM gateway billing and spend caps (#94154, #109055), and sandbox security boundaries for untrusted repositories (#120934, C=3). Quality sits at the median (0.967, 7 follow-up fixes), the flagship rotation PR (#86676, Q=0) needed six self-fixes, and team reach is median (15 teams, requested_by 6).",
+   "comparisons": [
+    {"vs": "C20", "why": "Similar delivery (719 vs 702) and both own product reliability; C01's fixes carry higher criticality per PR (including sandbox security), and he has higher trust (P95 vs P74), no reverts (0 vs 1) and a better quality_rate (0.967 vs 0.950)."},
+    {"vs": "C18", "why": "Same community 0 and adjacent products: C01 beats C18 on criticality and trust (trust_rank P95 vs P58) and needed fewer corrections (7 vs 10 follow-up fixes)."}
+   ],
+   "deviation": ""},
+  {"cid": "C20", "rank": 10,
+   "context_role": "Review hub of community 8 (181 reviews inside it) and an above-median foundation author (downstream_authors 88, P74) who approves across 23 teams (P76); his team is inferred as workflows.",
+   "rationale": "He leads the move of PostHog's own transactional email off Customer.io onto Workflows (55 PRs; #117663, #122019) and fixed shared-pipeline failures that hit every team: a cyclotron counter overflow that stalled workflow email for over a day (#97591, P=13.0), and zero-member realtime cohorts that silently disabled flags and workflows (#121092, P=16.0). He ranks below C01 and C12 because post-merge quality is 16/20 (0.950, 1 revert, 6 follow-up fixes in email and secrets paths) and the email cutover is still flag-gated.",
+   "comparisons": [
+    {"vs": "C12", "why": "Ranks below his teammate despite more major episodes (28 vs 21): his corrections concentrate in high-stakes email and credential code, and his flagship migration has not yet cut over."},
+    {"vs": "C02", "why": "Ranks above C02 because his reliability fixes sit in shared CDP and cohort infrastructure that other products depend on (88 vs 63 downstream authors, 23 vs 16 teams), despite C02's cleaner quality."}
+   ],
+   "deviation": ""},
+  {"cid": "C02", "rank": 11,
+   "context_role": "Top changer and de facto owner of Product: Data modeling (26.5% of his work; area major_share 0.6%) in community 3; 8 changelog PRs (P84), but team_leverage P10 and the highest changes_requested_rate of the 20 (0.069).",
+   "rationale": "He closed silent failure modes in materialized views (#80689, #100153), access-control and billing gaps (#101079 P=13.0, #95263, #125069), and started Trino as a second HogQL engine (23 PRs, #126460). Post-merge quality is excellent (0.991, P90; 1 follow-up fix), but the impact stays inside a small area and reviewers push back most when he enters core HogQL.",
+   "comparisons": [
+    {"vs": "C04", "why": "Close call: C02 has more major episodes (24 vs 20) and visible changelog value (8 vs 0), which edges out C04's broader downstream reach (89 vs 63 authors building on their files)."}
+   ],
+   "deviation": ""},
+  {"cid": "C04", "rank": 12,
+   "context_role": "Product-analytics engineer in community 3 whose code is a base others continue on (downstream_authors 89, P79) while his review footprint is small (team_leverage P16, requested_by 4).",
+   "rationale": "He retired the lossy legacy insight Filter system across about 46 PRs (#100835, #104270, #115882 at P=13.0, #127983), which removes a class of silent data-loss bugs for every product that embeds the series picker. He also fixed at least 16 wrong-result bugs (#118393, #127976, #104005 at P=13.0). Quality is strong (0.981, P79; 2 minor follow-ups); he ranks below C02 on major episodes (20 vs 24) and has no changelog presence.",
+   "comparisons": [
+    {"vs": "C13", "why": "Same team and review pair: C04 has five times the major episodes (20 vs 4), slightly higher quality (0.981 vs 0.972) and more downstream authors (89 vs 83)."}
+   ],
+   "deviation": "R rank 16 uses delivery P37, which scores the 46-PR migration as routine chores. The completed consolidation, 20 major episodes of correctness fixes and 89 downstream authors put him above C13 and the lower product builders."},
+  {"cid": "C13", "rank": 13,
+   "context_role": "Top changer of Product: Product analytics (38.8% of his work) and a moderate bridge (betweenness 0.0436, 11 communities); downstream_authors 83 (P58), but only 4 major episodes (P8).",
+   "rationale": "He completed the Chart.js to quill-charts migration across about a dozen products and deleted the dependency (#88145, #87831), and shipped two outage-class fixes: the HogQL coalesce regression that broke saved insights for many teams (#81892, P=13.0) and dashboards returning 500 (#122501, P=16.0). Quality is good (0.972, P63), but major work is thin (4 episodes, 18/20), and the late-October spike is flag-gated AI work with churn (#125481 removed four days later, #119175 Q=0).",
+   "comparisons": [],
+   "deviation": "R rank 8 is lifted by first_pass_rate P92 and changes_requested_rate P95, which reflect a tight review pair with C04 rather than independent scrutiny. With only 4 major episodes against C04's 20 on the same team, he ranks below C04."},
+  {"cid": "C19", "rank": 14,
+   "context_role": "Second-largest author in Warehouse sources (93.8% of his work; area major_share 15.9%) and C10's main review partner (205 of 257 reviewed PRs), with trust_rank P5 and requested_by 2 (P3).",
+   "rationale": "He owns Postgres CDC correctness and silent data-loss fixes in customer syncs (#82568 and #86717 at P=16.0, #118548, #98817), with 32 major episodes (P90) and 10 changelog PRs (P95). He is held down because 46 of 76 majors merged on a bot approval alone, a data-correctness fix needed two follow-ups for duplicated or skipped rows (#93764, then #94379), and few others build on his files (52, P16).",
+   "comparisons": [],
+   "deviation": ""},
+  {"cid": "C18", "rank": 15,
+   "context_role": "Top changer of Product: Desktop (54.5% of his work among 78 authors; area major_share 3.2%) and 4th on delivery (769.22, P84), but requested_by 2 (P3) and cross_team 11 (P18).",
+   "rationale": "He built bring-your-own-subscription and spend controls for agent tasks (#95656 and #97450, both P=16.0) and measured speedups for Today and Cmd+K (8.31s to 2.79s, #127509). But his 23 major PRs collapse into 14 episodes, 188 PRs in one week were flag-gated parity slices, and 10 follow-up fixes cluster in billing, credential and authorization code (#80869, #90933, #97543; #95656 scored Q=0).",
+   "comparisons": [],
+   "deviation": ""},
+  {"cid": "C09", "rank": 16,
+   "context_role": "Review hub of developer-experience community 1 (285 reviews inside it) and a bridge reaching 12 communities, yet only 26 downstream authors (P5), because others consume his CI files rather than extend them.",
+   "rationale": "He moved backend CI onto Depot with concrete savings (about 19k runner-minutes a day, #106911; cache size halved, #93326) and fixed real data loss (#98690, Visual Review baselines deleted on approval, P=16.0). Quality is 0.955 (P32): 29 of 87 Depot PRs are fixes or reverts, one change left PRs with no backend gate (#116511, reverted by #117140), and his P=16 analytics fix repairs his own three-day-old launch (#109297).",
+   "comparisons": [],
+   "deviation": ""},
+  {"cid": "C06", "rank": 17,
+   "context_role": "Owner of the APM observability stack in community 4; last of 19 on team_leverage (220.99, P0) and 19/20 on cross_team (7 teams), but 24 major episodes (P66).",
+   "rationale": "He built metrics4 storage, a Rust remote-write ingestion service and PromQL/Grafana compatibility for a new paid product, and fixed C=3 data-loss bugs in logs and metrics ingestion (#105202 P=13.0, #128013, #104593 P=16.0). He sits near the bottom because of a quality_rate of 0.940 (P5; 1 revert, 7 follow-up fixes, production timeouts from #112738) and a review footprint confined to one partner.",
+   "comparisons": [
+    {"vs": "C14", "why": "Ranks above C14 because he delivered far more durable change (24 vs 4 major episodes, a new storage and ingestion stack), even though C14 has broader review reach."}
+   ],
+   "deviation": ""},
+  {"cid": "C14", "rank": 18,
+   "context_role": "Second-highest betweenness of the 20 (0.0776, 13 communities) and cross_team 27 (P95), but the bridging is CI approvals: 391 of 415 reviews are approvals, requested_by 4 (P18), importance_flow P5.",
+   "rationale": "He ran a sustained merge-queue program that moved from hand-tuned lanes to lanes derived from code structure (#90078, #110140, #117151), hardened Stamphog's trust boundary (#125439, P=16.0) and encrypted webhook secret headers (#96545, P=13.0). Delivery is 18/20 (433.25) with 4 major episodes, the savings are self-reported, Dynamic CI is non-gating, and quality_rate is 0.948 (P16).",
+   "comparisons": [],
+   "deviation": ""},
+  {"cid": "C08", "rank": 19,
+   "context_role": "Review hub of community 0 (214 reviews inside it) and first on team_leverage (2935.77, P100) and cross_team (27), but bottom-quartile on delivery (P5) and trust_rank (P10), because 97 of his 163 PRs have no recorded review.",
+   "rationale": "His highest-value work is three incident fixes: the ChatGPT connector OAuth failure (#80746) and the agent closing strangers' PRs (#86477), both P=16.0, plus a report-generation race (#84115, P=13.0), alongside 9 changelog PRs on Signals. The 22-layer Autoresearch stack is still flag-gated with no adoption signal, half his triaged majors deep-read at P 3.6-5.5, and his 315 reviews include zero change requests.",
+   "comparisons": [],
+   "deviation": ""},
+  {"cid": "C05", "rank": 20,
+   "context_role": "Review hub of warehouse community 5 by volume (911 reviews inside it) and the effective approval gate for C10 (778 of his 854 reviewed PRs), yet trust_rank P0 and downstream_authors 3 (P0).",
+   "rationale": "He authored only 9 PRs, but #80285 ended a fleet-wide v3 loader stall (P=16.0), and three CI speedups land on every Node PR (#126087, #126907). His review load keeps C10's stream moving (median first review 0.18h), but 816 consecutive approvals with no blocking review after 2026-08-04 make it a thin gate, and his delivery is last of 20 (63.02).",
+   "comparisons": [],
+   "deviation": ""}
+ ],
+ "archetype_groups": [
+  {"archetype": "platform builder",
+   "cids": ["C10", "C07", "C03", "C11", "C15", "C04", "C13", "C09", "C14", "C05"],
+   "tradeoff": "The group splits on whether others actually build on the abstraction and whether it held up after merge. C10, C07 and C03 lead with 100-106 downstream authors and repo-wide reach; C10 is first on criticality and scale, C07 second on a cleaner post-merge record and stronger gatekeeping, and C03 third because his quality_rate is the pool's lowest. C11 and C15 build platform pieces for specific surfaces (flag storage, OAuth/MCP). C11 ranks above C15 because his migration finished inside the window. C04 and C13 consolidate product-analytics foundations, with C04 ahead on major work (20 vs 4 episodes). C09, C14 and C05 improve CI and pipelines for everyone, but their code is consumed rather than extended (downstream_authors 26, 44 and 3), so they sit last."},
+  {"archetype": "product builder",
+   "cids": ["C16", "C12", "C01", "C20", "C02", "C19", "C18", "C06", "C08"],
+   "tradeoff": "All nine own one product; the order follows how critical their majors are and how little rework they needed. C16 and C12 combine compliance or security-critical work with the best quality records in the pool (0.993 and 0.988). C01 and C20 have comparable reliability work, but more correction chains (rotation fixes; email and secrets follow-ups). C02 and C19 deliver correctness inside smaller or bot-reviewed areas. C18 has high volume, but its corrections sit in billing and credential code. C06 and C08 have real incident fixes, but weak quality or unproven flag-gated launches."},
+  {"archetype": "quality guardian",
+   "cids": ["C17"],
+   "tradeoff": "The only candidate whose main job is protecting other teams' code. He ranks 4th because his 37 major episodes are cross-tenant security fixes and guardrails that reach every product. He ranks below C03 because his team footprint is thin and his CSP rollout needed a long repair tail."}
+ ],
+ "top5_cases": [
+  {"cid": "C10", "case": "He owns the area that produced 15.9% of all major+ episodes, and his 130 major episodes are 6.5 times the next candidate's even after the templated catalogue PRs are set aside. His top work fixed fleet-wide stalls and duplicate rows on the shared loader path (#110610 and #113196, both P=16.0) and stopped billing for jobs that never ran (#114623). He then built a credentials service and integrations SDK that 21 products now use (#124844, #125029), and 106 other authors build on his files. The self-inflicted credential outage (#86546 then #122385) and thin review on half his PRs are real, but they do not close a gap this large."},
+  {"cid": "C07", "case": "He repeatedly finds a failure class that hurts many teams and replaces it with one shared mechanism. The ingress transport ended silent webhook data loss across at least eight providers (#100292, #101508), the granian pin restored web analytics dashboard latency (#104208), and the ownership reader unified four products (#103852, P=16.0). He is the most trusted approver in the pool (trust_rank P100), 106 authors build on his files, and his 24 change requests were 95% adopted. His own record is clean after merge (0 reverts, 9 follow-up fixes over 516 mature PRs)."},
+  {"cid": "C03", "case": "He changed defaults that every user and team inherits. The boot document shrank from 544 KB to 10 KB (#94059), lazy relation reads across 275 team-scoped models were batched (#126463), and CI ratchets keep the gains from regressing (#126768). He also fixed a production OAuth incident (#83929, P=13.0), integration-token data loss (#108163, P=16.0) and six access-control gaps (#102477, P=16.0), and 100 authors build on his files. He makes the top 5 despite the pool's lowest quality_rate (0.934), because none of his 20 major PRs was reverted or follow-up-fixed."},
+  {"cid": "C17", "case": "He is the pool's dedicated security owner, with 37 major episodes (2nd of 20) whose content is privilege escalation, cross-tenant access, SSRF and credential exposure. He unified project-access precedence in the core permission layer (#114423, P=16.0), enforced CSP across signed-in, shared and embedded pages (#106238, #116719), and pinned connect-time hosts for every warehouse source (#95376, #101362). He also removed the compromised eMudhra roots from every runtime PostHog ships within three days (#121580, #122294). The CSP repair tail and his weak review network are the cost, but no other candidate reduced company-wide risk as directly."},
+  {"cid": "C11", "case": "He completed a cross-cutting storage migration inside the window. Feature-flag calls moved out of the events table through cutover (#110254), a transparent HogQL rewrite (#124397, P=16.0) and removal of its rollout flag (#126076), with every deletion path updated for compliance (#117395, P=16.0). He also fixed silent CDP event drops and /flags 503s on core pipelines (#121819, #108772). He is the go-to reviewer for feature flags and experiments (12 requesters, 2nd of 20). The four-day correction chain after the HogQL rewrite shows the work was not right first time, but every fix was his own and none needed a revert."}
+ ],
+ "sixth_place_note": "C15 nearly made the top 5: his OAuth/MCP security fixes (13 of 26 majors, including the cross-customer MCP prompt leak #105547) are as critical as any in the pool, and he holds the strongest network position (bridge betweenness 0.0792, 95 downstream authors). He falls just short of C11 and C17 on three counts. He has fewer major episodes (21 vs 28 and 37). His quality_rate is weaker (0.945, 18/20), and his security majors had thin independent review (83 PRs approved by one teammate alone; only 3 of 13 security majors reviewed by the security team). And his largest new platform, the hog CLI, was days old at window end with posthog-cli not yet retired.",
+ "evidence_requests": [
+  {"cid": "C10", "need": "Classify the roughly 1,200 PRs with no recorded review (bot or Stamphog approval vs truly unreviewed), and sample review timing and text from C05's 816 consecutive approvals of his PRs, to decide whether the warehouse-sources stream has a functioning independent gate."},
+  {"cid": "C03", "need": "Post-window revert and follow-up-fix signals, and any production query-count metric, for #126463 (ORM fetch mode across 275 models) and #126421 (auth middleware replacement), both merged in the final week with deep-read Q=1."},
+  {"cid": "C07", "need": "Whether #126411 (default 1000-row DRF list cap across 219 viewsets) broke external API clients after merge (issues or follow-up PRs), and whether the 218 PRs without a human review were approved by Stamphog or other bots he owns."},
+  {"cid": "C17", "need": "Recompute his missing L0 metrics (team_leverage, changelog_prs, ai_share) so his team angle and R score are comparable with the other 19."},
+  {"cid": "C11", "need": "Any further flag_evaluations reader fixes or customer-visible gaps after #126076, and confirmation that deletion sweeps reach flag_evaluations in production for mode-2 organisations."},
+  {"cid": "C15", "need": "Diffs and review threads for the security majors #83980, #96835 and #99353, which were approved only by fercgomes, to confirm someone with security context checked them."},
+  {"cid": "C19", "need": "Human review coverage and any later fixes for majors #98817, #118548 and #90152, which merged on bot approval alone."},
+  {"cid": "C20", "need": "Identify which PR was reverted (the report says 1 revert but not which) and whether it sits on the transactional-email or credential path."}
+ ]
+}

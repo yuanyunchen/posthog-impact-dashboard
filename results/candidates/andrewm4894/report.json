@@ -1,0 +1,167 @@
+{
+  "cid": "andrewm4894",
+  "positioning": "Self-driving team product builder who single-handedly stood up the flag-gated Autoresearch product as a 22-layer PR stack, ships most of the Signals scout/inbox work, and is the widest-reaching approver among the 20 candidates, while his own code is only lightly reviewed.",
+  "role": {
+    "primary_role": "product builder",
+    "team": "self-driving (inferred from role.team_inferred; role.team is unknown)",
+    "how_they_create_impact": "He builds whole product surfaces end to end and in long stacked series (Autoresearch 1/22-22/22, community skills 1/7-7/7), fixes the production incidents those surfaces hit (OAuth token exchange, Signals report failures, PR mis-attribution), and keeps a large slice of the AI/agent org moving through fast approvals (first review median 1.53h across 50 authors).",
+    "network_summary": "Fast, broad approver rather than gatekeeper: he approved work from 50 authors across 27 teams (role.network.approved_authors_n, role.network.teams_covered_n; 1st of 20 on cross_team), most heavily inside self-driving (59 PRs) plus surfaces, ai-research and agent-infrastructure, and sits at bridge_rank 4 (role.network.bridge_rank). Few people explicitly ask for him (requested_by_n 5, median). The reverse direction is thin: only 66 of his 163 PRs carry a recorded review, mostly from skoob13 (27), so his approval-graph trust score is low (role.network.trust_rank 0.0065, p10.5). He corrects others more than he is corrected (fixes_given 6 vs fixes_received 1, reverts 0 both ways), and 77 other authors later built on files he changed (role.network.built_on_by_n, median)."
+  },
+  "core_contributions": [
+    {
+      "workstream_id": "ws2",
+      "title": "Autoresearch: a new ML-prediction product built as a 22-layer stack",
+      "what": "Built the flag-gated Autoresearch product from skeleton to UI: data model and HogQL system table, labeler and dataset templates, sandboxed inference, champion selection, scoring and online validation, REST CRUD and lifecycle actions, agent write surface (feature materialization, artifact store), headless training dispatch, a daily Temporal coordinator, 20 MCP tools, and the list/detail/create scenes.",
+      "why_it_matters": "It is a whole new product surface where agents train and serve models on customer event data; the deep-read layers show care for the risky parts (caller-authored HogQL under query:read scopes and ClickHouse throttles, per-request sandbox directories, row locks against concurrent live runs, artifact size and path guards).",
+      "outcome": "28 PRs over 49 days, 5 major, 3 deep reads at P 12.1-13.0 (#89149, #89154, #89155). He is the top author in the area (role.top_area_leader). Still behind a feature flag with no changelog entry, so user adoption is unproven; one layer (#89155) needed a follow-up fix and 18 of the 28 PRs have no recorded review.",
+      "his_role": "lead",
+      "evidence_prs": [88739, 89133, 89149, 89154, 89155, 89156, 101569, 101572, 119301],
+      "numbers": {"prs": 28, "major_prs": 5, "max_P": 13.0, "span_days": 49, "lines": 37179}
+    },
+    {
+      "workstream_id": "ws1",
+      "title": "Signals inbox and scouts: reliability fixes plus new signal sources",
+      "what": "90 PRs on Signals: fixed a ClickHouse visibility race that failed ~10% of new reports, stopped research runs from claiming strangers' PRs (which could comment on and close them), added Datadog errors/alerts/APM/logs as inbox sources, follow-up reports for failed validation checks, an 'Unused features' scout, throttle increases, and many scout-skill docs and UI tweaks.",
+      "why_it_matters": "Two of these are data-correctness / user-harm fixes on a live AI product: #84115 restored report generation, and #86477 (filed under Desktop) prevented the agent from closing unrelated users' PRs. Several shipped as public changelog items.",
+      "outcome": "Deep reads: #84115 P 13.0 (V3 C3), #86477 P 16.0 (V3 C3). 11 public changelog entries cite 9 of his PRs, including #115135, #115636 and #120323. The tail is long: 39 of 90 PRs are routine or trivial.",
+      "his_role": "lead",
+      "evidence_prs": [84115, 86477, 120323, 115135, 115636, 83321],
+      "numbers": {"prs": 90, "major_prs": 3, "substantive_prs": 48, "max_P": 16.0, "changelog_prs": 9}
+    },
+    {
+      "workstream_id": "ws6",
+      "title": "OAuth incident fix for the ChatGPT connector",
+      "what": "Let credential-less CIMD private_key_jwt clients fall back to public PKCE on code and refresh grants, added client_auth_method telemetry, and hardened against malformed-assertion downgrades.",
+      "why_it_matters": "During an active incident every ChatGPT connector token exchange failed with invalid_client and existing connections were breaking as refresh tokens came due; this is an auth-path change where getting the downgrade logic wrong would be a security bug.",
+      "outcome": "Deep read P 16.0 (V3 C3 N2 L2 Q2, all quotes verified), the joint-highest P in his record; no revert or follow-up fix recorded.",
+      "his_role": "lead",
+      "evidence_prs": [80746],
+      "numbers": {"prs": 1, "P": 16.0, "lines": 13620}
+    }
+  ],
+  "angles": {
+    "delivery": {
+      "grade": 6,
+      "rationale": "The matrix puts him 19/20 on delivery, but that figure collapses his stacked series into few episodes; the qualitative record has three incident-class fixes at P 13-16 and the 3rd most changelog PRs. It stays at 6 rather than 7 because his largest build, Autoresearch, is still flag-gated with no changelog or adoption signal, and much of the Signals volume is routine.",
+      "claims": [
+        {"statement": "Three incident or data-correctness fixes scored in the top deep-read band.", "numbers": {"P_80746": 16.0, "P_86477": 16.0, "P_84115": 13.0}, "evidence_ids": [80746, 86477, 84115]},
+        {"statement": "His work reaches public changelogs more than almost anyone in the pool.", "numbers": {"changelog_prs": 9, "changelog_percentile": 88.9}, "evidence_ids": ["metrics.changelog_prs", 115135, 115636, 120323]},
+        {"statement": "The matrix delivery estimate is low because episodes compress stacks; the stratified estimate is about twice as high.", "numbers": {"delivery_hat": 405.78, "delivery_stratified": 793.1, "delivery_percentile": 5.3, "major_episodes": 12}, "evidence_ids": ["delivery", "estimate.delivery_stratified", "major_episodes"]}
+      ]
+    },
+    "system": {
+      "grade": 6,
+      "rationale": "Autoresearch is real platform-style engineering (sandboxed inference, Temporal scheduling, a HogQL system table, 20 MCP tools, an artifact store) and the scout cookbook and skills patterns are reusable building blocks for other scouts. But core_share is 0.05 and downstream reuse is at the median, so there is no evidence yet that other teams build on his abstractions more than on a typical candidate's.",
+      "claims": [
+        {"statement": "He built the infrastructure layers of a new product, not just its UI.", "numbers": {"ws2_prs": 28, "P_89154": 12.1, "P_89149": 13.0, "mcp_tools": 20}, "evidence_ids": ["ws2", 89133, 89149, 89154, 89156, 101569]},
+        {"statement": "Other authors' follow-on work on his files is average for the pool.", "numbers": {"downstream_authors": 77, "percentile": 50.0, "core_share": 0.05}, "evidence_ids": ["downstream_authors", "metrics.core_share"]}
+      ]
+    },
+    "quality": {
+      "grade": 6,
+      "rationale": "No reverts in either direction and only one changes-requested review on his PRs, but four PRs needed an explicit follow-up fix (including a major Autoresearch layer) and 97 of 163 PRs have no recorded review, so risk control rests largely on him. Quality rate sits slightly below the pool median, consistent with a 6.",
+      "claims": [
+        {"statement": "Clean revert record with high first-pass approval when reviewed.", "numbers": {"reverted": 0, "first_pass_rate": 0.985, "changes_requested": 1, "reviewed_prs": 65}, "evidence_ids": ["metrics.reverted", "role.network.first_pass_rate"]},
+        {"statement": "Four PRs were follow-up fixed by others, three of them AI co-authored.", "numbers": {"followup_fixed": 4, "ai_reverted_or_fixed": 3, "quality_rate": 0.96, "quality_percentile": 36.8}, "evidence_ids": [84189, 88990, 89155, 115135, "quality_rate"]},
+        {"statement": "Most of his PRs, including seven majors, merged with no recorded review.", "numbers": {"prs_with_review": 66, "prs_total": 163, "unreviewed_major": 7}, "evidence_ids": [65013, 87121, 89133, 89149, 89155, 101572, 111518]}
+      ]
+    },
+    "team": {
+      "grade": 7,
+      "rationale": "He is the highest-leverage reviewer in the pool by breadth and speed, and when he does comment it changes code (#108760). Held at 7 rather than 8 because his reviews are overwhelmingly approvals with no changes requested, explicit review requests are only at the median, and changes_adopted_rate has no data.",
+      "claims": [
+        {"statement": "Broadest review reach of the 20: 315 reviews on 261 PRs from 50 authors across 27 teams, first review in a median 1.53h.", "numbers": {"team_leverage": 2935.77, "team_leverage_percentile": 100.0, "cross_team": 27, "first_review_median_h": 1.53}, "evidence_ids": ["team_leverage", "cross_team", "metrics.first_review_median_h"]},
+        {"statement": "His substantive review comments on #108760 led to line changes on reviewer-assignment and research-prompt logic.", "numbers": {"comment_reviews_on_108760": 7}, "evidence_ids": [108760]},
+        {"statement": "Approval-heavy and lightly requested: 263 approvals, 52 comments, 0 changes requested; 5 people requested him.", "numbers": {"approved": 263, "commented": 52, "changes_requested_given": 0, "requested_by": 5}, "evidence_ids": ["requested_by", "role.network.requested_by_n"]}
+      ]
+    }
+  },
+  "overall": {"grade": 6, "confidence": "medium"},
+  "key_numbers": [
+    {"label": "Team leverage (1st of 19)", "value": 2935.77, "metric_key": "team_leverage"},
+    {"label": "Teams whose authors he approved", "value": 27, "metric_key": "cross_team"},
+    {"label": "PRs cited in public changelog", "value": 9, "metric_key": "changelog_prs"}
+  ],
+  "calibration": {
+    "ranks": {"delivery": 5.3, "quality_rate": 36.8, "team_leverage": 100.0, "trust_rank": 10.5},
+    "note": "Position among the 20: near the bottom on delivery (19/20) and trust_rank (18/20), just below median on quality_rate (13/20), and first on team_leverage. Quality 6 and team 7 agree with that position. Delivery 6 sits above the p5.3 rank on purpose: the episode metric folds his 22-layer and 7-layer stacks into a few episodes (stratified estimate 793.1 vs 405.78), and he has three incident-class fixes at P 13-16 plus 9 changelog PRs (p88.9). The low trust_rank mainly reflects how few of his own PRs get reviewed (66 of 163), not that his reviewers distrust him. Overall 6, below the 7-8 'team pillar' band, because outside team breadth no column puts him clearly above the median."
+  },
+  "custom_analyses": [
+    {
+      "question": "Is his 19/20 delivery position real, or does stacked-PR delivery get compressed by the episode metric?",
+      "why": "He ships in numbered stacks (Autoresearch 1/22-22/22, community skills 1/7-7/7), and the delivery column scores max P + 0.25 x rest per episode, which would discount a long stack heavily.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 rank delivery",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 rank major_episodes",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 prs --ws ws2",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 timeline",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 compare tatoalo"
+      ],
+      "finding": "29 of his 163 PRs are numbered stack layers (21 in ws2, 7 in ws3, 1 in ws5), and 14 major PRs reduce to 12 major episodes (p15.8). The stratified estimate is 793.1, above the pool median of 616.02, while delivery_hat is 405.78. Compared with tatoalo (delivery 719.31, p73.7), he has fewer PRs (163 vs 344) but more changelog PRs (9 vs 2). The compression is real, but the Autoresearch stack is still flag-gated: none of the 11 changelog entries cites a ws2 PR. Output also front-loads: 141 of 163 PRs landed before the week of 2026-10-05 (which had 1 PR), and the 22 later PRs are mostly routine or trivial.",
+      "evidence_ids": ["delivery", "major_episodes", "ws2", 88739, 89156, 71867, 65016, "estimate.delivery_stratified"],
+      "effect": "delivery 5 -> 6: the matrix undercounts stacks and his incident fixes, but not to 7 because the largest stack has no user-adoption signal yet."
+    },
+    {
+      "question": "Is his top team_leverage substantive review influence or fast approvals?",
+      "why": "team_leverage is 2935.77 (1st), but trust_rank is p10.5 and requested_by is only at the median; the gap needs explaining before grading team.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 reviews-given --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 rank team_leverage",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 rank cross_team",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 rank requested_by",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 rank trust_rank",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 compare skoob13"
+      ],
+      "finding": "Submitted reviews are 315 on 261 PRs (263 APPROVED, 52 COMMENTED, 0 CHANGES_REQUESTED); team_leverage uses metrics.reviews_given = 743, which counts more review events than submitted reviews. Breadth is genuine: 50 authors, 27 teams (1st), first review median 1.53h vs skoob13's 3.71h. Comment reviews cluster on agent-infrastructure (21 of 47 reviews) and unteamed authors (22 of 77); his 30 reviews for ai-research and 34 for surfaces are almost pure approvals (0 and 1 comments). Where he engages, it changes code: on #108760 he left 7 comment reviews on reviewer auto-assignment and research-prompt memory, all on lines changed afterwards. Only 5 people requested him (median). trust_rank is low because his own PRs receive few approvals, not because of his reviewing.",
+      "evidence_ids": ["team_leverage", "cross_team", "requested_by", "trust_rank", 108760, "metrics.reviews_given"],
+      "effect": "team 8 -> 7: the reach is real and fast, but approval-dominated with no requested changes and no adoption data, so it reads as an unblocker more than a quality gate."
+    },
+    {
+      "question": "How much of his own output was independently reviewed, and did the unreviewed part cause problems?",
+      "why": "reviews-received covers only 66 PRs, and the dossier red flag lists 4 follow-up-fixed PRs; risk control matters for the quality grade.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 reviews-received --top 10",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 prs --tier major",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 pr 89155",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 pr 84189",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 pr 88990",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 deepread 115135",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 rank quality_rate"
+      ],
+      "finding": "66 of 163 PRs have a recorded review (83 reviews from 23 reviewers, skoob13 on 27). The 97 without one include 7 of 14 majors (#65013, #87121, #89133, #89149, #89155, #101572, #111518), concentrated in ws1 (55), ws2 (18) and ws3 (14); some stack layers may have been reviewed on a parent PR, which this data cannot show. Despite that, there are 0 reverts and 4 follow-up fixes (#84189, #88990, #89155, #115135), one of them the unreviewed major #89155 (P 13.0). #115135's on-demand deep read (P 4.49, Q1) is a 19-line skill rewrite, so that follow-up looks small. quality_rate is 0.96 (p36.8).",
+      "evidence_ids": [65013, 87121, 89133, 89149, 89155, 101572, 111518, 84189, 88990, 115135, "quality_rate"],
+      "effect": "quality stays at 6: the outcome record is clean, but low review coverage on major work means nobody besides him gated much of it."
+    },
+    {
+      "question": "Do the high-tier PRs that were never deep-read hold up?",
+      "why": "Several majors were only triaged, not deep-read; the strongest claims should not rest on summaries alone.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 deepread 84115",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 deepread 120323",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 deepread 65013",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 deepread 95970",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query andrewm4894 deepread 101572"
+      ],
+      "finding": "Only #84115 confirmed as top-band (P 13.0, V3 C3: the summary workflow read ClickHouse before the embedding insert landed). The other triaged majors deep-read as moderate: #65013 P 5.53, #120323 P 4.49, #95970 P 3.65, #101572 P 3.65. So the major-tier label overstates several feature PRs; his real peaks are the incident fixes (#80746, #86477, #84115) plus the Autoresearch core layers (#89149, #89154, #89155).",
+      "evidence_ids": [84115, 120323, 65013, 95970, 101572],
+      "effect": "delivery held at 6 rather than 7: half the major tier is moderate on deep read, so the peaks are fewer than the tier counts suggest."
+    }
+  ],
+  "insights": [
+    {"insight": "He ships in long numbered stacks (29 of 163 PRs), which makes PR counts look inflated and episode-based delivery look deflated at the same time; neither number alone describes him.", "evidence_ids": ["ws2", "ws3", "delivery", "major_episodes"]},
+    {"insight": "His highest-value work is reactive production fixes on agent products (OAuth for ChatGPT, report-generation race, PR mis-attribution), each P 13-16, rather than the large new feature builds, which deep-read at P 3.6-5.5 apart from the Autoresearch core layers.", "evidence_ids": [80746, 84115, 86477, 120323, 65013]},
+    {"insight": "He is the main approver for the self-driving and adjacent AI teams (59 self-driving PRs, 30 ai-research, 27 agent-infrastructure), so he functions as an unblocker for the agent org, while his own work is reviewed mostly by one person (skoob13, 27 PRs).", "evidence_ids": ["role.top_reviewed", "role.top_reviewers", "cross_team"]},
+    {"insight": "Output dropped after the end of September: the week of 2026-10-05 has 1 PR, and October to November is 22 PRs that are mostly routine or trivial, apart from #120323 and #119301.", "evidence_ids": [120323, 119301, 127622]}
+  ],
+  "red_flags": [
+    {"flag": "Four of his PRs needed an explicit follow-up fix (peer.followup_fixed = 4), three of them AI co-authored (metrics.ai_reverted_or_fixed = 3), including the major Autoresearch lifecycle-actions layer.", "evidence_ids": [84189, 88990, 89155, 115135, "peer.followup_fixed"]},
+    {"flag": "97 of 163 PRs, including 7 majors, have no recorded review in the data; parent-PR review of stack layers cannot be ruled out.", "evidence_ids": [65013, 87121, 89133, 89149, 89155, 101572, 111518]}
+  ],
+  "counter_evidence": "Against a higher grade: the matrix places him 19/20 on delivery and 18/20 on trust_rank; half of his triaged majors deep-read as moderate (P 3.6-5.5); Autoresearch is still flag-gated with no changelog entry; his reviews include no changes-requested. Against a lower grade: the episode metric discounts his stacks (stratified 793.1 vs 405.78), he has three incident-class fixes at P 13-16 with no reverts, and he is first in the pool on review reach. Self-description vs behaviour: PR summaries describe Autoresearch as enabling the product's primary flows, but peer behaviour (no changelog citation, 18 of 28 PRs with no recorded review) shows nothing yet beyond the flag. Data caveat: dossier review comments on #120672 read like author replies ('Fixed in ...') and #120672 is in neither his PR list nor reviews.json, so the comment attribution may be mixed with pushes to others' branches (events_given.continue = 302).",
+  "coverage": {
+    "sampled_prs": 19,
+    "ondemand_deepreads": 6,
+    "missing_data": ["review_requested_by", "issue_reactions", "team", "changes_adopted_rate", "review comment text for most reviews"],
+    "diff_truncated_share": 0.63
+  }
+}

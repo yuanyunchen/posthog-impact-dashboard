@@ -1,0 +1,157 @@
+{
+  "cid": "sampennington",
+  "positioning": "The lead author of PostHog's product analytics insights and charting surface: he owns the quill-charts library, finished the company-wide Chart.js removal, and shipped the outage-class fixes that kept saved insights and dashboards loading.",
+  "role": {
+    "primary_role": "platform builder",
+    "team": "product-analytics",
+    "how_they_create_impact": "He builds and hardens the shared charting layer (quill-charts) that every product's charts sit on, then uses it to ship insight features (nested and inline behavioral filters, data checks, 'Explain this chart') and to fix correctness bugs in HogQL and dashboards. Most of his leverage comes from code others build on (83 downstream authors) rather than from reviewing.",
+    "network_summary": "Trusted day-to-day approver inside product-analytics, not a cross-org gatekeeper. He approved 37 distinct authors (role.network.approved_authors_n) across 15 teams (role.network.teams_covered_n, median among the 20), and 9 people explicitly requested his review (role.network.requested_by_n, 6th of 20). His own PRs pass first time (role.network.first_pass_rate = 1.0 on 93 reviewed PRs, role.network.changes_requested_rate = 0) and are never reverted (role.network.reverts_received = 0). His code is a base others continue on: 83 other authors later changed files he touched (role.network.built_on_by_n). His review weight is light: importance flowing to him as reviewer is 12.9 of 840.84 total (role.network.importance_flow.reviewer), and trust_rank 0.01 sits at the 36.8th percentile. bridge_rank 6 (role.network.bridge_rank) places him as a moderate connector between product-analytics and the product teams that consume charts (logs, alerts, error tracking, MCP)."
+  },
+  "core_contributions": [
+    {
+      "workstream_id": "ws2",
+      "title": "quill-charts as the single chart platform, and the end of Chart.js",
+      "what": "Between 2026-08-06 and 2026-08-25 he migrated chart surfaces across billing, logs, metrics, error tracking, hog functions, experiments, tracing, alerts, web analytics, AI observability and internal debug tooling from Chart.js or bespoke D3 to quill-charts, flipped the shared Sparkline to quill for ~10 surfaces (#87831), and deleted the Chart.js dependency (#88145). He then kept extending the library: ScatterChart (#81127), BarList and StackedBarList (#115002, #121877), Gauge (#123010), DST-safe time axes (#97674), and hover/repaint performance fixes (#125205, #125329, #125454).",
+      "why_it_matters": "Every product team now renders charts through one library with one theme, one tooltip and one test harness, so chart fixes land once instead of per product. Removing a whole charting dependency is a cross-team platform change, not a local refactor.",
+      "outcome": "Chart.js is gone from the frontend (#88145). The 47-PR quill-charts workstream (ws.ws2.agg.prs_n) has 33 substantive PRs and an L_mean of 2.0, the highest leverage score of any of his workstreams; the error tracking sparkline migration alone removed ~780 lines (#77249).",
+      "his_role": "lead",
+      "evidence_prs": [88145, 87831, 86261, 77249, 81127, 97674, 121877, 125205, 77641],
+      "numbers": {"ws2_prs": 47, "ws2_substantive": 33, "migration_prs_aug": 17, "ws2_L_mean": 2.0, "downstream_authors": 83}
+    },
+    {
+      "workstream_id": "ws1",
+      "title": "Product analytics insights: correctness fixes and query power",
+      "what": "He is the top author in Product analytics (role.top_area_leader, 75 authors in the area). He fixed dashboards returning HTTP 500 after tile display saves nested filters past orjson's 255-level limit (#122501, P=16), exposed nested event property filters that the editor silently hid (#90222, P=16), added inline behavioral property filters that avoid saving a cohort (#83738, P=9.2, flag-gated), fixed transient chart loading failures (#89199) and consolidated ~30 bespoke display-option components into one declarative list (#126737, #127497).",
+      "why_it_matters": "Insights and dashboards are the core of PostHog's analytics product; #122501 and #90222 are data-correctness and availability bugs that customers hit directly.",
+      "outcome": "133 PRs (ws.ws1.agg.prs_n) with 2 major and 86 substantive; the two top deep reads in his whole profile (P=16.0 each) sit here, both with Q=2 (tests targeting the regression).",
+      "his_role": "lead",
+      "evidence_prs": [122501, 90222, 83738, 89199, 126737, 127497],
+      "numbers": {"ws1_prs": 133, "ws1_major": 2, "ws1_substantive": 86, "top_P": 16.0}
+    },
+    {
+      "workstream_id": "ws4",
+      "title": "HogQL regression and performance fixes behind saved insights",
+      "what": "He fixed a HogQL type-check regression that, from 2026-08-11, rejected boolean-vs-JSON coalesce branches and broke saved SQL insights and dashboards across many teams (#81892, P=13.0). He also removed an N+1 in cache-fingerprint view walking that made layered warehouse dashboards time out (#106193), narrowed the cache-key access-control lookup (#110523) and fixed quarter/year interval return types (#124346).",
+      "why_it_matters": "These are query-engine bugs that every insight refresh, cache warm and AI query tool passes through, so a single fix restores many customers' dashboards at once.",
+      "outcome": "9 PRs (ws.ws4.agg.prs_n), 2 major, Q_mean 2.0; #81892 is the clearest company-wide incident fix in his window.",
+      "his_role": "lead",
+      "evidence_prs": [81892, 106193, 110523, 124346],
+      "numbers": {"ws4_prs": 9, "ws4_major": 2, "ws4_Q_mean": 2.0, "p_81892": 13.0}
+    }
+  ],
+  "angles": {
+    "delivery": {
+      "grade": 7,
+      "rationale": "He shipped a small number of genuinely critical fixes (HogQL regression across many teams, dashboards 500ing) plus steady feature work in the product he leads. Volume of major work is low against the 20 (4 major episodes, 18th of 20) and the newest AI features are still behind flags, so this is a strong team pillar rather than company-level delivery.",
+      "claims": [
+        {"statement": "Two outage-class fixes: HogQL coalesce regression breaking saved insights across many teams, and dashboards returning HTTP 500 from recursive filter nesting.", "numbers": {"p_81892": 13.0, "p_122501": 16.0, "C_score_each": 3}, "evidence_ids": [81892, 122501]},
+        {"statement": "Delivery estimate ranks 14th of 20 and only 4 PRs were triaged major, against a median of 21 major episodes among candidates.", "numbers": {"delivery": 535.85, "delivery_percentile": 31.6, "major_episodes": 4}, "evidence_ids": ["delivery", "major_episodes"]},
+        {"statement": "Five of his PRs are cited in the public changelog (Slack charts, SQL scatter plots, previous-period trends, annotation scope), 78th percentile among candidates.", "numbers": {"changelog_prs": 5}, "evidence_ids": [75261, 82558, 88428, 101466, "changelog_prs"]},
+        {"statement": "The late-October push (77 PRs in two weeks) is mostly flag-gated AI work (data checks, Explain this chart) whose user value is not yet proven.", "numbers": {"prs_week_2026_10_19": 39, "prs_week_2026_10_26": 38}, "evidence_ids": [126106, 119175, 119275]}
+      ]
+    },
+    "system": {
+      "grade": 8,
+      "rationale": "This is his strongest angle. He completed a cross-product library migration and removed a dependency, built reusable chart primitives others consume, and consolidated duplicated UI into shared abstractions. Other people keep building on his files (83 downstream authors, 9th of 20).",
+      "claims": [
+        {"statement": "Finished the Chart.js to quill-charts migration across about a dozen product surfaces in three weeks and deleted the dependency.", "numbers": {"migration_prs": 17, "surfaces_via_sparkline_flip": 10}, "evidence_ids": [88145, 87831, 86261, 76683, 86545, "ws2"]},
+        {"statement": "The quill-charts workstream carries his highest leverage score and added new reusable chart types.", "numbers": {"ws2_prs": 47, "ws2_L_mean": 2.0, "p_97674": 7.3}, "evidence_ids": ["ws2", 81127, 121877, 123010, 97674]},
+        {"statement": "Consolidated insight and SQL editor display options into one declarative list, removing about 30 bespoke components.", "numbers": {"components_removed": 30, "lines": 3432}, "evidence_ids": [126737, 127497]},
+        {"statement": "Others continue on his code: 83 distinct authors later changed files he touched.", "numbers": {"downstream_authors": 83, "downstream_percentile": 57.9}, "evidence_ids": ["downstream_authors", "role.network.built_on_by_n"]}
+      ]
+    },
+    "quality": {
+      "grade": 7,
+      "rationale": "Zero reverts, three explicit follow-up fixes on 170 mature PRs, and every reviewed PR passed first time. Deep reads mostly score Q=2 with regression tests. Deductions: the explain-chart MCP app was deep-read at Q=0, and he built and then removed the Jeeves explain endpoint within four days, which signals churn in the AI work. First-pass 1.0 also partly reflects that only 93 of 244 PRs drew a review.",
+      "claims": [
+        {"statement": "No reverts and 3 follow-up-fixed PRs out of 170 mature PRs; quality_rate ranks 8th of 20.", "numbers": {"reverted": 0, "followup_fixed": 3, "mature_prs": 170, "quality_rate": 0.97, "quality_rate_percentile": 63.2}, "evidence_ids": ["quality_rate", "metrics.followup_fixed", 77641, 84280, 94037]},
+        {"statement": "All 93 reviewed PRs were approved with no changes requested.", "numbers": {"first_pass_rate": 1.0, "reviewed_prs": 93, "changes_requested_rate": 0.0}, "evidence_ids": ["first_pass_rate", "changes_requested_rate"]},
+        {"statement": "The three follow-up-fixed PRs each deep-read at Q=2 with P between 4.5 and 5.5, so the fixes landed on well-tested work rather than careless changes.", "numbers": {"p_77641": 5.53, "p_84280": 4.49, "p_94037": 5.53, "q_each": 2}, "evidence_ids": [77641, 84280, 94037]},
+        {"statement": "AI-feature churn: the explain-chart MCP app scored Q=0, and the Jeeves explain endpoint was removed four days after it merged.", "numbers": {"q_119175": 0, "days_between_125481_and_127478": 4}, "evidence_ids": [119175, 125481, 127478]}
+      ]
+    },
+    "team": {
+      "grade": 6,
+      "rationale": "He is a reliable approver for his own team and some neighbours, and his rare written reviews catch real defects. But the review footprint is narrow and mostly approvals: team_leverage and trust_rank both sit in the bottom half of the 20, and reviewer-side importance is about 1.5% of his total.",
+      "claims": [
+        {"statement": "Gave 175 reviews on 151 PRs for 38 authors, 148 of them approvals and only 2 change requests; half the reviewed PRs were product-analytics.", "numbers": {"reviews": 175, "approvals": 148, "changes_requested": 2, "product_analytics_prs": 76, "team_leverage": 575.47, "team_leverage_percentile": 27.8}, "evidence_ids": ["team_leverage", "role.network.events_given.approve"]},
+        {"statement": "When he does comment, he finds concrete defects: quadratic regex and parsing loops timed in Node and Python, an export expiry that skips midnight round-up, and lost query parameters on a redirect.", "numbers": {"regex_ms_at_80k_chars": 666, "comments_changed_code": 10}, "evidence_ids": [119842, 124372, 112763]},
+        {"statement": "Nine people explicitly requested his review (6th of 20), but trust_rank is 0.01 at the 36.8th percentile.", "numbers": {"requested_by": 9, "requested_by_percentile": 71.1, "trust_rank": 0.01, "trust_rank_percentile": 36.8}, "evidence_ids": ["requested_by", "trust_rank"]},
+        {"statement": "Reviewer-side importance flow is 12.9 of 840.84, so almost all of his measured impact comes from authorship.", "numbers": {"importance_flow_reviewer": 12.9, "importance_flow_total": 840.84}, "evidence_ids": ["importance_flow", "role.network.importance_flow.reviewer"]}
+      ]
+    }
+  },
+  "overall": {"grade": 7, "confidence": "medium"},
+  "key_numbers": [
+    {"label": "Downstream authors building on his files", "value": 83, "metric_key": "downstream_authors"},
+    {"label": "Quality rate (no reverts, 3 follow-up fixes)", "value": 0.97, "metric_key": "quality_rate"},
+    {"label": "Delivery estimate", "value": 535.85, "metric_key": "delivery"}
+  ],
+  "calibration": {
+    "ranks": {"delivery": 31.6, "quality_rate": 63.2, "team_leverage": 27.8, "trust_rank": 36.8},
+    "note": "Among the 20 he sits in the lower-middle on delivery (14/20), team_leverage (14/19) and trust_rank (13/20), and upper-middle on quality_rate (8/20). The overall 7 is above what those ranks alone suggest, for two reasons the delivery estimate does not capture: the Chart.js removal is a cross-product platform change that the per-episode score rates as routine or mechanical PRs (#88145 is tiered mechanical), and two of his four major PRs are incident-class fixes. I did not raise him further because major_episodes is 18th of 20 and his team footprint is narrow; the team grade (6) is set to match the low team_leverage and trust_rank. Note that the rank tool reports changes_requested_rate (a lower-is-better column) at percentile 5.3 even though his value of 0 is the best possible, so that percentile was not used."
+  },
+  "custom_analyses": [
+    {
+      "question": "Did he actually finish the Chart.js to quill-charts migration, or contribute a few surfaces to someone else's effort?",
+      "why": "Over 40 of his PRs are tiered routine or mechanical chart migrations, which the delivery estimate scores low. If together they are one completed cross-product migration, the system grade should reflect the whole, not the parts.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sampennington prs --ws ws2",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query --max-lines 400 sampennington prs",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sampennington pr 88145",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sampennington pr 87831",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sampennington pr 86261",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sampennington deepread 77641"
+      ],
+      "finding": "Yes. 17 of his PRs mention Chart.js or legacy-chart migration, concentrated between 2026-08-06 and 2026-08-25, touching billing (#77178), logs (#78837, #82670), metrics (#76683), error tracking (#77249), hog functions (#81936), experiments (#81708), tracing (#86154), alerts (#86526, #86545, #86564), AI observability (#86243), web analytics (#86261, summary: 'completing the charts migration') and the shared Sparkline (#87831, ~10 surfaces). The sequence ends with deleting the dead legacy renderer (#88049) and the chart.js dependency itself (#88145). The on-demand deep read of the enabling library PR #77641 scored P=5.53 with L=2 and Q=2. Collaborators on ws2 are reviewers, not co-authors, so he led it.",
+      "evidence_ids": [88145, 88049, 87831, 86261, 77249, 76683, 86545, 81708, 77641, "ws2"],
+      "effect": "system 7 → 8: individually small PRs add up to a finished cross-product platform migration with the dependency removed."
+    },
+    {
+      "question": "Is the late-October volume spike real impact, or flag-gated AI exploration with churn?",
+      "why": "His two busiest weeks (39 and 38 PRs, 2026-10-19 and 2026-10-26) are three to four times his September rate and dominated by data checks and 'Explain this chart'. High PR counts should not raise delivery unless the work holds up.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sampennington timeline",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query --max-lines 100 sampennington prs --since 2026-10-19",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sampennington deepread 125481",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sampennington deepread 119175",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sampennington deepread 126737",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sampennington pr 127478"
+      ],
+      "finding": "Mixed. 91 PRs since 2026-10-19 carry 313.6 points and only one major (#122501, the dashboard 500 fix, which is not AI work). The AI features are behind flags (#126106, #119275) and were still being reshaped: the Jeeves explain endpoint (#125481, deep-read P=5.53) was removed four days later as unused (#127478), and the explain-chart MCP app (#119175) deep-read at P=4.49 with Q=0. The display-option consolidation shipped in the same window (#126737, P=4.49, Q=2) is solid refactoring. The spike is real engineering but mostly unproven product value.",
+      "evidence_ids": [122501, 125481, 127478, 119175, 126106, 119275, 126737],
+      "effect": "delivery held at 7 rather than 8: the volume spike adds little proven user value, and quality loses a point for the endpoint churn and the Q=0 MCP app."
+    },
+    {
+      "question": "Where does his review weight actually land, and do his reviews catch real problems?",
+      "why": "He gave 175 reviews, but team_leverage and trust_rank are both below the median of the 20. The team grade depends on whether he is a rubber-stamp approver or a reviewer whose comments change code.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sampennington reviews-given --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sampennington reviews-received --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sampennington rank requested_by",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sampennington rank cross_team",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sampennington compare pauldambra"
+      ],
+      "finding": "His reviews concentrate on product-analytics (76 of 151 PRs) and one author (thmsobrmlr, 46 PRs), with blitzscale a distant second (22). 148 of 175 reviews are approvals and 2 are change requests. The written comments in the dossier are high quality and all led to changed lines: measured quadratic behaviour in element-chain parsing (#119842), an export expiry bug versus the S3 lifecycle rule (#124372), and a misleading PieChart-swap claim (#112763). Against teammate pauldambra he has a better quality profile (quality_rate 0.97 vs 0.93, 0 vs 2 reverts) but a smaller review and trust footprint (requested_by 9 vs 12, trust_rank p36.8 vs p89.5, first review median 15.4h vs 4.8h).",
+      "evidence_ids": [119842, 124372, 112763, "requested_by", "cross_team", "trust_rank"],
+      "effect": "team stays at 6: reviews are substantive when written but rare, and his network weight is team-local."
+    }
+  ],
+  "insights": [
+    {"insight": "His delivery score understates him because his biggest platform result is spread across many routine and mechanical PRs; the dependency-deletion PR that closes the migration is tiered mechanical.", "evidence_ids": [88145, "ws2", "delivery"]},
+    {"insight": "He works heavily with AI assistants (109 of 244 PRs AI co-authored, 45%) and only 1 of those was reverted or follow-up fixed, so AI-assisted output has not dragged his quality down.", "evidence_ids": ["metrics.ai_share", "metrics.ai_reverted_or_fixed"]},
+    {"insight": "His most valuable fixes are the ones that protect data trust in insights: hidden nested filters, recursive dashboard filters, and the HogQL coalesce regression. This matches the newer data-checks feature, which surfaces internal users, bots and duplicate events on charts.", "evidence_ids": [90222, 122501, 81892, 119275, 120060]}
+  ],
+  "red_flags": [
+    {"flag": "Peers explicitly follow-up-fixed 3 of his PRs (peer.followup_fixed = 3): the quill bar layout config (#77641), the PostHog AI schema reference conversion (#84280) and shared y-axes for trends (#94037). All three deep-read at Q=2, so the fixes look like normal iteration rather than broken work.", "evidence_ids": [77641, 84280, 94037, "peer.followup_fixed"]},
+    {"flag": "He removed his own Jeeves insight explain endpoint four days after merging it, as unused (#127478 reverses #125481).", "evidence_ids": [127478, 125481]},
+    {"flag": "The explain-chart MCP tool and app deep-read at Q=0 (no meaningful test or risk control signal).", "evidence_ids": [119175]}
+  ],
+  "counter_evidence": "Peer behaviour mostly supports his own PR descriptions: no reverts, first-pass approval on every reviewed PR, and 83 downstream authors. Where they diverge: (1) Several descriptions frame AI features as improving explanations for users, but #125481 was removed as unused four days later (#127478) and the features remain flag-gated, so behaviour says this work is still exploratory. (2) A first-pass rate of 1.0 is less meaningful than it looks, because only 93 of 244 PRs drew any review and his most frequent reviewer (thmsobrmlr, 24 PRs) is also the author he reviews most (46 PRs); this is a tight mutual-approval pair. (3) Three PRs needed follow-up fixes from others despite tests. Ranks argue against a higher overall: delivery 14/20, major_episodes 18/20, team_leverage 14/19.",
+  "coverage": {
+    "sampled_prs": 15,
+    "ondemand_deepreads": 6,
+    "missing_data": ["review_requested_by", "issue_reactions"],
+    "diff_truncated_share": 0.33
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "cid": "thmsobrmlr",
+  "positioning": "Product-analytics engineer who spent the window retiring PostHog's legacy insight Filter system end to end, while shipping a steady stream of fixes for insights that silently returned wrong numbers.",
+  "role": {
+    "primary_role": "platform builder",
+    "team": "product-analytics",
+    "how_they_create_impact": "Runs long, staged migrations in the insights stack: moves editors and readers off the lossy legacy filter shape onto query nodes, then deletes the old converter, endpoints and Filter classes. Along the way he finds and fixes data-correctness bugs (dropped series fields, wrong retention and funnel results, stale all-time ranges) and isolates product code behind facades. 222 PRs, 23 tiered major, zero reverts.",
+    "network_summary": "Reliable approver inside product-analytics rather than a sought-after reviewer: he approved 34 authors across 17 teams (role.network.approved_authors_n, role.network.teams_covered_n), concentrated on sampennington (24 PRs) and MattPua (13), but only 4 people explicitly requested his review (role.network.requested_by_n, p18.4). His code is a foundation others build on: 89 distinct authors later changed files he touched (role.network.built_on_by_n, p78.9). He rarely needs correction: first-pass approval 0.98 and only 2 follow-up fixes against 222 PRs (role.network.first_pass_rate, role.network.fixes_received). He is not a bridge between communities (role.network.bridge_rank unknown, community 3), and almost all importance flowing to him comes from authorship, not reviewing (role.network.importance_flow.author 749.7 vs reviewer 13.35)."
+  },
+  "core_contributions": [
+    {
+      "workstream_id": "ws1",
+      "title": "Retiring the legacy insight Filter system",
+      "what": "A staged migration across about 46 PRs from 2026-08-27 to 2026-11-03: stopped converting legacy filters on read (#96074), removed the legacy trend and funnel endpoints (#97647), deleted the filters-to-query converter (#100835, 9,060 lines), deleted the 40-mixin legacy Filter (#104270), moved the insight, experiment and settings series editors onto node-native pickers (#115882, #115906, #115946), switched chart labels, tables, drill-downs and CSV export to read the query series, and finally deleted EntityFilter, ActionFilter and the filters package (#127312, #127983).",
+      "why_it_matters": "The legacy round-trip silently dropped query fields the editor did not show (math_multiplier, revenue currency, fixedProperties, warehouse source type), so any UI edit could change an insight's numbers; it also affected experiment metric configs and customer-analytics settings. Removing the dual representation eliminates that class of bug for every team that embeds the series picker (experiments, CDP, replay, heatmaps).",
+      "outcome": "About 49k changed lines across the program, the legacy converter and Filter classes gone, and no reverts. #115882 is one of his two highest-scored PRs (P=13.0); #96074 kept filters-only insights from 500-ing the insights list (P=5.92).",
+      "his_role": "lead",
+      "evidence_prs": [96074, 97647, 100835, 104270, 115882, 115906, 115946, 116839, 120255, 127312, 127983],
+      "numbers": {"program_prs": 46, "program_lines": 49186, "major_prs": 4, "top_P": 13.0, "reverts": 0}
+    },
+    {
+      "workstream_id": "ws2",
+      "title": "HogQL query-engine correctness and safety",
+      "what": "Fixes and guards in the query engine behind insights: bounded the trends/stickiness per-series fan-out to 200 queries with 10-way concurrency (#102774), fixed stale cached all-time start dates on warehouse saved views (#127976) and all-time insights on String timestamp columns that skipped older rows (#127979), made missing cohorts return 400 instead of 500 (#99500), and added system.event_definitions / property_definitions tables (#124827).",
+      "why_it_matters": "These are silent-wrong-result and resource-exhaustion bugs: a single insight could exhaust worker threads and the shared Postgres pool, and saved-view insights could drop rows for up to 24 hours without any error.",
+      "outcome": "24 PRs, 6 tiered major; deep reads score #102774 at P=7.82, #124827 at P=7.5 and #127976 at P=5.92.",
+      "his_role": "lead",
+      "evidence_prs": [102774, 127976, 127979, 99500, 124827, 76718],
+      "numbers": {"prs": 24, "major_prs": 6, "points_sum": 108.15}
+    },
+    {
+      "workstream_id": "misc",
+      "title": "Cross-product data and security fixes",
+      "what": "Fixed CSV uploads that were introspected with RFC 4180 quoting but read with quoting off, leaving tables unqueryable (#104005); closed two prompt-injection gaps in PostHog AI context handling (#103158, #103615); fixed AI observability renderers hijacking the global person column across core tables (#103997).",
+      "why_it_matters": "Data warehouse uploads that save but fail every query, and forged trusted-context tags in the AI agent, are correctness and security issues outside his home area that he picked up and fixed.",
+      "outcome": "#104005 scored P=13.0 (tied highest), #103997 P=7.8; both PostHog AI hardening PRs tiered major.",
+      "his_role": "lead",
+      "evidence_prs": [104005, 103158, 103615, 103997],
+      "numbers": {"major_prs": 4, "top_P": 13.0}
+    }
+  ],
+  "angles": {
+    "delivery": {
+      "grade": 7,
+      "rationale": "A team-core pillar for product analytics. Delivery is dominated by data-correctness fixes in insights, funnels, retention and warehouse queries, plus two security fixes for PostHog AI. No landmark PR and no changelog entries, so it stays below company-level. The matrix delivery estimate (p36.8) undercounts him because most of the migration PRs are tiered routine.",
+      "claims": [
+        {"statement": "He shipped 23 major-tier PRs, the largest share of them fixes for insights returning wrong or silently truncated results.", "numbers": {"major_prs": 23, "major_fixes": 15, "landmark": 0}, "evidence_ids": [115882, 118393, 125854, 127979, "tier_counts.major"]},
+        {"statement": "His three highest-value deep reads are user-facing correctness fixes: CSV tables unqueryable after upload, insight edits dropping query fields, and a global person-column renderer collision.", "numbers": {"P_104005": 13.0, "P_115882": 13.0, "P_103997": 7.8}, "evidence_ids": [104005, 115882, 103997]},
+        {"statement": "Two major PRs closed prompt-injection gaps in PostHog AI context handling.", "numbers": {"major_prs": 2}, "evidence_ids": [103158, 103615, "ws7"]}
+      ]
+    },
+    "system": {
+      "grade": 8,
+      "rationale": "The legacy Filter removal is a genuine platform change: it replaces a lossy shared representation used by many products and deletes the old one, and 89 other authors later built on files he changed. Product-isolation work (facades, moving scenes and subscriptions into their products) also cut merge-queue serialization for other teams. It falls short of 9 because it is consolidation of an existing model rather than a new platform, and deep reads value the pure deletions low (#104270 P=1.32).",
+      "claims": [
+        {"statement": "The legacy filter migration spans about 46 PRs and 49k changed lines, ending with the legacy converter, Filter and EntityFilter deleted.", "numbers": {"program_prs": 46, "program_lines": 49186}, "evidence_ids": [100835, 104270, 127312, 127983, "ws1"]},
+        {"statement": "Others build on his code: 89 distinct authors later changed files he touched, 5th of 20 candidates.", "numbers": {"downstream_authors": 89, "percentile": 78.9}, "evidence_ids": ["role.network.built_on_by_n", "peer.downstream_authors"]},
+        {"statement": "Product-isolation refactors rerouted about 210 cross-product imports through a facade and cut merge-queue targets for groups, annotations and actions from 90 to 1.", "numbers": {"imports_rerouted": 210, "merge_queue_targets_before": 90, "after": 1}, "evidence_ids": [85553, 99417, 116802]}
+      ]
+    },
+    "quality": {
+      "grade": 8,
+      "rationale": "Zero reverts across 222 PRs, including a long chain of deletions in core code, and only 2 follow-up fixes, both on moderate-value PRs. Quality rate is 5th of 20. Many of his fixes add regression tests and convert silent failures into explicit 400s. Changes were requested on only 2 of his PRs.",
+      "claims": [
+        {"statement": "No PR of his was reverted and only 2 were later fixed by someone else.", "numbers": {"reverted": 0, "followup_fixed": 2, "mature_prs": 174}, "evidence_ids": ["metrics.reverted", "metrics.followup_fixed", 91560, 116802]},
+        {"statement": "Quality rate 0.98 places him 5th of 20; reviewers approved 0.98 of his reviewed PRs on the first pass.", "numbers": {"quality_rate": 0.98, "percentile": 78.9, "first_pass_rate": 0.98}, "evidence_ids": ["quality_rate", "role.network.first_pass_rate"]},
+        {"statement": "Changes were requested on only 2 of his PRs (#86275 by webjunkie, #96308 by mariusandra).", "numbers": {"changes_requested_prs": 2, "changes_requested_rate": 0.02}, "evidence_ids": [86275, 96308, "role.network.changes_requested_rate"]}
+      ]
+    },
+    "team": {
+      "grade": 5,
+      "rationale": "Steady, effective reviewing, but not a multiplier. He reviews a lot (134 reviews on 116 PRs) and the sampled comments are sharp, catching real bugs that authors then changed. But peers rarely seek him out (4 requesters, p18.4), team leverage is 17th of 19, and 114 of 134 reviews are plain approvals.",
+      "claims": [
+        {"statement": "Team leverage is near the bottom of the 20 and few people explicitly request his review.", "numbers": {"team_leverage": 472.89, "percentile": 11.1, "requested_by": 4}, "evidence_ids": ["team_leverage", "role.network.requested_by_n"]},
+        {"statement": "His sampled review comments catch real defects: an RBAC leak of private canvases and repeated folder fetches (#112982), a tile-edit landing on the wrong dashboard under a concurrent move (#107605), a 409 masking 5xx failures (#118360); the commented lines were changed afterwards.", "numbers": {"sampled_comments": 10, "lines_changed_after": 10}, "evidence_ids": [112982, 107605, 118360, 123533]},
+        {"statement": "Approvals span 34 authors in 17 teams, but 46 of 116 reviewed PRs are inside product-analytics.", "numbers": {"approved_authors": 34, "teams_covered": 17, "home_team_prs": 46}, "evidence_ids": ["role.network.approved_authors_n", "role.network.teams_covered_n"]}
+      ]
+    }
+  },
+  "overall": {"grade": 7, "confidence": "medium"},
+  "key_numbers": [
+    {"label": "Major-tier PRs", "value": 23, "metric_key": "tier_counts.major"},
+    {"label": "Authors building on his code", "value": 89, "metric_key": "downstream_authors"},
+    {"label": "Quality rate (no revert, no follow-up fix)", "value": 0.98, "metric_key": "quality_rate"}
+  ],
+  "calibration": {
+    "ranks": {"delivery": 36.8, "quality_rate": 78.9, "team_leverage": 11.1, "trust_rank": 42.1},
+    "note": "He sits mid-pack on delivery (13/20, 586.95 vs median 616.02), top quartile on quality (5/20), and near the bottom on team leverage (17/19), with middling trust_rank (12/20). The overall 7 is above where the delivery percentile alone would put him. The episode-based delivery estimate scores each PR by tier, and the 46-PR legacy filter migration is mostly tiered routine, so a multi-team platform consolidation gets counted as many small chores; his stratified estimate is higher (742.32) and he has 23 major PRs. The quality 8 matches his percentile. The team 5 matches his low leverage and requested_by numbers; the sharp sampled comments are the only thing keeping it from 4."
+  },
+  "custom_analyses": [
+    {
+      "question": "Is the large number of routine-tier refactors actually one coherent platform migration, and how big is it?",
+      "why": "68 routine and 19 mechanical PRs would normally dilute his profile, but many titles reference legacy filters, query nodes and series pickers, which suggests one program rather than unrelated chores.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query thmsobrmlr prs --ws ws1 --since 2026-10-12 --until 2026-10-19",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query thmsobrmlr pr 100835",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query thmsobrmlr pr 104270",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query thmsobrmlr deepread 96074",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query thmsobrmlr deepread 104270",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query thmsobrmlr timeline"
+      ],
+      "finding": "About 46 of his PRs (49k changed lines, 4 major, 15 substantive, 25 routine) form one staged migration from 2026-08-27 to 2026-11-03: stop converting on read (#96074, P=5.92), delete the converter (#100835, 9,060 lines), delete the legacy Filter (#104270, P=1.32), move series editors to query nodes (#115882 P=13.0, #115906, #115946), switch readers to the query series (#116839, #116861, #116862), and delete the remaining types (#127312, #127983). The busiest week (2026-10-12: 32 PRs, 5 major) is the node-native picker cutover. Pure deletions score low individually, but they are the steps that make the correctness fixes permanent.",
+      "evidence_ids": [96074, 100835, 104270, 115882, 115906, 115946, 116839, 127312, 127983, "ws1"],
+      "effect": "system 7 → 8, because the routine tiers hide a multi-team platform consolidation that peers then built on (89 downstream authors)."
+    },
+    {
+      "question": "How much of his fix work addresses silent wrong results rather than cosmetic bugs?",
+      "why": "Delivery should weight data correctness heavily for an analytics product, and 71 of his PRs are fixes; the tier labels alone do not show whether they matter to users' numbers.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query thmsobrmlr prs --tier major",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query thmsobrmlr prs --area \"Query engine (HogQL)\" --tier major",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query thmsobrmlr deepread 102774",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query thmsobrmlr deepread 127976",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query thmsobrmlr pr 125854"
+      ],
+      "finding": "At least 16 of his fix PRs describe silent or wrong results, 6 of them major: funnels over 32 steps returning zeros (#83561), action selectors matching zero events (#83169), empty-query updates wiping insights (#96058), wrong 1970 funnel paths (#125854), retention cohort rows counting other cohorts' members (#118393), and all-time warehouse insights dropping rows (#127976 P=5.92, #127979). #102774 (P=7.82) prevents one insight from exhausting the shared Postgres pool. None of these was reverted.",
+      "evidence_ids": [83561, 83169, 96058, 125854, 118393, 127976, 127979, 102774],
+      "effect": "delivery stays at 7 despite the p36.8 delivery percentile: the work protects the correctness of core analytics numbers, but none of it is a landmark."
+    },
+    {
+      "question": "Are his two follow-up-fixed PRs a sign of risky work, and how does he compare with his closest collaborator?",
+      "why": "The dossier flags peer.followup_fixed=2, and sampennington is both his top reviewer (46 PRs) and his most-reviewed author (24 PRs), so a side-by-side check shows whether his quality and team numbers are unusual for the team.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query thmsobrmlr deepread 91560",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query thmsobrmlr deepread 116802",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query thmsobrmlr compare sampennington",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query thmsobrmlr reviews-given --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query thmsobrmlr reviews-received --top 10"
+      ],
+      "finding": "Both follow-up-fixed PRs are moderate: #91560 is a dashboard override-banner fix (P=3.65) and #116802 a no-behavior-change code move into the subscriptions product (P=2.19). Neither is a major-tier or data-path change. Against sampennington he has far more major PRs (23 vs 4), a similar quality rate (0.98 vs 0.97) and more downstream authors (89 vs 83), but lower team leverage (472.89 vs 575.47), fewer review requesters (4 vs 9) and slower first reviews (24.85h vs 15.42h median).",
+      "evidence_ids": [91560, 116802, "metrics.followup_fixed", "team_leverage", "requested_by"],
+      "effect": "quality stays at 8 because the follow-up fixes are low-stakes; team stays at 5 because his review footprint trails even his own team's peers."
+    }
+  ],
+  "insights": [
+    {"insight": "His highest-impact work is invisible to per-PR counting: the deletions and reader switches that retire the legacy filter model are tiered routine one by one, but together they remove a class of silent data-loss bugs for every product that embeds the series picker.", "evidence_ids": ["ws1", 115882, 100835, 127983]},
+    {"insight": "AI-assisted output at high volume without a quality cost: 149 of 222 PRs (0.67, 4th of 19) are AI co-authored, yet only 1 of them was reverted or follow-up fixed.", "evidence_ids": ["metrics.ai_share", "metrics.ai_coauthored_prs", "metrics.ai_reverted_or_fixed"]},
+    {"insight": "He is a builder first and a reviewer second: 98% of the importance flowing to him in the network comes from authorship (749.7 of 763.05).", "evidence_ids": ["role.network.importance_flow.author", "role.network.importance_flow.reviewer"]}
+  ],
+  "red_flags": [
+    {"flag": "Two of his PRs were later fixed by someone else (peer.followup_fixed=2): the dashboard override-banner fix #91560 and the subscriptions code move #116802. Both are moderate-value changes.", "evidence_ids": [91560, 116802, "peer.followup_fixed"]},
+    {"flag": "The deep read of #118393 (retention cohort breakdown fix, P=5.9) could not verify its quality quote, so its Q score is less reliable.", "evidence_ids": [118393]}
+  ],
+  "counter_evidence": "The behavioral team signals point lower than the review quality suggests. Only 4 people explicitly requested his review, team leverage ranks 17 of 19, and 114 of his 134 reviews are plain approvals, so the sharp comments in the dossier (10 sampled) may not be typical. On delivery, the matrix places him 13th of 20 and he has no changelog entries and no landmark PR; the case for grade 7 rests on the correctness value of his fixes and on reading the routine-tier migration as one program, which is my judgment rather than a peer behavior. Pure deletion PRs score low in deep reads (#104270 P=1.32), so part of the 49k-line migration is cleanup rather than new value. His first-review latency (24.85h median) is slower than his closest teammate's.",
+  "coverage": {"sampled_prs": 25, "missing_data": ["review_requested_by", "issue_reactions", "review comment text beyond 10 sampled comments"], "diff_truncated_share": 0.32}
+}

@@ -1,0 +1,430 @@
+{
+ "cid": "rnegron",
+ "positioning": "Developer-experience engineer who owns PostHog's backend CI platform (Depot migration, caching, test speed) and is the leading author of the internal Engineering analytics product; high-volume, fix-forward builder whose work touches every backend PR, but whose output is mostly internal-facing.",
+ "role": {
+  "primary_role": "platform builder",
+  "team": "developer-experience",
+  "how_they_create_impact": "Removes friction for every engineer: moves backend CI onto Depot, cuts runner minutes and wall-clock time (pnpm cache, mypy memory, test sharding, migration replay), hardens the CI supply chain, and builds the Engineering analytics product (CI explorer, Depot warehouse source) that measures that CI. He also reviews heavily and fast inside the dev-ex trio.",
+  "network_summary": "Trusted, fast approver at the centre of a tight developer-experience trio: trust_rank 0.02 (5/20, p78.9), approved 51 authors (role.network.approved_authors_n) across 27 teams (role.network.teams_covered_n, cross_team p94.7), first review median 4.03h (metrics.first_review_median_h). But 69% of his reviews go to two teammates (webjunkie 149, gantoine 93 PRs; role.top_reviewed) and 238 of his 268 reviewed PRs were reviewed by those same two (role.top_reviewers), so trust is earned mostly inside one community (role.network.community 1). Only 6 people explicitly requested his review (role.network.requested_by_n), and he almost never blocks: 349 approvals vs 1 CHANGES_REQUESTED (role.network.events_given.changes_requested). Few people build on his files: 26 downstream authors (role.network.built_on_by_n, p5.3), consistent with CI/tooling code that others consume rather than extend."
+ },
+ "core_contributions": [
+  {
+   "workstream_id": "ws1",
+   "title": "Backend CI platform: Depot migration, speed and supply-chain hardening",
+   "what": "Led the move of backend CI onto Depot (routing, relay, fail-closed gate, master-push runs) plus a long series of cost and speed fixes: lean single-writer pnpm store cache, migration replay outside pytest to stop OOM kills, selective flush and shard splits, json-leg pruning, mypy memory cuts, and locking 64 workflows to a verified actions lockfile.",
+   "why_it_matters": "Backend CI gates every PR in the monorepo; OOM-killed jobs, evicted caches and red master block all teams. Changes here have company-wide reach and the supply-chain lock closes a security gap on mutable action tags.",
+   "outcome": "Concrete savings stated in summaries: ~19k runner-min/day (#106911), ~2,770 runner-min/day (#106831), ~2 min fixed overhead removed per backend run (#104782), cache size halved and 10 GB pool eviction stopped (#93326, P=5.53). Cost: one incident where PRs got no backend gate, reverted the same day (#116511 -> #117140) and re-landed next day (#117320), plus 29 Depot fix/revert PRs.",
+   "his_role": "lead",
+   "evidence_prs": [
+    93326,
+    80472,
+    116511,
+    117140,
+    117320,
+    125784,
+    106911,
+    128471
+   ],
+   "numbers": {
+    "prs": 243,
+    "major_prs": 6,
+    "points_sum": 797.46,
+    "depot_prs": 87,
+    "depot_fix_or_revert_prs": 29
+   }
+  },
+  {
+   "workstream_id": "ws2",
+   "title": "Engineering analytics product and its Depot CI data source",
+   "what": "Primary author of Engineering analytics (top area leader with 43% share of his work, 16 authors in the area): CI explorer page, Depot CI warehouse source, CI cost and health views, and many data-correctness fixes (merge-queue gate PRs counted as work, per-test sums inflating failed-run counts, silent truncation at 200 rows) and latency cuts (pages from ~112s/59s to a few seconds).",
+   "why_it_matters": "It is the instrument that tells engineering leadership where CI time and money goes; wrong counts mislead decisions about the CI migration itself.",
+   "outcome": "Highest-scoring deep reads of his window: #109297 (P=16.0, permanent loss of late CI retry runs fixed via replay/reconciliation) and #106828 (P=9.6, source syncing 0 rows). Both fix a source he introduced days earlier (#106073, 2026-09-25), so part of the value is repairing his own launch.",
+   "his_role": "lead",
+   "evidence_prs": [
+    109297,
+    106828,
+    106073,
+    111949,
+    77530,
+    102894,
+    110365
+   ],
+   "numbers": {
+    "prs": 68,
+    "major_prs": 5,
+    "points_sum": 270.69,
+    "top_area_share": 0.43
+   }
+  },
+  {
+   "workstream_id": "ws3",
+   "title": "Data-loss and permission-scope fixes in the Django platform",
+   "what": "Fixed GitHub file reads over 1 MB returning empty, which silently deleted Visual Review baselines on approval (a bot commit deleted 10,516 lines), and restricted the token/api_key project override to project-nested routes to close a permission-scope gap.",
+   "why_it_matters": "Silent data deletion and auth-scope leaks are the highest-criticality classes of bug; both are small diffs with outsized risk reduction.",
+   "outcome": "#98690 P=16.0 (V3 C3), #110262 P=6.35 (C3), both with targeted tests (Q2).",
+   "his_role": "lead",
+   "evidence_prs": [
+    98690,
+    110262
+   ],
+   "numbers": {
+    "prs": 13,
+    "major_prs": 2,
+    "max_P": 16.0
+   }
+  }
+ ],
+ "angles": {
+  "delivery": {
+   "grade": 7,
+   "rationale": "5th of 20 on the delivery estimate (726.96, p78.9) with two P=16 deep reads on data loss, but only 13 major episodes (p21.1), no landmark PRs, no changelog entries, and value that is almost entirely internal (CI and an internal analytics product). Company-wide CI reach lifts him above 6; the absence of customer-facing or landmark work keeps him below 8.",
+   "claims": [
+    {
+     "statement": "His two highest-value PRs fix silent data loss: Visual Review baselines wiped on approval and Depot CI retries permanently missed.",
+     "numbers": {
+      "P_98690": 16.0,
+      "P_109297": 16.0
+     },
+     "evidence_ids": [
+      98690,
+      109297,
+      "ws2",
+      "ws3"
+     ]
+    },
+    {
+     "statement": "Delivery is broad but rarely major: 14 major PRs out of 380, 0 landmark, 0 changelog PRs.",
+     "numbers": {
+      "tier_counts.major": 14,
+      "tier_counts.landmark": 0,
+      "metrics.changelog_prs": 0,
+      "major_episodes_pct": 21.1
+     },
+     "evidence_ids": [
+      "tier_counts.major",
+      "metrics.changelog_prs",
+      "major_episodes"
+     ]
+    },
+    {
+     "statement": "CI savings are concrete and company-wide (runner minutes per day, minutes per run).",
+     "numbers": {
+      "runner_min_per_day_106911": 19000,
+      "runner_min_per_day_106831": 2770
+     },
+     "evidence_ids": [
+      106911,
+      106831,
+      104782,
+      "ws1"
+     ]
+    }
+   ]
+  },
+  "system": {
+   "grade": 7,
+   "rationale": "He is the CI platform owner: caching architecture, Depot routing and gate, actions lockfile, hogli CLI, devbox tooling. This is real platform work used by every engineer. Counter-signal: only 26 downstream authors (p5.3) build on files he changed, and several platform changes needed follow-up fixes, so 'others build on his abstractions' is not demonstrated.",
+   "claims": [
+    {
+     "statement": "Reworked pnpm store caching to one lockfile-exact writer, halving cache size and stopping eviction across the 10 GB pool.",
+     "numbers": {
+      "P": 5.53,
+      "N": 2,
+      "L": 2
+     },
+     "evidence_ids": [
+      93326
+     ]
+    },
+    {
+     "statement": "Locked 64 of 142 workflows to a verified actions lockfile, a supply-chain control others must now follow.",
+     "numbers": {
+      "workflows_locked": 64,
+      "P": 5.92
+     },
+     "evidence_ids": [
+      125784
+     ]
+    },
+    {
+     "statement": "Few others extend his code: 26 downstream authors, 5th percentile among the 20.",
+     "numbers": {
+      "downstream_authors": 26,
+      "downstream_authors_pct": 5.3
+     },
+     "evidence_ids": [
+      "downstream_authors",
+      "role.network.built_on_by_n"
+     ]
+    }
+   ]
+  },
+  "quality": {
+   "grade": 6,
+   "rationale": "No one reverted him and quality_q is 0.97, but quality_rate is 0.955 (14/20, p31.6), 8 PRs needed follow-up fixes, and the Depot rollout was fix-forward heavy: 29 of 87 Depot PRs are fixes or reverts, including a same-day self-revert after PRs got no backend gate. His biggest analytics wins repair a source he launched three days earlier. Many deep reads show good tests (Q2), so this is solid but not exemplary.",
+   "claims": [
+    {
+     "statement": "Moving the backend gate to Depot left PRs and merge-queue batches with no backend gate; he reverted it the same day and re-landed it the next.",
+     "numbers": {
+      "merged_116511": "2026-10-14T15:34",
+      "reverted_117140": "2026-10-14T16:01",
+      "relanded_117320": "2026-10-15"
+     },
+     "evidence_ids": [
+      116511,
+      117140,
+      117320
+     ]
+    },
+    {
+     "statement": "Quality rate below the median of the 20 with 8 follow-up-fixed PRs.",
+     "numbers": {
+      "quality_rate": 0.955,
+      "quality_rate_pct": 31.6,
+      "metrics.followup_fixed": 8,
+      "metrics.reverted": 0
+     },
+     "evidence_ids": [
+      "quality_rate",
+      "metrics.followup_fixed",
+      117320,
+      95096,
+      94402
+     ]
+    },
+    {
+     "statement": "The Depot warehouse source shipped with sync gaps that he fixed within 3 and 6 days.",
+     "numbers": {
+      "days_to_first_fix": 3,
+      "days_to_second_fix": 6
+     },
+     "evidence_ids": [
+      106073,
+      106828,
+      109297
+     ]
+    }
+   ]
+  },
+  "team": {
+   "grade": 7,
+   "rationale": "Top-quartile reviewer by volume and trust (team_leverage p77.8, trust_rank p78.9), fastest first review among the dev-ex trio (4.03h vs 11.09h and 18.15h), and approvals across 27 teams. His written comments catch real issues (IDOR scope exemption, SSH-agent hook exposure, dropped release runs). Held at 7 because 69% of reviews are mutual within the trio, he blocks almost nothing (1 changes-requested in 370 reviews), and explicit review requests are modest (6 people).",
+   "claims": [
+    {
+     "statement": "Reviews broadly and fast: 370 reviews on 350 PRs by 53 authors, 27 teams covered, median first review 4.03h.",
+     "numbers": {
+      "metrics.reviews_given": 351,
+      "role.network.teams_covered_n": 27,
+      "metrics.first_review_median_h": 4.03
+     },
+     "evidence_ids": [
+      "metrics.team_leverage",
+      "role.network.teams_covered_n",
+      "metrics.first_review_median_h"
+     ]
+    },
+    {
+     "statement": "When he comments, he raises substantive security and correctness issues.",
+     "numbers": {
+      "commented_reviews": 20,
+      "changes_requested_given": 1
+     },
+     "evidence_ids": [
+      85710,
+      122350,
+      118584
+     ]
+    },
+    {
+     "statement": "Review activity is concentrated in a closed loop with two teammates.",
+     "numbers": {
+      "reviews_to_webjunkie_prs": 149,
+      "reviews_to_gantoine_prs": 93,
+      "his_prs_reviewed_by_them": 238,
+      "his_reviewed_prs": 268
+     },
+     "evidence_ids": [
+      "role.top_reviewed",
+      "role.top_reviewers"
+     ]
+    }
+   ]
+  }
+ },
+ "overall": {
+  "grade": 7,
+  "confidence": "medium"
+ },
+ "key_numbers": [
+  {
+   "label": "Delivery estimate (5/20)",
+   "value": 726.96,
+   "metric_key": "delivery"
+  },
+  {
+   "label": "Teams covered as approver",
+   "value": 27,
+   "metric_key": "cross_team"
+  },
+  {
+   "label": "Quality rate (14/20)",
+   "value": 0.955,
+   "metric_key": "quality_rate"
+  }
+ ],
+ "calibration": {
+  "ranks": {
+   "delivery": 78.9,
+   "quality_rate": 31.6,
+   "team_leverage": 77.8,
+   "trust_rank": 78.9
+  },
+  "note": "He sits around 5th of 20 on delivery, team_leverage and trust_rank, and 14th on quality_rate. Grades of 7 on delivery, system and team match that top-quartile but not top-3 position (Gilbert09 delivers 7x his estimate; webjunkie has 31 major episodes vs his 13). Quality at 6 matches the below-median quality_rate and the Depot incident. Overall 7 = team core pillar, not company-level critical."
+ },
+ "custom_analyses": [
+  {
+   "question": "Was the late-September output spike a planned Depot rollout, and how much of it was fix-forward churn?",
+   "why": "Weeks of 2026-09-21 and 2026-09-28 hold 117 of his 380 PRs and 410 points; volume during a migration can be inflated by fixing one's own rollout.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron timeline",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron prs --since 2026-09-21 --until 2026-10-04 --tier major",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron prs --since 2026-09-21 --until 2026-10-04 --tier substantive",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron prs --area \"Repo config/CI/tooling\" --since 2026-10-14 --until 2026-10-20",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron pr 117140",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron deepread 117140",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron deepread 117320"
+   ],
+   "finding": "87 of his PRs mention Depot; 41 of them landed in those two weeks and 20 of the 29 Depot fix/revert PRs landed in that window (6 then 14). Most substantive PRs there repair routing races (#105886, #106889, #107912, #107914, #108682, #109153). The 2026-10-14 gate move (#116511) was reverted 27 minutes later (#117140, P=6.35, C3) after PRs got no backend gate, re-landed the next day (#117320, P=4.81), which was then follow-up-fixed. The migration delivered real savings but a third of its PRs are self-correction.",
+   "evidence_ids": [
+    116511,
+    117140,
+    117320,
+    105886,
+    106889,
+    107914,
+    109153,
+    "ws1"
+   ],
+   "effect": "delivery stays 7 (reach is real but PR count overstates it); quality 7 -> 6 because the rollout relied on fix-forward and caused one gating incident."
+  },
+  {
+   "question": "Is his reviewer weight real gatekeeping or mutual approval inside the dev-ex trio?",
+   "why": "team_leverage and trust_rank are top-quartile, but approval graphs can be inflated by a small group approving each other.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron reviews-given --top 15",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron reviews-received --top 15",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron compare gantoine",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron compare webjunkie",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron rank team_leverage",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron rank trust_rank"
+   ],
+   "finding": "349 of 370 reviews are APPROVED and only 1 is CHANGES_REQUESTED (#118584). 242 of his 350 reviewed PRs are developer-experience authors, and webjunkie/gantoine reviewed 238 of his 268 reviewed PRs. Outside dev-ex he still reviewed 108 PRs from 51 authors across 27 other teams, and he is the fastest of the trio to first review (4.03h vs gantoine 11.09h, webjunkie 18.15h). His 20 comment reviews are substantive (IDOR exemption on #85710, SSH-agent hook risk and devbox race on #122350).",
+   "evidence_ids": [
+    118584,
+    85710,
+    122350,
+    "role.top_reviewed",
+    "role.top_reviewers",
+    "metrics.first_review_median_h"
+   ],
+   "effect": "team held at 7 rather than 8: reach across teams and comment quality are real, but the trust score is mostly intra-team and he rarely blocks."
+  },
+  {
+   "question": "Are his top-scoring Engineering analytics PRs new value or repairs of his own recent launch?",
+   "why": "#109297 and #106828 carry the highest P in the workstream; if they fix bugs he shipped days earlier, they should not count fully as delivery.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron prs --ws ws2 --tier major",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron prs --ws ws2 --since 2026-09-25 --until 2026-10-20",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron pr 106073",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron pr 106828",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron pr 109297",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron pr 118652",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rnegron rank quality_rate"
+   ],
+   "finding": "He launched the alpha Depot source on 2026-09-25 (#106073, P=3.65) and then fixed it syncing 0 rows on 09-28 (#106828, P=9.6), permanently missed retries on 10-01 (#109297, P=16.0), and double-counted gate runs on 10-01 and 10-16 (#107849, #118652). The fixes are well engineered and caught before broad use (alpha), so the net value is a correct data source, but most of the P is self-repair.",
+   "evidence_ids": [
+    106073,
+    106828,
+    109297,
+    107849,
+    118652,
+    "ws2"
+   ],
+   "effect": "delivery not raised to 8 despite two P=16 PRs; quality confirmed at 6."
+  }
+ ],
+ "insights": [
+  {
+   "insight": "He is effectively the operator of backend CI: when Depot routing, cache eviction or OOMs break PRs, he is the one shipping the fix, often within hours. That ownership is the core of his value, more than any single PR.",
+   "evidence_ids": [
+    "ws1",
+    80472,
+    117140,
+    112614
+   ]
+  },
+  {
+   "insight": "His product work and platform work feed each other: he builds the CI that Engineering analytics measures, and uses the analytics to justify CI changes. This creates a closed, internally-focused loop with little customer-facing output (0 changelog PRs).",
+   "evidence_ids": [
+    "ws2",
+    "ws1",
+    "metrics.changelog_prs"
+   ]
+  },
+  {
+   "insight": "Small security-relevant changes punch above their size: permission-scope guard (33 lines), token redaction, pydantic advisory bump, actions lockfile.",
+   "evidence_ids": [
+    110262,
+    94398,
+    127390,
+    125784
+   ]
+  }
+ ],
+ "red_flags": [
+  {
+   "flag": "Dossier: #106073 deep-read quote not found for N (novelty evidence unverified).",
+   "evidence_ids": [
+    106073
+   ]
+  },
+  {
+   "flag": "Dossier: 8 PRs follow-up-fixed by others (peer.followup_fixed=8), including the Depot gate re-land, Python 3.14 bump and analytics truncation fix.",
+   "evidence_ids": [
+    "peer.followup_fixed",
+    54933,
+    88638,
+    88767,
+    94402,
+    95096,
+    100428,
+    104523,
+    117320
+   ]
+  },
+  {
+   "flag": "CI incident: the backend gate move left PRs and merge-queue batches with no backend gate and was self-reverted the same day; self-reverts do not appear in metrics.reverted=0.",
+   "evidence_ids": [
+    116511,
+    117140
+   ]
+  },
+  {
+   "flag": "Review activity is near-unconditional approval inside a closed trio: 1 changes-requested in 370 reviews; 89% of his own reviewed PRs reviewed by the same two teammates.",
+   "evidence_ids": [
+    "role.top_reviewers",
+    "role.network.events_given.changes_requested"
+   ]
+  }
+ ],
+ "counter_evidence": "Behaviour versus his own descriptions: summaries claim large CI savings, but peers had to follow-up-fix 8 of his PRs and he self-reverted the Depot gate move after an incident, so 'reverted 0' understates rework. His highest-P analytics PRs fix his own alpha launch. Low changes-requested on his PRs (0.022) is weak evidence of quality because 89% of them were reviewed by the same two teammates, who also receive 69% of his approvals. downstream_authors is only 26 (p5.3), though CI/workflow files may be excluded as hub files, which would understate system reach. In his favour: no one else reverted him, deep reads with tests (Q2) are common, and his rare comments catch real security issues.",
+ "coverage": {
+  "sampled_prs": 25,
+  "missing_data": [
+   "review_requested_by",
+   "issue_reactions",
+   "changes_adopted_rate (n=1)"
+  ],
+  "diff_truncated_share": 0.26
+ }
+}

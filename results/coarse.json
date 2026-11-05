@@ -1,0 +1,681 @@
+[
+ {
+  "login": "Gilbert09",
+  "tier_counts": {
+   "mechanical": 38,
+   "trivial": 152,
+   "routine": 734,
+   "substantive": 1804,
+   "major": 211,
+   "landmark": 0
+  },
+  "prs": 2939,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 987,
+  "major_episodes": 130,
+  "raw_points": 10524,
+  "mass": 5324.25,
+  "q": 0.9864864864864865,
+  "quality_factor": 0.9864864864864865,
+  "quality_unknown": false,
+  "team_score": 1248.552,
+  "coarse_score": 5252.300675675676,
+  "selected_by": [
+   "score",
+   "major"
+  ],
+  "recalled_by": [
+   "delivery",
+   "team",
+   "changelog"
+  ]
+ },
+ {
+  "login": "pauldambra",
+  "tier_counts": {
+   "mechanical": 46,
+   "trivial": 42,
+   "routine": 236,
+   "substantive": 308,
+   "major": 20,
+   "landmark": 0
+  },
+  "prs": 652,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 388,
+  "major_episodes": 20,
+  "raw_points": 1906,
+  "mass": 1398.25,
+  "q": 0.9517543859649122,
+  "quality_factor": 0.9517543859649122,
+  "quality_unknown": false,
+  "team_score": 798.464,
+  "coarse_score": 1330.7905701754385,
+  "selected_by": [
+   "score",
+   "major"
+  ],
+  "recalled_by": [
+   "delivery",
+   "team",
+   "system"
+  ]
+ },
+ {
+  "login": "webjunkie",
+  "tier_counts": {
+   "mechanical": 23,
+   "trivial": 15,
+   "routine": 130,
+   "substantive": 344,
+   "major": 47,
+   "landmark": 0
+  },
+  "prs": 559,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 191,
+  "major_episodes": 31,
+  "raw_points": 2027,
+  "mass": 1092.5,
+  "q": 0.9832869080779945,
+  "quality_factor": 0.9832869080779945,
+  "quality_unknown": false,
+  "team_score": 1461.203,
+  "coarse_score": 1074.2409470752089,
+  "selected_by": [
+   "score",
+   "team",
+   "major"
+  ],
+  "recalled_by": [
+   "delivery",
+   "team",
+   "changelog"
+  ]
+ },
+ {
+  "login": "puemos",
+  "tier_counts": {
+   "mechanical": 2,
+   "trivial": 36,
+   "routine": 119,
+   "substantive": 292,
+   "major": 23,
+   "landmark": 0
+  },
+  "prs": 472,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 129,
+  "major_episodes": 14,
+  "raw_points": 1626,
+  "mass": 760.5,
+  "q": 0.9628252788104089,
+  "quality_factor": 0.9628252788104089,
+  "quality_unknown": false,
+  "team_score": 556.499,
+  "coarse_score": 732.2286245353159,
+  "selected_by": [
+   "score"
+  ],
+  "recalled_by": [
+   "delivery",
+   "system",
+   "changelog"
+  ]
+ },
+ {
+  "login": "rnegron",
+  "tier_counts": {
+   "mechanical": 24,
+   "trivial": 11,
+   "routine": 122,
+   "substantive": 209,
+   "major": 14,
+   "landmark": 0
+  },
+  "prs": 380,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 154,
+  "major_episodes": 13,
+  "raw_points": 1203,
+  "mass": 713.25,
+  "q": 0.9775280898876404,
+  "quality_factor": 0.9775280898876404,
+  "quality_unknown": false,
+  "team_score": 1406.574,
+  "coarse_score": 697.2219101123595,
+  "selected_by": [
+   "score",
+   "team"
+  ],
+  "recalled_by": [
+   "delivery",
+   "team"
+  ]
+ },
+ {
+  "login": "tatoalo",
+  "tier_counts": {
+   "mechanical": 6,
+   "trivial": 3,
+   "routine": 108,
+   "substantive": 201,
+   "major": 26,
+   "landmark": 0
+  },
+  "prs": 344,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 126,
+  "major_episodes": 21,
+  "raw_points": 1231,
+  "mass": 706.75,
+  "q": 0.9666666666666667,
+  "quality_factor": 0.9666666666666667,
+  "quality_unknown": false,
+  "team_score": 902.099,
+  "coarse_score": 683.1916666666667,
+  "selected_by": [
+   "score",
+   "major"
+  ],
+  "recalled_by": [
+   "delivery",
+   "team",
+   "changelog"
+  ]
+ },
+ {
+  "login": "mayteio",
+  "tier_counts": {
+   "mechanical": 16,
+   "trivial": 5,
+   "routine": 60,
+   "substantive": 171,
+   "major": 38,
+   "landmark": 0
+  },
+  "prs": 290,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 117,
+  "major_episodes": 28,
+  "raw_points": 1113,
+  "mass": 678.75,
+  "q": 0.9574468085106383,
+  "quality_factor": 0.9574468085106383,
+  "quality_unknown": false,
+  "team_score": 1020.186,
+  "coarse_score": 649.8670212765958,
+  "selected_by": [
+   "score",
+   "major"
+  ],
+  "recalled_by": [
+   "delivery",
+   "team"
+  ]
+ },
+ {
+  "login": "haacked",
+  "tier_counts": {
+   "mechanical": 3,
+   "trivial": 5,
+   "routine": 47,
+   "substantive": 137,
+   "major": 54,
+   "landmark": 0
+  },
+  "prs": 246,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 114,
+  "major_episodes": 28,
+  "raw_points": 1079,
+  "mass": 658.25,
+  "q": 0.9798657718120806,
+  "quality_factor": 0.9798657718120806,
+  "quality_unknown": false,
+  "team_score": 820.638,
+  "coarse_score": 644.9966442953021,
+  "selected_by": [
+   "score",
+   "major"
+  ],
+  "recalled_by": [
+   "delivery",
+   "team",
+   "system"
+  ]
+ },
+ {
+  "login": "rafaeelaudibert",
+  "tier_counts": {
+   "mechanical": 8,
+   "trivial": 9,
+   "routine": 51,
+   "substantive": 149,
+   "major": 26,
+   "landmark": 0
+  },
+  "prs": 243,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 149,
+  "major_episodes": 21,
+  "raw_points": 915,
+  "mass": 678.0,
+  "q": 0.9448818897637795,
+  "quality_factor": 0.9448818897637795,
+  "quality_unknown": false,
+  "team_score": 889.543,
+  "coarse_score": 640.6299212598425,
+  "selected_by": [
+   "score",
+   "major"
+  ],
+  "recalled_by": [
+   "delivery",
+   "team",
+   "system",
+   "changelog",
+   "critical"
+  ]
+ },
+ {
+  "login": "danielcarletti",
+  "tier_counts": {
+   "mechanical": 1,
+   "trivial": 2,
+   "routine": 19,
+   "substantive": 134,
+   "major": 76,
+   "landmark": 0
+  },
+  "prs": 232,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 86,
+  "major_episodes": 32,
+  "raw_points": 1184,
+  "mass": 635.75,
+  "q": 0.9714285714285714,
+  "quality_factor": 0.9714285714285714,
+  "quality_unknown": false,
+  "team_score": 831.49,
+  "coarse_score": 617.5857142857143,
+  "selected_by": [
+   "score",
+   "major"
+  ],
+  "recalled_by": [
+   "delivery",
+   "team",
+   "changelog"
+  ]
+ },
+ {
+  "login": "dmarchuk",
+  "tier_counts": {
+   "mechanical": 2,
+   "trivial": 6,
+   "routine": 40,
+   "substantive": 191,
+   "major": 26,
+   "landmark": 0
+  },
+  "prs": 265,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 98,
+  "major_episodes": 21,
+  "raw_points": 1058,
+  "mass": 594.5,
+  "q": 0.9938650306748467,
+  "quality_factor": 0.9938650306748467,
+  "quality_unknown": false,
+  "team_score": 707.449,
+  "coarse_score": 590.8527607361964,
+  "selected_by": [
+   "score",
+   "major"
+  ],
+  "recalled_by": [
+   "delivery",
+   "changelog"
+  ]
+ },
+ {
+  "login": "thmsobrmlr",
+  "tier_counts": {
+   "mechanical": 19,
+   "trivial": 4,
+   "routine": 68,
+   "substantive": 108,
+   "major": 23,
+   "landmark": 0
+  },
+  "prs": 222,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 138,
+  "major_episodes": 20,
+  "raw_points": 756,
+  "mass": 591.75,
+  "q": 0.9814814814814815,
+  "quality_factor": 0.9814814814814815,
+  "quality_unknown": false,
+  "team_score": 472.886,
+  "coarse_score": 580.7916666666666,
+  "selected_by": [
+   "score",
+   "major"
+  ],
+  "recalled_by": [
+   "delivery"
+  ]
+ },
+ {
+  "login": "sakce",
+  "tier_counts": {
+   "mechanical": 1,
+   "trivial": 8,
+   "routine": 52,
+   "substantive": 139,
+   "major": 26,
+   "landmark": 0
+  },
+  "prs": 226,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 96,
+  "major_episodes": 24,
+  "raw_points": 876,
+  "mass": 546.75,
+  "q": 0.9907407407407407,
+  "quality_factor": 0.9907407407407407,
+  "quality_unknown": false,
+  "team_score": 461.417,
+  "coarse_score": 541.6875,
+  "selected_by": [
+   "score",
+   "major"
+  ],
+  "recalled_by": [
+   "delivery",
+   "changelog"
+  ]
+ },
+ {
+  "login": "Piccirello",
+  "tier_counts": {
+   "mechanical": 5,
+   "trivial": 5,
+   "routine": 28,
+   "substantive": 64,
+   "major": 42,
+   "landmark": 0
+  },
+  "prs": 144,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 89,
+  "major_episodes": 37,
+  "raw_points": 653,
+  "mass": 518.0,
+  "q": 0.9655172413793104,
+  "quality_factor": 0.9655172413793104,
+  "quality_unknown": false,
+  "team_score": 350.323,
+  "coarse_score": 500.1379310344828,
+  "selected_by": [
+   "score",
+   "major"
+  ],
+  "recalled_by": [
+   "audit"
+  ]
+ },
+ {
+  "login": "sampennington",
+  "tier_counts": {
+   "mechanical": 6,
+   "trivial": 14,
+   "routine": 67,
+   "substantive": 153,
+   "major": 4,
+   "landmark": 0
+  },
+  "prs": 244,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 117,
+  "major_episodes": 4,
+  "raw_points": 792,
+  "mass": 501.75,
+  "q": 0.9724770642201834,
+  "quality_factor": 0.9724770642201834,
+  "quality_unknown": false,
+  "team_score": 575.465,
+  "coarse_score": 487.940366972477,
+  "selected_by": [
+   "score"
+  ],
+  "recalled_by": [
+   "delivery",
+   "changelog"
+  ]
+ },
+ {
+  "login": "TueHaulund",
+  "tier_counts": {
+   "mechanical": 1,
+   "trivial": 3,
+   "routine": 34,
+   "substantive": 173,
+   "major": 27,
+   "landmark": 0
+  },
+  "prs": 238,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 60,
+  "major_episodes": 23,
+  "raw_points": 979,
+  "mass": 484.75,
+  "q": 0.9932432432432432,
+  "quality_factor": 0.9932432432432432,
+  "quality_unknown": false,
+  "team_score": 536.007,
+  "coarse_score": 481.47466216216213,
+  "selected_by": [
+   "major"
+  ],
+  "recalled_by": [
+   "delivery",
+   "changelog"
+  ]
+ },
+ {
+  "login": "frankh",
+  "tier_counts": {
+   "mechanical": 11,
+   "trivial": 2,
+   "routine": 36,
+   "substantive": 115,
+   "major": 33,
+   "landmark": 0
+  },
+  "prs": 197,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 79,
+  "major_episodes": 24,
+  "raw_points": 798,
+  "mass": 496.5,
+  "q": 0.9398496240601504,
+  "quality_factor": 0.9398496240601504,
+  "quality_unknown": false,
+  "team_score": 220.991,
+  "coarse_score": 466.6353383458647,
+  "selected_by": [
+   "major"
+  ],
+  "recalled_by": [
+   "delivery"
+  ]
+ },
+ {
+  "login": "eli-r-ph",
+  "tier_counts": {
+   "mechanical": 2,
+   "trivial": 4,
+   "routine": 38,
+   "substantive": 64,
+   "major": 51,
+   "landmark": 0
+  },
+  "prs": 159,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 75,
+  "major_episodes": 32,
+  "raw_points": 744,
+  "mass": 476.25,
+  "q": 0.9662921348314607,
+  "quality_factor": 0.9662921348314607,
+  "quality_unknown": false,
+  "team_score": 395.981,
+  "coarse_score": 460.19662921348316,
+  "selected_by": [
+   "major"
+  ],
+  "recalled_by": [
+   "delivery",
+   "system"
+  ]
+ },
+ {
+  "login": "gantoine",
+  "tier_counts": {
+   "mechanical": 8,
+   "trivial": 7,
+   "routine": 62,
+   "substantive": 97,
+   "major": 4,
+   "landmark": 0
+  },
+  "prs": 178,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 108,
+  "major_episodes": 4,
+  "raw_points": 551,
+  "mass": 412.25,
+  "q": 0.961038961038961,
+  "quality_factor": 0.961038961038961,
+  "quality_unknown": false,
+  "team_score": 1771.96,
+  "coarse_score": 396.18831168831167,
+  "selected_by": [
+   "team"
+  ],
+  "recalled_by": [
+   "team"
+  ]
+ },
+ {
+  "login": "andrewm4894",
+  "tier_counts": {
+   "mechanical": 2,
+   "trivial": 12,
+   "routine": 38,
+   "substantive": 97,
+   "major": 14,
+   "landmark": 0
+  },
+  "prs": 163,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 83,
+  "major_episodes": 12,
+  "raw_points": 588,
+  "mass": 387.75,
+  "q": 0.9626168224299065,
+  "quality_factor": 0.9626168224299065,
+  "quality_unknown": false,
+  "team_score": 2935.774,
+  "coarse_score": 373.25467289719626,
+  "selected_by": [
+   "team"
+  ],
+  "recalled_by": [
+   "delivery",
+   "team",
+   "changelog"
+  ]
+ },
+ {
+  "login": "MattBro",
+  "tier_counts": {
+   "mechanical": 2,
+   "trivial": 1,
+   "routine": 14,
+   "substantive": 42,
+   "major": 26,
+   "landmark": 0
+  },
+  "prs": 85,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 54,
+  "major_episodes": 21,
+  "raw_points": 405,
+  "mass": 309.0,
+  "q": 0.9701492537313433,
+  "quality_factor": 0.9701492537313433,
+  "quality_unknown": false,
+  "team_score": 164.157,
+  "coarse_score": 299.7761194029851,
+  "selected_by": [
+   "major"
+  ],
+  "recalled_by": [
+   "audit"
+  ]
+ },
+ {
+  "login": "fuziontech",
+  "tier_counts": {
+   "mechanical": 0,
+   "trivial": 0,
+   "routine": 0,
+   "substantive": 6,
+   "major": 3,
+   "landmark": 0
+  },
+  "prs": 9,
+  "untriaged": 0,
+  "llm_errors": 0,
+  "episodes": 9,
+  "major_episodes": 3,
+  "raw_points": 48,
+  "mass": 48.0,
+  "q": 1.0,
+  "quality_factor": 1.0,
+  "quality_unknown": false,
+  "team_score": 2124.595,
+  "coarse_score": 48.0,
+  "selected_by": [
+   "team"
+  ],
+  "recalled_by": [
+   "team"
+  ]
+ }
+]

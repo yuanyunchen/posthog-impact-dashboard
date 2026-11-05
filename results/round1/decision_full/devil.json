@@ -1,0 +1,42 @@
+[
+ {
+  "cid": "C10",
+  "objection": "Weak objection: his lead is partly volume that peers barely verified. About 32% of his 2939 PRs are templated add-source/add-table/GA flips (~874), and about 1200 PRs carry no recorded review. The reviewer behind 778 of them (C05) gave zero blocking reviews after 2026-08-04 and up to 71 approvals a day, so the 0.99 first-pass and 0.98 quality_rate are weakly tested. He also caused a fleet-wide credential outage himself (#86546 -> #122385, about 2h), received 31 peer follow-up fixes (9 major), and as a reviewer he is light: 269 approvals vs 1 changes-requested, reviewer importance_flow 4.8, requested_by 7 (P63). None of this offsets 130 major episodes (next best 37) and 129 major fixes such as #110610 and #113196, so the objection does not overturn him.",
+  "replacement_cid": "C15",
+  "replacement_reason": "C15 is the highest-R candidate outside the Top 5 (67.7, R rank 3) and is a real cross-team multiplier where C10 is not: 50 authors approved across 25 teams, trust_rank P84, bridge_rank 1, and 13 company-wide auth/security majors deep-read at C=3 (#113014, #127775, #105547 P=13).",
+  "rebuttal": "Kept. The objection itself rates as weak: 130 major+ episodes against 37 for the next candidate. The templated share (~32%) and the self-caused credential outage are real and are shown on his card as caveats, but even discounting templated work he leads delivery by a wide margin. Both independent decisions ranked him #1.",
+  "decision": "keep"
+ },
+ {
+  "cid": "C07",
+  "objection": "His trust_rank #1 and 0.997 first-pass rate come from a closed developer-experience loop, not company-wide validation. C09/C14 reviewed 261 of his 341 reviewed PRs, 217 (64%) were seen by nobody else, the C09 relationship is reciprocal (139 vs 149 PRs), and 218 of 559 PRs have no human review, which fits approval by Stamphog, a tool he owns himself (unverified). He received one change request across 414 reviews, much of his own reviewing is agent-run, and his deep-read Q averages 1.5 (Q=1 on #104208, #91646 and #126411, the platform-wide 1000-row cap merged in the last days). The value is internal tooling with no landmark PR and only 4 changelog PRs, quality_rate sits mid-pack (P68), and the delivery estimate is inflated by 559 PRs including generated code and a 41k-line migration squash.",
+  "replacement_cid": "C01",
+  "replacement_reason": "C01 matches C07's trust (trust_rank P95, 2nd) with a perfect first-pass rate over 271 reviewed PRs, and his majors protect a paid, customer-facing product (Tasks area leader among 58 authors: #109870 P=16, #108247 P=13, #116932 P=13, #120934 C=3). He also gives first reviews in 3.47h against C07's 18.15h.",
+  "rebuttal": "Kept. The closed-review-loop concern applies to his own PRs, and the dashboard states it. His impact runs the other way: shared platform work (inbound-webhook transport, CI and merge-queue health) that every team depends on, plus approvals for 48 authors across 21 teams. Both decisions ranked him #2.",
+  "decision": "keep"
+ },
+ {
+  "cid": "C03",
+  "objection": "He has the worst peer-behaviour quality of the 20: quality_rate 0.934 (P0), 2 reverts and 13 follow-up fixes, 5 of them inside his own boot-performance campaign (#115140, #117799, #119102, #119225, #103466). 368 of 652 PRs have no recorded review, including 5 of 20 majors (#94059, #108163, #127333). The P95 delivery figure is volume-driven (652 PRs, including 46 mechanical and 42 trivial per the C16 comparison), while major_episodes is only 20 (P34, below the median of 21) and changelog_prs is 0. On the team side he gave 1 changes-requested in 147 reviews (team_leverage P42), and some of his substantive review comments are automated QA Swarm output. His riskiest repo-wide default changes (#126463 across 275 models, #126421 auth middleware) merged in the final week with Q=1 and a single approver each. His R (64.0) is below the excluded C15 (67.7).",
+  "replacement_cid": "C15",
+  "replacement_reason": "C15 outranks C03 on R (67.7 vs 64.0) with zero reverts (vs 2), 21 vs 20 major episodes, 4 vs 0 changelog PRs and much wider review reach (25 vs 15 teams, bridge_rank 1), and half his majors are critical-class auth/security fixes rather than performance increments.",
+  "rebuttal": "Kept. Tested directly: C03 beat the proposed replacement C15 in both presentation orders (delivery 1,405 vs 691; defaults inherited by every team). His weaker quality rate (2 reverts, 13 follow-up fixes) stays on his card as a caveat. Both decisions ranked him #3.",
+  "decision": "keep"
+ },
+ {
+  "cid": "C17",
+  "objection": "He is R rank 11 (47.8), so including him means jumping six higher-R candidates (C15, C01, C20, C13, C02, C16) on the strength of one column, major_episodes P95. Every other column is weak: delivery P26 (15th of 20), quality_rate 0.954 (P26) with 5 follow-up fixes, team_leverage P5 (his own report says the L0 metrics were missing), and trust_rank and importance_flow both P16. His 1.0 first-pass rate leans on one security colleague, who reviewed 40 of his 105 reviewed PRs. About 24 of his ~55 CSP PRs repair or relax his own rollout after enforcement broke features users saw (admin dialogs, HogQL editor, replay export). His leaked-key feature #81587 needed a security fix one day later (#81631). Many of the CA-incident 'major' PRs are 5-24 line dependency bumps (#121626, #121580). His own report deliberately grades him above his percentiles.",
+  "replacement_cid": "C15",
+  "replacement_reason": "C15 covers the same security ground with far stronger peer signals: the security team sends him its auth PRs (12 of C17's PRs), 13 of his 26 majors are C=3 auth/security fixes, and he leads C17 on R (67.7 vs 47.8), trust_rank (P84 vs P16), team_leverage (889 vs 350), cross_team (25 vs 18) and changelog PRs (4 vs 0).",
+  "rebuttal": "Kept. Tested directly: C17 beat C15 in both presentation orders (37 major episodes vs 21; company-wide security changes shipped, including CSP enforcement and the CA emergency fix). The self-repair share of his CSP work is disclosed as a red flag. Both decisions ranked him #4.",
+  "decision": "keep"
+ },
+ {
+  "cid": "C11",
+  "objection": "His work needs more correction than almost anyone's. first_pass_rate 0.961 and changes_requested_rate 0.047 are both 19th of 20, across 13 change requests with a mean of 2.17 rounds. His flagship HogQL flag-call rewrite #124397 needed four more major fixes from him within four days (#125115, #125267, #125649, #126076), so part of his October major count is self-repair. The session-replay relink bug took 7 PRs from August to October (#77598 through #119939), the root cause was never removed, and #119939 was then fixed by someone else. 26 of his 54 majors sit in one storage migration. Beyond that he has no changelog PRs, cross_team 14 (P29), trust_rank and team_leverage at the median (P47), and a 25.7h median first review. His R lead over the next candidate is only 1.2 points (56.5 vs C01's 55.3).",
+  "replacement_cid": "C01",
+  "replacement_reason": "C01 is almost tied on R (55.3) and beats C11 on first_pass_rate (1.0 vs 0.961), trust_rank (P95 vs P47), team_leverage (902 vs 820), importance_flow (1247 vs 1141), delivery (719 vs 696) and changelog PRs (2 vs 0), and his unsampled majors deep-read at a mean P of 9.87.",
+  "rebuttal": "Kept. Tested directly: C11 beat C01 in both presentation orders (28 vs 21 major episodes, in the core flag_evaluations migration and privacy-deletion paths; 85 vs 66 downstream authors). He had already beaten C15 in both orders. His low first-pass approval rate is disclosed.",
+  "decision": "keep"
+ }
+]

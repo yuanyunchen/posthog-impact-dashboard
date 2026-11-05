@@ -1,0 +1,145 @@
+{
+  "cid": "haacked",
+  "positioning": "Feature-flags engineer who single-handedly drove the flag_evaluations storage migration end to end (ingestion, ClickHouse, HogQL, data deletion, cohorts, CDP) while serving as the main approver for the feature-flags and experiments teams.",
+  "role": {
+    "primary_role": "platform builder",
+    "team": "feature-flags",
+    "how_they_create_impact": "He takes a cross-cutting data change ($feature_flag_called moving out of events into a dedicated flag_evaluations table) and carries it through every layer that reads or deletes that data, shipping many small, guarded PRs with kill switches and rollout flags. Alongside that he closes silent-failure and data-loss bugs (session replay gating, CDP event drops, /flags timeouts, RBAC leaks), most of them classified major.",
+    "network_summary": "Trusted approver for the feature-flags and experiments teams: 12 distinct people requested his review (requested_by, 2nd of 20) and he reviewed 207 PRs from 37 authors, mostly JamesPatrickGill, andehen, matheus-vb and gustavohstrassburger (role.reviews_given_prs, role.top_reviewed). His reach outside that home group is modest: approved authors span 14 teams (role.network.teams_covered_n, 14th of 20), trust_rank sits at the median (role.network.trust_rank 0.01) and his first review lands after a median 25.7h (metrics.first_review_median_h). As an author he is built upon widely (role.network.built_on_by_n 85 downstream authors) but needs correction more often than peers when he works in other teams' core code: changes were requested on 4.7% of his reviewed PRs (role.network.changes_requested_rate, 19th of 20), almost all from the HogQL owner. Importance flows to him overwhelmingly as an author (role.network.importance_flow.author 1118.3 of 1141.19)."
+  },
+  "core_contributions": [
+    {
+      "workstream_id": "ws1",
+      "title": "flag_evaluations migration: moving feature-flag calls out of the events table without breaking readers",
+      "what": "Built the path that lets an organization stop writing $feature_flag_called to events (mode 2 / FLAG_EVALUATIONS_ONLY): ingestion suppresses the events copy (#110254), backfills and dedups rows (#111129, #116519), HogQL transparently rewrites events queries for flag calls to read flag_evaluations (#124397) and the Activity page, lifecycle, cohorts, paths and experiments were taught to read the new table (#110149, #118127, #124498, #124564, #124461).",
+      "why_it_matters": "Flag calls are one of the highest-volume event types; removing them from events cuts storage and query cost, but every saved insight, cohort and SQL view that reads them would silently go empty. The rewrite keeps customer queries working with no customer change.",
+      "outcome": "Mode 2 is live behind a staff-controlled org setting (#106290) and the rollout flag on the HogQL rewrite was removed on 2026-11-02 (#126076). The rewrite needed four follow-up major fixes within four days (#125115, #125267, #125649, #126076), all by him.",
+      "his_role": "lead",
+      "evidence_prs": [110254, 124397, 110149, 118127, 116519, 111129, 125267, 126076],
+      "numbers": {"ws1_prs": 158, "ws1_major_prs": 45, "flag_evaluations_majors_of_all_majors": 26, "all_major_prs": 54, "deep_read_P_124397": 16.0, "deep_read_P_110254": 13.0}
+    },
+    {
+      "workstream_id": "ws1",
+      "title": "Data-deletion compliance for flag_evaluations",
+      "what": "Made every deletion path reach the new table: person-property removal (#114276), immediate deletion requests (#114271), deferred HogQL-predicate deletions for rows with no events copy (#117395, #114745), person-deletion cutoff precision (#112836), merge squashing (#98802) and a deletion-target registry with a CI coverage test for person-data tables (#82056).",
+      "why_it_matters": "Without these, deletion requests reported success while copies of personal data stayed in flag_evaluations, a privacy-compliance gap that had to close before new orgs default to mode 2.",
+      "outcome": "Deletion requests now sweep and verify flag_evaluations; the registry plus CI test makes future person-data tables fail CI if they are left out of deletion sweeps.",
+      "his_role": "lead",
+      "evidence_prs": [117395, 114276, 114271, 114745, 112836, 82056],
+      "numbers": {"major_prs": 5, "deep_read_P_117395": 16.0, "deep_read_P_114276": 9.6, "deep_read_P_114271": 7.8}
+    },
+    {
+      "workstream_id": "ws3",
+      "title": "Stopping silent event loss and outages in ingestion, CDP and /flags",
+      "what": "Fixed CDP consumers that committed offsets and dropped events when internal lookups failed (#121819, #121802, #122953), made replica recovery-conflict reads retriable (#122274), stopped invalid team IDs from restarting pods (#122365), and on the rust /flags service bounded the group-type lookup with the persons DB deadline (#108772) and fixed timeout ordering that caused reconnect storms (#108014).",
+      "why_it_matters": "These were silent data-loss and availability failures on core pipelines: a frozen persons DB returned 503 for every flag, and CDP destinations permanently lost events with no alert.",
+      "outcome": "Frozen-DB /flags requests return 200 instead of 503; CDP batches with lookup failures are retried or dead-lettered rather than dropped.",
+      "his_role": "lead",
+      "evidence_prs": [121819, 121802, 122953, 122274, 108772, 108014],
+      "numbers": {"ws3_major_prs": 5, "deep_read_P_108772": 16.0, "deep_read_P_121819": 13.0}
+    }
+  ],
+  "angles": {
+    "delivery": {
+      "grade": 8,
+      "rationale": "Unusually dense in high-criticality work: 54 of 246 PRs were triaged major and he has 28 major episodes (5th of 20). The work is concentrated on data correctness, privacy deletion and pipeline reliability, and the flag_evaluations program touches product analytics, experiments, cohorts and CDP. The delivery estimate places him only 8th of 20 because most majors were never deep-read, but every on-demand deep read of an unsampled major scored P 6.4 to 13.0. Not 9: the program benefits several teams but is one storage migration, and nothing reached landmark tier or the changelog.",
+      "claims": [
+        {"statement": "A large share of his output is major-tier, and the majors are concentrated in one cross-team migration.", "numbers": {"major_prs": 54, "prs": 246, "flag_evaluations_majors": 26, "major_episodes": 28}, "evidence_ids": ["tier_counts.major", "major_episodes", "ws1", 124397]},
+        {"statement": "Unsampled major PRs deep-read on demand score at or above his major-stratum mean, so the stratified estimate is not inflated.", "numbers": {"P_110254": 13.0, "P_121819": 13.0, "P_125267": 9.62, "P_104617": 6.35, "major_stratum_mean_P": 10.57}, "evidence_ids": [110254, 121819, 125267, 104617, "estimate.strata.major+landmark.mean_P"]},
+        {"statement": "He closed a production RBAC bypass that leaked variant keys of restricted flags.", "numbers": {"lines": 32, "P": 6.35}, "evidence_ids": [104617]}
+      ]
+    },
+    "system": {
+      "grade": 7,
+      "rationale": "He builds infrastructure other code depends on: a new storage table with engine and TTL choices (#116519, #124485), a transparent HogQL query rewrite with binding guards (#124397), a deletion-target registry with CI coverage (#82056), CI invariant guards on writable timestamps (#102568) and a fixed N+1 snapshot helper that restored guards repo-wide (#119735). 85 other authors later built on files he changed (7th of 20). Not 8: the abstractions are mostly in service of one migration rather than a reusable platform others adopt.",
+      "claims": [
+        {"statement": "Other engineers build on his code at an above-median rate.", "numbers": {"downstream_authors": 85, "rank_position": 7, "median": 77}, "evidence_ids": ["downstream_authors", "role.network.built_on_by_n"]},
+        {"statement": "He adds repo-wide guards that prevent whole bug classes, not just instances.", "numbers": {"guard_prs": 3}, "evidence_ids": [82056, 102568, 119735]},
+        {"statement": "The HogQL rewrite is a compiler-level change: the printer resolves both versions and keeps the swap only when every field binds the same way.", "numbers": {"P": 16.0, "N": 2}, "evidence_ids": [124397, "ws1"]}
+      ]
+    },
+    "quality": {
+      "grade": 6,
+      "rationale": "Zero reverts and a 0.97 quality rate (median of 20), with guarded rollouts and kill switches throughout. Against that: his first-pass approval rate is 19th of 20, five PRs were later fixed by others, and his own migration needed many corrective majors (four within four days of the HogQL rewrite, and five PRs for the same session-replay relink bug class between August and October). The corrections are mostly by himself and caught before or during rollout, so this reads as iterative hardening of risky work rather than carelessness, but it is not first-time-right.",
+      "claims": [
+        {"statement": "No reverts and median quality rate.", "numbers": {"reverted": 0, "quality_rate": 0.97, "percentile": 47.4}, "evidence_ids": ["metrics.reverted", "quality_rate"]},
+        {"statement": "Reviewers request changes on his PRs more than on almost anyone else's among the 20.", "numbers": {"first_pass_rate": 0.96, "changes_requested_rate": 0.047, "rank_position": 19, "changes_rounds_mean": 2.17}, "evidence_ids": ["first_pass_rate", "changes_requested_rate", "role.network.changes_rounds_mean"]},
+        {"statement": "The HogQL flag-call rewrite shipped with gaps that took four more major fixes.", "numbers": {"followup_majors": 4, "days": 4}, "evidence_ids": [124397, 125115, 125267, 125649, 126076]}
+      ]
+    },
+    "team": {
+      "grade": 7,
+      "rationale": "He is the go-to approver for the feature-flags and experiments group: 12 distinct requesters (2nd of 20), 207 PRs reviewed for 37 authors, and his recorded comments catch real defects, including two blocking RBAC-bypass findings on a HogQL property-restriction PR and a lost-update race on flag tag saves, with the commented lines changed afterwards. Not 8: team_leverage and trust_rank are only at the median, cross-team reach is below median (14 teams, 14th of 20), reviews are 70% plain approvals and first reviews are slow (25.7h median).",
+      "claims": [
+        {"statement": "Many people seek his review.", "numbers": {"requested_by": 12, "percentile": 92.1, "rank_position": 2}, "evidence_ids": ["requested_by", "peer.requested_by"]},
+        {"statement": "His review comments find security and data-loss bugs that authors then fix.", "numbers": {"blocking_comments_shown": 3, "comments_shown_line_changed_afterwards": 10}, "evidence_ids": [91506, 106774, 73902]},
+        {"statement": "Overall review leverage is only median and narrow in team spread.", "numbers": {"team_leverage": 820.64, "team_leverage_percentile": 44.4, "cross_team": 14, "cross_team_percentile": 28.9, "approvals": 180, "reviews": 259, "first_review_median_h": 25.71}, "evidence_ids": ["team_leverage", "cross_team", "metrics.first_review_median_h"]}
+      ]
+    }
+  },
+  "overall": {"grade": 7, "confidence": "medium"},
+  "key_numbers": [
+    {"label": "Major episodes (5th of 20)", "value": 28, "metric_key": "major_episodes"},
+    {"label": "Distinct people requesting his review (2nd of 20)", "value": 12, "metric_key": "requested_by"},
+    {"label": "First-pass approval rate (19th of 20)", "value": 0.96, "metric_key": "first_pass_rate"}
+  ],
+  "calibration": {
+    "ranks": {"delivery": 63.2, "quality_rate": 47.4, "team_leverage": 44.4, "trust_rank": 47.4},
+    "note": "On the matrix he is upper-middle: delivery 8th of 20, quality_rate and trust_rank 11th, team_leverage 11th of 19. Delivery is graded above that position (8) because the estimate deep-read only 8 of 54 majors and four on-demand deep reads of unsampled majors scored P 6.4 to 13.0, while major_episodes (5th) and requested_by (2nd) both place him near the top. Quality (6) and team (7) match their median positions, with team nudged up by requested_by and the defect-finding review comments. Overall 7 rather than 8 because the high delivery comes with a bottom-two first-pass rate and a migration that needed repeated self-correction."
+  },
+  "custom_analyses": [
+    {
+      "question": "Is his volume one coherent program or scattered fixes, and when did it peak?",
+      "why": "246 PRs across 51 areas could mean diffuse firefighting; the workstreams suggest a single storage migration spread over many layers, which would change how delivery should be read.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query haacked timeline",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query haacked prs --tier major",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query haacked deepread 110254"
+      ],
+      "finding": "26 of his 54 major PRs belong to the flag_evaluations migration, spread across ingestion, ClickHouse, background jobs, HogQL, Django API, frontend and cohorts. Output ramps sharply in October: 140 PRs and 38 majors in the four weeks from 2026-10-05, versus 8 to 21 PRs a week from mid-August through September. The cutover PR that stops writing flag calls to events (#110254, 2026-10-02, on-demand P 13.0) marks the start of the surge, which is then dominated by making every reader and deletion path work in the new mode, ending with removal of the HogQL rollout flag (#126076).",
+      "evidence_ids": [110254, 126076, 124397, "ws1", "ws3"],
+      "effect": "delivery 7 → 8: the volume is a single multi-layer program with a clear launch arc and measurable criticality, not scattered small fixes."
+    },
+    {
+      "question": "Why is his first-pass approval rate 19th of 20 — sloppiness or working in someone else's core module?",
+      "why": "Peer behaviour outranks self-description, and a bottom-two first-pass rate would normally pull quality down hard.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query haacked rank first_pass_rate",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query haacked reviews-received --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query haacked pr 91418",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query haacked prs --area \"Query engine (HogQL)\" --since 2026-10-28"
+      ],
+      "finding": "Of the 13 CHANGES_REQUESTED reviews he received, 9 came from mariusandra on four HogQL PRs (#91418 four rounds, #124397 three, #117395 two, #116693 one); the rest were on #87021 (two reviewers, sandbox escape) and #81020. All of them merged and none was reverted. So the low first-pass rate is driven by one strict owner gating compiler-level changes in a module outside his team, not by broad rework. However, the HogQL work also needed four follow-up major fixes from him within four days of #124397 (#125115, #125649, #125267 on-demand P 9.6, #126076), so the strict review was catching real risk.",
+      "evidence_ids": [91418, 124397, 117395, 116693, 87021, 125267, 125115, 125649, 126076, "first_pass_rate"],
+      "effect": "quality stays at 6 rather than 5: the friction is concentrated and resolved, but the post-launch fix chain prevents a higher grade."
+    },
+    {
+      "question": "Did the session-replay linked-flag repair converge, or keep needing new fixes?",
+      "why": "Five major PRs over two months target what looks like one bug class (flag rename or delete silently disabling session replay), which can indicate incomplete first fixes.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query haacked prs --area \"Product: Feature flags\" --until 2026-09-30",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query haacked pr 119939"
+      ],
+      "finding": "The series is #77598 (Aug 13, relink keys on rename), #80998 (Aug 20, block bulk delete of gating flags), #86720 (Aug 26, relink under muted signals and tombstones), #81575 (Sep 16, trigger groups on rename/delete), #89733 (Oct 14, repair command for trigger groups), #117391 (Oct 20, harden team API writes) and #119939 (Oct 20, trigger groups storing flag objects), and #119939 itself was later fixed by someone else. Each PR covers a different path into the same stored-key problem, so it is progressive hardening of a fragile denormalized link rather than the same fix redone, but the root cause (replay settings storing flag keys) was never removed.",
+      "evidence_ids": [77598, 80998, 86720, 81575, 89733, 117391, 119939],
+      "effect": "No grade change; it confirms quality at 6 and supports delivery (each fix restored recordings for affected teams)."
+    }
+  ],
+  "insights": [
+    {"insight": "He is a migration finisher: the flag_evaluations work went from a dark-shipped shadow writer in August (#86291) through cutover (#110254) to rollout-flag removal (#126076) inside the window, with the unglamorous deletion and reader fixes done by him rather than left to other teams.", "evidence_ids": [86291, 110254, 126076, "ws1"]},
+    {"insight": "Most of his majors are silent-failure fixes (data that quietly went missing, deletions that reported success, events dropped without alerts); the value is in correctness and trust rather than visible features, which is why he has no changelog entries.", "evidence_ids": [114271, 121819, 77598, "changelog_prs"]},
+    {"insight": "Low AI involvement (ai_share 0.02, 6 AI co-authored PRs, none reverted or fixed), so his output is almost entirely hand-written.", "evidence_ids": ["metrics.ai_share", "metrics.ai_coauthored_prs"]}
+  ],
+  "red_flags": [
+    {"flag": "Five of his PRs were later explicitly fixed by others (#80995 geoip metrics, #85528 ClickHouse flag mirror, #113495 deleted-cohort validation, #114183 property popover, #119939 replay trigger groups). The network block counts 3 fixes received, so the two sources disagree on the exact number.", "evidence_ids": [80995, 85528, 113495, 114183, 119939, "peer.followup_fixed", "role.network.fixes_received"]},
+    {"flag": "Deep-read quote verification failed for the C (criticality) quote on #106290 and the N (novelty) quote on #114251; those scores are less trustworthy (both are low-P PRs, 2.7 and 2.2).", "evidence_ids": [106290, 114251]},
+    {"flag": "First-pass approval rate 0.96 is 19th of 20, with 13 change requests across 6 PRs (mean 2.17 rounds).", "evidence_ids": ["first_pass_rate", "role.network.changes_rounds_mean", 91418, 124397]}
+  ],
+  "counter_evidence": "PR summaries describe the HogQL rewrite (#124397) as keeping saved queries working with no customer change, but peer and follow-up behaviour says otherwise: the HogQL owner requested changes three times on it, and he had to ship four more major fixes (#125115, #125649, #125267, #126076) within four days for funnels, trends, retention, experiments and saved views that still missed flag calls. Behaviour wins: the rewrite was correct in design but not complete at merge. Similarly, the session-replay relink was described as fixed in August (#77598) yet needed five more PRs through October. On the other side, the matrix delivery estimate (8th of 20) understates him: only 8 of 54 majors were deep-read, and the alternative stratified estimate is 1603.72 versus 696.53 used for ranking. Review leverage looks median on team_leverage, but requested_by (2nd of 20) and the content of his comments suggest his reviews carry more weight than approval counts show; changes_adopted_rate is unknown (n=1), so adoption cannot be confirmed quantitatively.",
+  "coverage": {
+    "sampled_prs": 19,
+    "ondemand_deepreads": 4,
+    "missing_data": ["review_requested_by", "issue_reactions", "changes_adopted_rate"],
+    "diff_truncated_share": 0.53
+  }
+}

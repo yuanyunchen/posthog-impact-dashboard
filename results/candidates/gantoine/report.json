@@ -1,0 +1,426 @@
+{
+ "cid": "gantoine",
+ "positioning": "Developer-experience platform engineer who spent the window running a sustained campaign to unclog PostHog's CI and Trunk merge queue for every team, while also hardening the security of the team's AI review and auto-approval bots; his reach is repo-wide but his measured delivery and downstream footprint sit near the bottom of the 20.",
+ "role": {
+  "primary_role": "platform builder",
+  "team": "developer-experience",
+  "how_they_create_impact": "Removes friction that every engineer pays on every PR: narrowing merge-queue lanes so unrelated PRs stop serializing, deflaking tests that kick batches out of the queue, moving redundant master suites to crons, and adding lint checks and tooling (hogli verify, workflow-plan, WF009) that keep CI correct. Secondary: security hardening of Stamphog/PostHog Review and webhook credentials.",
+  "network_summary": "A high-volume, broad approver rather than a sought-after expert. He gave 415 reviews on 403 PRs for 71 authors across 27 teams (role.network.teams_covered_n=27, cross_team rank 1/20 tied), which drives team_leverage to 3rd of 19. But 94% of those reviews are approvals (391), only 6 requested changes (role.network.events_given.changes_requested=6, adopted 83% of the time), and only 4 people explicitly requested his review (role.network.requested_by_n=4, 15th of 20). More than half of his reviewing (222 of 403 PRs) goes to two devex teammates, webjunkie and rnegron, and rnegron in turn reviews 93 of his 164 reviewed PRs: a tight devex review pair. Trust rank is at the median (role.network.trust_rank=0.01, 10th of 20); bridge_rank=2 in community 1 suggests he connects devex to many product teams through CI approvals. Others rarely build on his files (role.network.built_on_by_n=44, downstream_authors 18th of 20), which is expected for CI/workflow files but means the system angle cannot lean on peer build-on behavior."
+ },
+ "core_contributions": [
+  {
+   "workstream_id": "ws1",
+   "title": "Merge-queue throughput and CI reliability program",
+   "what": "Over 90 days he shipped 122 CI/tooling PRs (66 substantive, 2 major). The core thread is the Trunk merge queue: hand-narrowed lane rules early on (#78351, #79744, #81045, #90085, #89288), then lanes derived from code structure (#90078 Rust lanes from the affected-services determinator, #110140 import-derived nodejs sub-lanes, #117151 impacted targets from the GitHub compare API), then Trunk Dynamic CI in learning mode (#101929). Around it: deflaking tests that evicted queue batches, a WF009 lint check that derives MCP filter coverage from the import graph (#94179), quarantine gating (#90158), and moving master suites to hourly crons (#90195).",
+   "why_it_matters": "Merge-queue serialization and flaky kickouts tax every engineer in the monorepo; a lane that claims every target makes one team's PR block everyone else's.",
+   "outcome": "Self-reported effects include claimed proto targets cut from 162 to roughly 2-104 (#81045), PRs no longer serializing behind 436 files (#90085), master matrix runs cut from about 160/day to at most 24/day (#90195) and about 1,300 runner hours saved on queue branches (#88762). These figures come from his PR descriptions; no reverts were recorded in the workstream, and Dynamic CI (#101929) is non-gating, so its savings are not yet realized.",
+   "his_role": "lead",
+   "evidence_prs": [
+    101929,
+    94179,
+    89288,
+    90158,
+    110140,
+    117151,
+    90195,
+    88762
+   ],
+   "numbers": {
+    "prs": 122,
+    "substantive": 66,
+    "major": 2,
+    "points_sum": 398.87,
+    "span_days": 90
+   }
+  },
+  {
+   "workstream_id": "ws6",
+   "title": "Security hardening of Stamphog and PostHog Review",
+   "what": "Made the Stamphog auto-approval worker re-run the engine gates itself against a pinned file list before posting an approval, escalating to a human when the sandbox verdict cannot be confirmed (#125439); fail-closed on symlinked trusted-file parents (#125413); pinned the sandbox Python interpreter (#121220). In PostHog Review he moved triggering to @posthog comments with a Stamphog handoff (#124327), added a round cap (#119856) and per-PR cost attribution (#117301).",
+   "why_it_matters": "Stamphog approves PRs automatically; if untrusted PR code can influence its verdict, it becomes a path to merge unreviewed code into the monorepo.",
+   "outcome": "The on-demand deep read of #125439 scored P=16.0 (V3 C3 N2), the highest single score in his pack; three ws6 PRs all close concrete trust-boundary gaps. Outside the stratified estimate, so not reflected in delivery.",
+   "his_role": "lead",
+   "evidence_prs": [
+    125439,
+    125413,
+    121220,
+    124327,
+    119856,
+    117301
+   ],
+   "numbers": {
+    "ws6_prs": 3,
+    "ws4_prs": 4,
+    "top_P": 16.0
+   }
+  },
+  {
+   "workstream_id": "ws3",
+   "title": "Webhook credential secrecy and supply-chain trust fixes",
+   "what": "Added a Secret headers input to the CDP webhook destination so credential headers are encrypted, never returned by the API and kept out of queue params and logs, while hardening template sync to fail loudly instead of deleting templates (#96545); added Standard Webhooks HMAC signing (#90307); separately refreshed CA bundles in llm-gateway and Streamlit images to stop trusting compromised eMudhra intermediates (#122682).",
+   "why_it_matters": "These are the few user-facing and security-critical items in his window: customer webhook tokens were previously stored and moved in plaintext.",
+   "outcome": "#96545 is one of his 4 major-tier PRs with deep-read P=13.0; #122682 is major-tier (P=6.3).",
+   "his_role": "lead",
+   "evidence_prs": [
+    96545,
+    90307,
+    122682
+   ],
+   "numbers": {
+    "prs": 3,
+    "major": 1,
+    "P_96545": 13.0
+   }
+  }
+ ],
+ "angles": {
+  "delivery": {
+   "grade": 5,
+   "rationale": "Measured delivery is low: estimate 433.25 (18th of 20) with only 4 major-tier PRs and no landmark. The estimate undercounts internal infra whose beneficiaries are every engineer, and two security items (#96545, #125439) are genuinely critical, so he lands at stable effective contribution rather than local. Most claimed savings are self-reported and Dynamic CI is not yet gating, so I do not lift him into the team-pillar band on delivery alone.",
+   "claims": [
+    {
+     "statement": "Delivery estimate ranks 18th of 20 with 4 major-tier PRs out of 178.",
+     "numbers": {
+      "delivery": 433.25,
+      "percentile": 10.5,
+      "major_prs": 4,
+      "prs": 178
+     },
+     "evidence_ids": [
+      "delivery",
+      "major_episodes"
+     ]
+    },
+    {
+     "statement": "His highest-value user-facing work is security: webhook secret headers and CA bundle refresh.",
+     "numbers": {
+      "P_96545": 13.0,
+      "P_122682": 6.3
+     },
+     "evidence_ids": [
+      96545,
+      122682,
+      "ws3"
+     ]
+    },
+    {
+     "statement": "Stamphog gate re-verification is the strongest single PR but sits outside the stratified estimate.",
+     "numbers": {
+      "P": 16.0
+     },
+     "evidence_ids": [
+      125439,
+      "ws6"
+     ]
+    }
+   ]
+  },
+  "system": {
+   "grade": 7,
+   "rationale": "This is his strongest angle. The merge-queue work evolves from hand-tuned rules to structure-derived lanes and a learning-mode Dynamic CI, plus reusable guards (WF009, workflow lint rules, workflow-plan tool, hogli verify). It is the CI substrate for the whole monorepo. Peer build-on is weak (44 downstream authors, 18th of 20), which keeps him out of 8+.",
+   "claims": [
+    {
+     "statement": "Merge-queue lane assignment moved from hand rules to lanes derived from the determinator, import graph and compare API.",
+     "numbers": {
+      "lane_prs_mentioning_queue": 47,
+      "P_117151": 5.53,
+      "P_89288": 5.9
+     },
+     "evidence_ids": [
+      90078,
+      110140,
+      117151,
+      89288,
+      "ws1"
+     ]
+    },
+    {
+     "statement": "WF009 derives required MCP filter coverage from the TypeScript import graph, replacing manual filter upkeep.",
+     "numbers": {
+      "P": 7.3
+     },
+     "evidence_ids": [
+      94179
+     ]
+    },
+    {
+     "statement": "Few other authors later build on files he changed.",
+     "numbers": {
+      "downstream_authors": 44,
+      "percentile": 10.5
+     },
+     "evidence_ids": [
+      "downstream_authors"
+     ]
+    }
+   ]
+  },
+  "quality": {
+   "grade": 6,
+   "rationale": "Zero reverts and a 0.99 first-pass rate, but 4 follow-up-fixed PRs give a quality_rate of 0.95, 17th of 20. Two of the four fixes sit in one deliberate trade-off (moving master suites to crons) that he partly repaired himself the same day (#90953). His main reviewer is a close teammate, so the near-zero changes-requested rate is weaker evidence than it looks.",
+   "claims": [
+    {
+     "statement": "No reverts; 4 PRs later fixed by others.",
+     "numbers": {
+      "reverted": 0,
+      "followup_fixed": 4,
+      "quality_rate": 0.95,
+      "percentile": 15.8
+     },
+     "evidence_ids": [
+      "quality_rate",
+      93229,
+      96633,
+      116166,
+      118586
+     ]
+    },
+    {
+     "statement": "Reviewers almost never ask for changes, but 93 of his 164 reviewed PRs were reviewed by teammate rnegron.",
+     "numbers": {
+      "first_pass_rate": 0.99,
+      "changes_requested_received": 1,
+      "rnegron_reviews": 93
+     },
+     "evidence_ids": [
+      "first_pass_rate",
+      "changes_requested_rate"
+     ]
+    },
+    {
+     "statement": "The cron move (#90195) traded up to an hour of non-paging failure detection for CI spend; he restored paging in #90953 six hours later.",
+     "numbers": {
+      "master_runs_before": 160,
+      "master_runs_after": 24,
+      "P_90195": 4.49
+     },
+     "evidence_ids": [
+      90195,
+      90953
+     ]
+    }
+   ]
+  },
+  "team": {
+   "grade": 6,
+   "rationale": "Breadth is excellent (team_leverage 3rd of 19, 27 teams covered, 1st tied), but depth signals are weak: 94% approvals, 6 changes requested, 4 people requesting him, median trust rank. Sampled comments show real verification on some reviews, so he is a useful broad gatekeeper for CI-touching PRs rather than a sought-after expert.",
+   "claims": [
+    {
+     "statement": "Reviews span 71 authors and 27 teams.",
+     "numbers": {
+      "reviews_given": 415,
+      "authors": 71,
+      "teams": 27,
+      "team_leverage": 1771.96
+     },
+     "evidence_ids": [
+      "team_leverage",
+      "cross_team"
+     ]
+    },
+    {
+     "statement": "Few explicit review requests and a 94% approval share.",
+     "numbers": {
+      "requested_by": 4,
+      "approved": 391,
+      "changes_requested": 6,
+      "changes_adopted_rate": 0.83
+     },
+     "evidence_ids": [
+      "requested_by",
+      "trust_rank"
+     ]
+    },
+    {
+     "statement": "Some reviews include hands-on verification, e.g. reproducing filtered pnpm installs before approving.",
+     "numbers": {
+      "sampled_substantive_reviews": 2
+     },
+     "evidence_ids": [
+      124808,
+      118584
+     ]
+    }
+   ]
+  }
+ },
+ "overall": {
+  "grade": 6,
+  "confidence": "medium"
+ },
+ "key_numbers": [
+  {
+   "label": "Team leverage (reviews x ln authors)",
+   "value": 1771.96,
+   "metric_key": "team_leverage"
+  },
+  {
+   "label": "Teams covered by his approvals",
+   "value": 27,
+   "metric_key": "cross_team"
+  },
+  {
+   "label": "Delivery estimate (18th of 20)",
+   "value": 433.25,
+   "metric_key": "delivery"
+  }
+ ],
+ "calibration": {
+  "ranks": {
+   "delivery": 10.5,
+   "quality_rate": 15.8,
+   "team_leverage": 88.9,
+   "trust_rank": 52.6
+  },
+  "note": "He sits in the bottom quartile on delivery (18/20) and quality_rate (17/20), top tier on team_leverage (3/19) and at the median on trust_rank (10/20). Grades mostly agree: overall 6 (stable effective contribution) is below the cohort's delivery leaders. I grade delivery 5 rather than 3-4 because the estimate cannot see repo-wide CI throughput and two security-critical PRs; system 7 is above what his percentiles imply because the merge-queue program is a coherent platform for all teams even though peer build-on is low; team 6 rather than 8 despite p88.9 leverage because leverage counts approvals, and his approvals are 94% of reviews with few explicit requests."
+ },
+ "custom_analyses": [
+  {
+   "question": "Is the CI work a coherent merge-queue program or reactive firefighting?",
+   "why": "122 of his 178 PRs are CI/tooling; volume alone should not count, so I checked whether they build toward something.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine prs --ws ws1 --tier substantive --until 2026-09-20",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine prs --ws ws1 --tier substantive --since 2026-09-21",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine timeline",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine deepread 117151",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine deepread 88762",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine pr 110140"
+   ],
+   "finding": "66 substantive ws1 PRs (43 before Sep 21, 23 after). 47 of his 178 PR summaries mention the merge queue or lanes, spread across August (21), September (12) and October (14), so it is a sustained theme, not one incident. The approach matures: hand-narrowed lanes in August (#78351, #81045, #90085), derived lanes from September on (#90078, #110140 import-derived nodejs sub-lanes, #117151 compare API, P=5.53), and learning-mode Dynamic CI (#101929). About 20 PRs are deflakes, the reactive part. Output is bursty: 3-6 PRs/week from Sep 21 to Oct 11 versus 19-30/week in mid-October.",
+   "evidence_ids": [
+    78351,
+    81045,
+    90085,
+    90078,
+    110140,
+    117151,
+    101929,
+    88762,
+    "ws1"
+   ],
+   "effect": "system 6 -> 7 because the work shows rising abstraction across a quarter; delivery stays 5 because the outcome numbers are self-reported and the most ambitious piece is non-gating."
+  },
+  {
+   "question": "Where do his quality problems come from?",
+   "why": "quality_rate is 17th of 20 despite zero reverts; I wanted to know whether the 4 follow-up fixes share a cause.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine pr 93229",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine pr 96633",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine pr 116166",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine pr 118586",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine deepread 90195",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine pr 90953"
+   ],
+   "finding": "Two of the four fixed PRs (#93229 five master suites to hourly cron, #96633 desktop tests to daily cron) continue the cost-cutting pattern started by #90195, whose deep read notes the trade-off of up to an hour of delayed, non-paging failure detection. He shipped #90953 (alerting on the hourly matrices) about six hours after #90195. The other two are a 4-line .envrc fix (#116166) and a metrics classification fix (#118586). No fix touches the security work.",
+   "evidence_ids": [
+    93229,
+    96633,
+    116166,
+    118586,
+    90195,
+    90953
+   ],
+   "effect": "quality held at 6 rather than 5: defects cluster in one deliberate, owned trade-off and none is a revert; not higher because the rate still ranks 17/20."
+  },
+  {
+   "question": "Is his top-3 team leverage real review influence or rubber-stamping?",
+   "why": "team_leverage counts reviews times authors served; approvals inflate it, so I checked review states, requesters and concentration.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine reviews-given --top 15",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine reviews-received --top 10",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine rank requested_by",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine rank cross_team",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine compare webjunkie",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine compare rnegron"
+   ],
+   "finding": "391 of 415 reviews are approvals and 6 request changes (adopted 83%). 222 of the 403 PRs he reviewed belong to webjunkie (115) and rnegron (107); rnegron reviews 93 of his own PRs. Only 4 people requested his review (15th of 20) versus 11 for webjunkie, while cross-team reach (27) ties for 1st. Sampled review text shows some depth (#124808 reproduced filtered pnpm installs; #118584 caught a repo-secret policy breach).",
+   "evidence_ids": [
+    124808,
+    118584,
+    "requested_by",
+    "cross_team",
+    "team_leverage"
+   ],
+   "effect": "team 7 -> 6 because breadth comes mainly from approvals, with few explicit requests and a reciprocal review pair."
+  },
+  {
+   "question": "Does his 92% AI co-authorship cost quality?",
+   "why": "He has the highest ai_share of the 20, so AI-assisted output could inflate PR counts or carry hidden defects.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine rank ai_share",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine rank quality_rate",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query gantoine compare rnegron"
+   ],
+   "finding": "163 of 178 PRs are AI co-authored (ai_share 0.92, 1st of 19). All 4 follow-up fixes are on AI co-authored PRs, but that is close to his base rate. quality_rate 0.95 versus 0.96 for rnegron (ai_share 0.01) and 0.97 for webjunkie (0.02): a 1-2 point gap, with no reverts.",
+   "evidence_ids": [
+    "ai_share",
+    "quality_rate",
+    93229,
+    96633
+   ],
+   "effect": "No grade change; the gap is too small to attribute to AI use, and PR counts already carry no weight."
+  }
+ ],
+ "insights": [
+  {
+   "insight": "His impact is breadth of reach through shared CI rather than code others build on: downstream_authors (18th) and importance_flow (19th) are near the bottom, while cross_team is 1st, which fits a CI owner whose files are workflow configs.",
+   "evidence_ids": [
+    "downstream_authors",
+    "importance_flow",
+    "cross_team",
+    "ws1"
+   ]
+  },
+  {
+   "insight": "The highest-scoring PR in his pack (#125439, P=16.0) merged on the last day of the window and was only found through an on-demand deep read; the stratified estimate rests on 15 sampled PRs and misses it.",
+   "evidence_ids": [
+    125439,
+    "delivery"
+   ]
+  },
+  {
+   "insight": "Security work is a recurring secondary theme across three workstreams (Stamphog trust boundaries, webhook secrets, CA bundles), more than his devex label suggests.",
+   "evidence_ids": [
+    125413,
+    121220,
+    96545,
+    122682,
+    "ws6",
+    "ws3"
+   ]
+  }
+ ],
+ "red_flags": [
+  {
+   "flag": "Four PRs later needed follow-up fixes by others (peer.followup_fixed=4), two from the master-suite-to-cron pattern.",
+   "evidence_ids": [
+    93229,
+    96633,
+    116166,
+    118586
+   ]
+  },
+  {
+   "flag": "#101929 (P=13.0, his top stratified PR) has its novelty quote not found in the source, and the job is non-gating learning mode, so its high score may overstate realized impact.",
+   "evidence_ids": [
+    101929
+   ]
+  },
+  {
+   "flag": "Only 4 people explicitly requested his review despite 415 reviews given; review influence may be overstated by approval volume.",
+   "evidence_ids": [
+    "requested_by"
+   ]
+  }
+ ],
+ "counter_evidence": "Most outcome figures (162 to 2-104 targets, 436 files, ~1,300 runner hours, ~90% master spend cut) come from his own PR descriptions; peer behavior confirms only that the PRs were approved quickly, mostly by teammate rnegron, and not that the savings held. Peer behavior also shows 4 follow-up fixes and low build-on (44 downstream authors). In the other direction, peers never reverted him and the cron trade-off was repaired by himself within hours. Dynamic CI (#101929) is in learning mode only. 92% of PRs are AI co-authored, so PR volume says little about personal effort.",
+ "coverage": {
+  "sampled_prs": 15,
+  "ondemand_deepreads": 4,
+  "missing_data": [
+   "review_requested_by",
+   "issue_reactions"
+  ],
+  "diff_truncated_share": 0.4
+ }
+}

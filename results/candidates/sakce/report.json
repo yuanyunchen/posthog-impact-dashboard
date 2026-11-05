@@ -1,0 +1,427 @@
+{
+ "cid": "sakce",
+ "positioning": "The lead author and de facto owner of PostHog's data modeling / materialized-views product: he wrote 127 of its window PRs (top author among 21), hardened its correctness, access control and billing paths, and in October drove the HogQL-to-Trino shadow-build rollout.",
+ "role": {
+  "primary_role": "product builder",
+  "team": "data-modeling (inferred; no team mapping in the data)",
+  "how_they_create_impact": "A steady stream of mostly small, well-scoped fixes and features (226 PRs, 130 typed as fixes, active in 13 weeks) that close silent failure modes in the data-modeling pipeline: views that stop materializing without telling anyone, duplicate or racing builds, lineage drawn from the wrong source, permission leaks in warehouse endpoints, and usage under-counted into billing. Late in the window he extended this into the shared HogQL query engine to make Trino a second execution engine for data models.",
+  "network_summary": "A tight two-person core with thiagosalvatore inside data-modeling, not a broad hub. He is the main approver for thiagosalvatore (94 of his 138 reviews, role.top_reviewed) and in turn is reviewed mostly by benben (93 reviews) and thiagosalvatore (69). Reach beyond that pair is modest: 25 authors approved (role.network.approved_authors_n), 16 teams covered (role.network.teams_covered_n, median among the 20), only 5 people requested his review (role.network.requested_by_n, median), trust_rank 0.01 (p31.6) and team_leverage p5.6. Peers keep building on his files (built_on_by_n 63) and nobody reverted him (reverts_received 0), but he gets corrected more often than any other candidate at review time (changes_requested_rate 0.07, worst of 20), mostly when he works in core HogQL owned by mariusandra."
+ },
+ "core_contributions": [
+  {
+   "workstream_id": "ws1",
+   "title": "Making data-modeling materialization reliable and observable",
+   "what": "Owned the data-modeling pipeline end to end: failure notifications for materialized views (#80689, changelog), recovery when a model's backing table disappears (#100153), working refresh/resume/timeout recovery paths (#95234), lineage read from a single authoritative DAG (#92276), dependency edges from subqueries so the DAG schedules and detects cycles correctly (#100837), correct incremental-eligibility checks (#113985), and a fast lineage graph on large projects (#124837).",
+   "why_it_matters": "Data models feed customers' dashboards and endpoints; most of these bugs were silent (a view stops refreshing forever, wrong partial rows merged, stale status shown), which is the worst failure mode for a data product.",
+   "outcome": "127 PRs in the workstream with 11 major and 79 substantive, 6 changelog entries across the window (failure alerts, models needing attention, suspend failing models, lineage search, endpoint dependencies, failure digests), zero reverts.",
+   "his_role": "lead",
+   "evidence_prs": [
+    80689,
+    100153,
+    95234,
+    92276,
+    100837,
+    113985,
+    124837
+   ],
+   "numbers": {
+    "prs": 127,
+    "major_prs": 11,
+    "substantive_prs": 79,
+    "top_deepread_P": 16.0,
+    "points_sum": 498.71
+   }
+  },
+  {
+   "workstream_id": "ws4",
+   "title": "Trino as a second engine for data models (HogQL lowering and shadow builds)",
+   "what": "Between 2026-10-08 and 2026-11-03 he shipped 23 Trino-related PRs across ws1, ws4 and ws2: incremental models in the Trino shadow (#113990), decoupling ClickHouse DAG runs from Trino shadows (#114695), a series of HogQL-to-Trino printer fixes closing type-coercion and lowering gaps (#123149, #118736, #123152, #124905, #125056, #128159), one-build-per-model concurrency via fixed Temporal workflow ids (#126460), per-engine resume from MCP (#126202) and saving raw Trino queries as views (#126362); the last PR deletes the in-workflow shadow comparison (#128353).",
+   "why_it_matters": "Running models on Trino requires the shared query engine to emit semantically identical SQL for a second dialect; mismatches either fail builds or silently change results. This is platform work in code other teams depend on.",
+   "outcome": "Shadow builds moved from comparison to directly runnable Trino models with engine-specific operations in under four weeks; 3 of the 23 PRs triaged major. The final outcome of the migration is outside the window.",
+   "his_role": "lead",
+   "evidence_prs": [
+    113990,
+    114695,
+    123149,
+    118736,
+    124905,
+    126460,
+    126202,
+    126362,
+    128353
+   ],
+   "numbers": {
+    "trino_prs": 23,
+    "major_prs": 3,
+    "span_days": 26,
+    "deepread_P_126460": 9.62
+   }
+  },
+  {
+   "workstream_id": "ws2",
+   "title": "Access control, data correctness and billing in the data warehouse",
+   "what": "Closed several authorization gaps and correctness bugs around saved queries: per-view permissions and atomic deletion for folders (#101079), object-level access on four viewset actions (#95602), cross-project saved_query_id validation (#95600), lineage filtered by per-object access (#125069), credential leaks kept out of error tracking (#94342, #94326), duplicate materialization tables (#79746), and under-counted materialized-view storage that reached billing (#95263).",
+   "why_it_matters": "These touch security (members reading objects they are denied, credentials in error capture) and money (usage reports under-counting storage), the highest-criticality classes in the rubric.",
+   "outcome": "6 of his 26 major PRs are access-control or credential-leak fixes and one is a billing-facing usage fix; on-demand deep reads scored #125069 at P 7.82 and #95263 at P 6.35, both with C=3.",
+   "his_role": "lead",
+   "evidence_prs": [
+    101079,
+    95602,
+    95600,
+    125069,
+    94342,
+    94326,
+    79746,
+    95263
+   ],
+   "numbers": {
+    "major_prs_ws2": 8,
+    "deepread_P_101079": 13.0,
+    "deepread_P_125069": 7.82,
+    "deepread_P_95263": 6.35
+   }
+  }
+ ],
+ "angles": {
+  "delivery": {
+   "grade": 7,
+   "rationale": "Core pillar of one product team. His work is dominated by critical-class fixes (data correctness, security, billing) plus several user-facing features cited in the public changelog, sustained over all 13 weeks. The delivery metric ranks him only 12/20 (p42.1) because 226 PRs collapse into 96 episodes and the episode formula discounts all but the strongest PR in each; the stratified estimate (1869) is three times the episode figure. No single landmark or multi-team launch lifts him to 8+.",
+   "claims": [
+    {
+     "statement": "26 major PRs, the 7th-highest count of major episodes among the 20 candidates, with no landmark.",
+     "numbers": {
+      "major_prs": 26,
+      "major_episodes": 24,
+      "major_episodes_percentile": 65.8,
+      "landmark": 0
+     },
+     "evidence_ids": [
+      "major_episodes",
+      "tier_counts.major",
+      100153,
+      101079
+     ]
+    },
+    {
+     "statement": "8 PRs cited in the public changelog, 4th of 19 candidates.",
+     "numbers": {
+      "changelog_prs": 8,
+      "percentile": 83.3
+     },
+     "evidence_ids": [
+      "changelog_prs",
+      80689,
+      122005
+     ]
+    },
+    {
+     "statement": "Episode-based delivery sits just below the median of the 20.",
+     "numbers": {
+      "delivery_hat": 590.94,
+      "median": 616.02,
+      "percentile": 42.1,
+      "delivery_stratified": 1869.21
+     },
+     "evidence_ids": [
+      "delivery",
+      "estimate.delivery_stratified"
+     ]
+    }
+   ]
+  },
+  "system": {
+   "grade": 6,
+   "rationale": "He builds real infrastructure inside his product (single DAG as lineage source, Temporal workflow-id concurrency control, chunked Kafka-confirmed resumable syncs) and in October extended the shared HogQL engine with a Trino dialect. That is meaningful platform work, but its reach beyond data-modeling is limited so far: downstream authors who built on his files rank 15/20.",
+   "claims": [
+    {
+     "statement": "Resumable person-property syncs that snapshot only Kafka-confirmed deliveries, one of his three P=16 deep reads.",
+     "numbers": {
+      "P": 16.0,
+      "chunk_rows": 50000
+     },
+     "evidence_ids": [
+      122054,
+      "ws5"
+     ]
+    },
+    {
+     "statement": "23 Trino PRs in 26 days, 8 of them in the shared HogQL printer.",
+     "numbers": {
+      "trino_prs": 23,
+      "hogql_trino_prs": 8,
+      "major": 3
+     },
+     "evidence_ids": [
+      "ws4",
+      123149,
+      124905,
+      126460
+     ]
+    },
+    {
+     "statement": "Others continue on his code, but less broadly than most candidates.",
+     "numbers": {
+      "downstream_authors": 63,
+      "percentile": 26.3,
+      "core_share": 0.29
+     },
+     "evidence_ids": [
+      "downstream_authors",
+      "role.network.built_on_by_n",
+      "metrics.core_share"
+     ]
+    }
+   ]
+  },
+  "quality": {
+   "grade": 7,
+   "rationale": "Post-merge quality is excellent: zero reverts, one follow-up fix across 148 mature PRs, quality_rate 3rd of 20, zero problems in his 54 AI co-authored PRs. Pre-merge is the weak spot: he has the highest changes-requested rate and lowest first-pass rate among the 20, concentrated in core HogQL work where mariusandra gates changes. Rounds stay short (1.33 mean), so corrections are absorbed quickly rather than dragging on.",
+   "claims": [
+    {
+     "statement": "No reverts and a single follow-up fix in the window.",
+     "numbers": {
+      "reverted": 0,
+      "followup_fixed": 1,
+      "mature_prs": 148,
+      "quality_rate": 0.99,
+      "percentile": 89.5
+     },
+     "evidence_ids": [
+      "quality_rate",
+      "metrics.reverted",
+      "peer.followup_fixed"
+     ]
+    },
+    {
+     "statement": "Highest changes-requested rate of the 20 (12 CHANGES_REQUESTED reviews on 9 PRs), but with short rounds.",
+     "numbers": {
+      "changes_requested_rate": 0.07,
+      "first_pass_rate": 0.93,
+      "changes_requested_reviews": 12,
+      "rounds_mean": 1.33
+     },
+     "evidence_ids": [
+      "changes_requested_rate",
+      "first_pass_rate",
+      113194,
+      111961
+     ]
+    },
+    {
+     "statement": "AI co-authored work shows no extra quality cost.",
+     "numbers": {
+      "ai_coauthored_prs": 54,
+      "ai_share": 0.24,
+      "ai_reverted_or_fixed": 0
+     },
+     "evidence_ids": [
+      "metrics.ai_coauthored_prs",
+      "metrics.ai_reverted_or_fixed"
+     ]
+    }
+   ]
+  },
+  "team": {
+   "grade": 5,
+   "rationale": "He is the reliable approver for his closest teammate and his written review comments are substantive design feedback (schedule drift between Django and Temporal, missing transactions, naming consistency). But review volume and breadth are low for this cohort: team_leverage 18/19, requested by only 5 people, and two-thirds of his reviews go to one author. Approvals dominate (125 of 138) with a single change request.",
+   "claims": [
+    {
+     "statement": "Review leverage is near the bottom of the 20.",
+     "numbers": {
+      "team_leverage": 461.42,
+      "percentile": 5.6,
+      "reviews_given": 138,
+      "authors": 25
+     },
+     "evidence_ids": [
+      "team_leverage",
+      "metrics.reviews_given"
+     ]
+    },
+    {
+     "statement": "Reviews are concentrated on one teammate.",
+     "numbers": {
+      "reviews_to_thiagosalvatore": 94,
+      "reviews_given": 138,
+      "share": 0.68,
+      "teams_covered": 16
+     },
+     "evidence_ids": [
+      "role.top_reviewed",
+      "role.network.teams_covered_n",
+      113443
+     ]
+    },
+    {
+     "statement": "His comments raise design-level issues that the authors then changed.",
+     "numbers": {
+      "comments_shown": 10,
+      "changes_requested_given": 1
+     },
+     "evidence_ids": [
+      97570,
+      121459,
+      113443
+     ]
+    }
+   ]
+  }
+ },
+ "overall": {
+  "grade": 7,
+  "confidence": "medium"
+ },
+ "key_numbers": [
+  {
+   "label": "Major PRs (critical fixes and features)",
+   "value": 26,
+   "metric_key": "tier_counts.major"
+  },
+  {
+   "label": "Quality rate (no reverts, 1 follow-up fix)",
+   "value": 0.99,
+   "metric_key": "quality_rate"
+  },
+  {
+   "label": "Data-modeling PRs as area leader",
+   "value": 127,
+   "metric_key": "ws.ws1.agg.prs_n"
+  }
+ ],
+ "calibration": {
+  "ranks": {
+   "delivery": 42.1,
+   "quality_rate": 89.5,
+   "team_leverage": 5.6,
+   "trust_rank": 31.6
+  },
+  "note": "Among the 20 he is mid-pack on delivery (12/20), near the top on post-merge quality (3/20), near the bottom on review leverage (18/19) and below the median on trust_rank (14/20). An overall 7 is slightly above what the delivery percentile alone suggests; I keep it because the episode metric compresses his many related fixes (226 PRs into 96 episodes, stratified estimate 1869 vs 590.94) while major_episodes (p65.8) and changelog_prs (p83.3) rank him higher, and because the content of his majors is security, billing and data-correctness work. The team grade of 5 is consistent with his low leverage and trust ranks. He is not a cross-company hub like Gilbert09 (delivery 5340, downstream authors 106), so nothing reaches 8."
+ },
+ "custom_analyses": [
+  {
+   "question": "Why is his changes-requested rate the worst of the 20, and does it signal low code quality?",
+   "why": "first_pass_rate (0.93) and changes_requested_rate (0.07) are both last place among the 20, which conflicts with his near-perfect post-merge record; I wanted to see who asks for changes and on what.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sakce rank changes_requested_rate",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sakce rank first_pass_rate",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sakce reviews-received --top 15",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sakce pr 113194",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sakce pr 111961",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sakce pr 108610",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sakce prs --ws ws4 --since 2026-10-01"
+   ],
+   "finding": "The 12 CHANGES_REQUESTED reviews come from only two people: mariusandra (7, cross-checked in the pack's reviews.json) and thiagosalvatore (5). mariusandra's 7 all land on HogQL or namespace work between 2026-09-29 and 2026-10-19: the Jev SQL function #108610, reserving the models namespace #111961 (2 rounds), a shadowed-views metric #113194 (3 rounds) and Trino lowering #118736. thiagosalvatore's 5 are spread over ordinary data-modeling PRs (4 of the 127 in ws1), a low rate for his home area. None of the 9 corrected PRs was later reverted. This is a newcomer-to-core-engine pattern: the HogQL owner pushes back on design when he enters shared code, and the work then lands.",
+   "evidence_ids": [
+    108610,
+    111961,
+    113194,
+    118736,
+    "changes_requested_rate",
+    "first_pass_rate"
+   ],
+   "effect": "quality stays at 7 instead of dropping to 6: the extra review friction is localized to shared-engine work and does not show up after merge."
+  },
+  {
+   "question": "Is there a coherent Trino engine effort hidden across workstreams, and how big is it?",
+   "why": "The script clusters by area, so Trino PRs are spread over data modeling, HogQL and data warehouse; the timeline shows his heaviest weeks are the last three (38, 29, 14 PRs), which suggested a push.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sakce timeline",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sakce prs --ws ws4 --since 2026-10-01",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sakce deepread 126460",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sakce deepread 123149"
+   ],
+   "finding": "23 PRs mention Trino, all merged 2026-10-08 to 2026-11-03 (18 in October, 5 on the final day), 3 of them major. They form a single arc: run models in a Trino shadow, decouple from ClickHouse runs, close more than twenty HogQL-to-Trino lowering gaps, add concurrency control (#126460, on-demand P 9.62, C=3), then make Trino directly runnable and delete the shadow comparison (#128353). The on-demand deep read of #123149 failed (bad shape), so its major tier is unconfirmed.",
+   "evidence_ids": [
+    113990,
+    126460,
+    123149,
+    124905,
+    128353,
+    "ws4"
+   ],
+   "effect": "system 5 → 6 because this is sustained platform work in the shared query engine, not product glue; kept below 7 because adoption by other teams is not yet visible in the window."
+  },
+  {
+   "question": "Do his major fixes hit the rubric's critical classes (security, billing, data correctness), or are majors inflated?",
+   "why": "metrics.critical_prs is 0, yet his summaries repeatedly mention permissions, credentials and billing; I wanted direct evidence.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sakce prs --ws ws1 --tier major",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sakce deepread 95263",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sakce deepread 125069",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query sakce deepread 108610"
+   ],
+   "finding": "Of 26 majors, 6 are access-control or credential-leak fixes (#95602, #95600, #101079, #125069, #94342, #94326) and #95263 fixed materialized-view storage under-counted into billing usage reports. On-demand deep reads confirm C=3 for #95263 (P 6.35) and #125069 (P 7.82). The one major feature checked, the Jev SQL function #108610, scored lower (P 5.53, C=1, Q=1), so his strength is correctness work rather than new feature launches. The critical_prs=0 metric undercounts him.",
+   "evidence_ids": [
+    95263,
+    125069,
+    108610,
+    95602,
+    101079,
+    "metrics.critical_prs"
+   ],
+   "effect": "delivery held at 7 (not 6) because the criticality is real; not raised to 8 because the fixes are within one product area and the main feature deep-read is modest."
+  }
+ ],
+ "insights": [
+  {
+   "insight": "His delivery percentile (42.1) understates him: the episode formula discounts long chains of related fixes, while major_episodes (p65.8), changelog_prs (p83.3) and quality_rate (p89.5) all place him in the upper half.",
+   "evidence_ids": [
+    "delivery",
+    "major_episodes",
+    "changelog_prs",
+    "quality_rate"
+   ]
+  },
+  {
+   "insight": "His signature is closing silent failure modes (views that stop refreshing, secondary exceptions hiding root causes, lost sync updates); all three of his P=16 deep reads are of this kind.",
+   "evidence_ids": [
+    80689,
+    94594,
+    122054
+   ]
+  },
+  {
+   "insight": "Network-wise he is a pair, not a hub: two-thirds of his reviews go to thiagosalvatore and his own PRs are mostly reviewed by benben and thiagosalvatore, so the product's review load rests on very few people.",
+   "evidence_ids": [
+    "role.top_reviewed",
+    "role.top_reviewers",
+    "team_leverage"
+   ]
+  }
+ ],
+ "red_flags": [
+  {
+   "flag": "One PR was explicitly follow-up-fixed by a peer (peer.followup_fixed = 1); the pack does not identify which one.",
+   "evidence_ids": [
+    "peer.followup_fixed"
+   ]
+  },
+  {
+   "flag": "Scripted deep read of major PR #110713 (endpoints serving ineligible materializations inline) failed, so its tier is unverified; the on-demand deep read of major #123149 also failed.",
+   "evidence_ids": [
+    110713,
+    123149
+   ]
+  },
+  {
+   "flag": "Highest changes-requested rate (0.07) and lowest first-pass rate (0.93) among the 20, concentrated on HogQL work reviewed by mariusandra.",
+   "evidence_ids": [
+    "changes_requested_rate",
+    "first_pass_rate",
+    113194
+   ]
+  }
+ ],
+ "counter_evidence": "Peer behaviour mostly supports his own descriptions (zero reverts, 63 people built on his files), with two caveats. First, reviewers pushed back more often than for anyone else in the cohort, so his PRs are not as review-ready as their merged quality suggests, especially in core HogQL. Second, the summaries call many fixes critical, while metrics.critical_prs is 0 and the Jev feature deep-read scored only C=1; I relied on the on-demand deep reads (C=3 for #95263 and #125069) rather than the summaries. A third of diffs were truncated, so some tier calls may be off. Much of the Trino work landed in the last week, so its downstream effect cannot yet be observed.",
+ "coverage": {
+  "sampled_prs": 22,
+  "missing_data": [
+   "review_requested_by",
+   "issue_reactions",
+   "team",
+   "which PR was follow-up-fixed",
+   "deep read of #110713 and #123149"
+  ],
+  "diff_truncated_share": 0.33
+ }
+}

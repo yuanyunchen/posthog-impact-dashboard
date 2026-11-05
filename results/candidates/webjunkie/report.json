@@ -1,0 +1,154 @@
+{
+  "cid": "webjunkie",
+  "positioning": "The developer-experience engineer who builds the shared plumbing other teams run on: CI and merge-queue health, a common inbound-webhook transport, code-ownership resolution and the internal AI review tools (PostHog Review, Stamphog, Visual review), while also being the most trusted approver among the 20 candidates.",
+  "role": {
+    "primary_role": "platform builder",
+    "team": "developer-experience",
+    "how_they_create_impact": "He finds a failure class that hurts many teams (silent webhook loss, slow migrations, flaky merge queue, wrong ownership, unstable pagination), builds one shared mechanism for it, then migrates the callers himself in a fast series of small PRs and adds CI rules so the fix stays in place. On top of that he runs a heavy review load across 54 authors and 21 teams.",
+    "network_summary": "Trusted approver at the centre of the developer-experience community: the highest approval-graph PageRank of the 20 (role.network.trust_rank 0.02, rank 1/20), approves work from 48 authors across 21 teams (role.network.approved_authors_n, role.network.teams_covered_n), and 106 other authors later built on files he changed (role.network.built_on_by_n). His own work rarely needs correction (role.network.fixes_received 10, role.network.reverts_received 0, one CHANGES_REQUESTED in 414 received reviews), while he corrects others more often (role.network.fixes_given 34, 24 change requests with 95% adopted, role.network.changes_adopted_rate). Caveat: review of his own PRs is concentrated in a tight pair (rnegron and gantoine appear on 261 of 341 reviewed PRs), so he is a hub inside one team more than a bridge between communities (role.network.bridge_rank unknown)."
+  },
+  "core_contributions": [
+    {
+      "workstream_id": "ws1",
+      "title": "Shared inbound-webhook transport (posthog/ingress) and the end of silent webhook loss",
+      "what": "Created the posthog/ingress package (signature verification, consumer registry, per-delivery dedup, wall-clock budget, metrics), then moved Slack, Mailgun, SES/SNS, Microsoft Teams, Vapi, PandaDoc, Vercel and GitHub webhooks onto it, adding retryable statuses, a dedup lease, cross-region forwarding and a pre-body signature check.",
+      "why_it_matters": "Each provider previously had its own verification and error handling; several answered success or a non-retryable code when recording failed, so Slack events, SES tenant events, interview transcripts and signed legal documents could be lost with no trace. #102801 also closed an unauthenticated path that forced up to 20 MB body reads on every HMAC endpoint.",
+      "outcome": "36 ingress PRs in four weeks (2026-09-15 to 2026-10-13), 12 triaged major. Deep reads score the foundation #100292 P=7.29 (L=3) and the retry-status fix #101508 P=9.6 (C=3); none of the ingress PRs appears in the reverted or follow-up-fixed list.",
+      "his_role": "lead",
+      "evidence_prs": [100292, 101508, 102218, 102801, 103605, 100892, 101558, 103809, 102261, 104023],
+      "numbers": {"ingress_prs": 36, "ingress_major_prs": 12, "deepread_P_100292": 7.29, "deepread_P_101508": 9.6, "deepread_P_102801": 7.82}
+    },
+    {
+      "workstream_id": "ws1",
+      "title": "CI, merge-queue and runtime health for the whole monorepo",
+      "what": "Fixed repo-wide CI failure modes and one production latency regression: pinned granian back to 2.7.9 to restore the shared listen socket (#104208), squashed pre-2026-09-07 Django migrations with a new nextgensquash tool (#91646), fixed required gates that went green with no tests (#96671), a pnpm bootstrap stall (#95127), test-shard balancing (#88987) and merge-queue guards for visual baselines (#109982), plus a shared ownership reader used by four products (#103852).",
+      "why_it_matters": "These are the paths every PostHog engineer goes through: the granian regression made web analytics dashboards load p90 ~6s to ~15-20s and kept the query pool at max replicas; the migration squash cut fresh-database migrate from ~20 to ~5 minutes for every CI shard and dev bootstrap; a gate passing with no tests lets broken code merge.",
+      "outcome": "ws1 holds 250 PRs with 32 major; the top deep reads of the whole dossier are here (#103852 P=16.0, #104208 P=10.6). 106 other authors later built on files he changed, the 97th percentile among the 20 (downstream_authors).",
+      "his_role": "lead",
+      "evidence_prs": [104208, 91646, 96671, 95127, 88987, 103852, 109982],
+      "numbers": {"ws1_prs": 250, "ws1_major_prs": 32, "deepread_P_103852": 16.0, "deepread_P_104208": 10.6, "deepread_P_91646": 7.29}
+    },
+    {
+      "workstream_id": "ws2",
+      "title": "Internal AI code-review products: PostHog Review, Stamphog and Visual review",
+      "what": "Built and tuned three internal review products: ReviewHog lenses, chunking, version fingerprints and cost gates (ws2, 73 PRs); Stamphog policy, audit log, deterministic digests and evidence registry (ws3, 51 PRs); Visual review quarantine, lift-on-merge and merge-queue guards (ws4, 52 PRs); plus @posthog PR and Slack commands (#114296, #116859).",
+      "why_it_matters": "These tools sit in every PR's path at PostHog. Reliability and cost decisions here (for example moving digest filtering from LLM prompts to code in #92246, or guarding the merge queue against dropped baselines in #109982) affect all engineers rather than one product.",
+      "outcome": "176 PRs across the three workstreams, 6 major; mostly substantive iterations rather than single large launches. Only a handful are deep-read (5 of 176), so the per-PR value here is less certain than for ws1.",
+      "his_role": "lead",
+      "evidence_prs": [113749, 112388, 92246, 93108, 109982, 114296, 116859],
+      "numbers": {"ws2_prs": 73, "ws3_prs": 51, "ws4_prs": 52, "major_prs": 6, "deepread_P_114296": 4.49}
+    }
+  ],
+  "angles": {
+    "delivery": {
+      "grade": 8,
+      "rationale": "Third of 20 on the delivery estimate (1106.28, percentile 89.5) with 47 major PRs and 31 major episodes. Value is mostly reliability and data correctness for internal and customer-facing paths (webhook data loss, dashboard latency, CI billing figures, a security DoS) rather than new end-user features, and nothing is triaged landmark, which keeps him below 9.",
+      "claims": [
+        {"statement": "He fixed a production regression that made web analytics dashboards 2-3x slower and kept the query pool at max replicas.", "numbers": {"P": 10.6, "dashboard_p90_before_s": 6, "dashboard_p90_after_s": 15}, "evidence_ids": [104208]},
+        {"statement": "Several ingress PRs stop silent customer-data loss across providers (Slack events, SES tenant events, interview transcripts, signed legal documents).", "numbers": {"ingress_major_prs": 12, "P_101508": 9.6}, "evidence_ids": [101508, 102261, 100892, 103809]},
+        {"statement": "Delivery ranks 3rd of 20, behind Gilbert09 (5340.42) and pauldambra (1404.87).", "numbers": {"delivery": 1106.28, "percentile": 89.5, "major_prs": 47, "landmark_prs": 0}, "evidence_ids": ["delivery", "major_episodes"]}
+      ]
+    },
+    "system": {
+      "grade": 9,
+      "rationale": "His strongest angle. He repeatedly turns one-off fixes into shared mechanisms (ingress transport, posthog/ownership core module, facade paging kit, MCP codegen scope derivation, migration squash tool) and then enforces them with CI and semgrep rules. 106 other authors built on his files (97th percentile), and the shared modules serve many teams, which meets the multi-team anchor.",
+      "claims": [
+        {"statement": "The ingress package became the common transport for at least eight webhook providers within four weeks.", "numbers": {"ingress_prs": 36, "P_100292": 7.29, "L_100292": 3}, "evidence_ids": [100292, 101558, 104023, 103605]},
+        {"statement": "A single ownership reader replaced separate ones across signals, visual review, engineering analytics and stamphog, the highest-scored PR in his dossier.", "numbers": {"P": 16.0, "L": 3, "products": 4}, "evidence_ids": [103852]},
+        {"statement": "Other engineers keep building on what he changes.", "numbers": {"built_on_by_n": 106, "downstream_authors_percentile": 97.4}, "evidence_ids": ["role.network.built_on_by_n", "downstream_authors"]}
+      ]
+    },
+    "quality": {
+      "grade": 7,
+      "rationale": "Post-merge behaviour is clean: no reverts and 9 follow-up fixes by others over 516 mature PRs, quality_rate 0.97 (7th of 20, equal to the median). Several of his PRs explicitly guard against regressions (migration-analysis policy, required-gate fix, semgrep ratchets). Held at 7 rather than 8 because pre-merge scrutiny is thin: one change request across 414 received reviews, review concentrated in two teammates, deep-read Q averages 1.5 of 3 with Q=1 on the granian pin (no runtime testing) and the migration squash, and 61% of diffs were truncated for the readers.",
+      "claims": [
+        {"statement": "No PR of his was reverted and only 9 were later fixed by someone else.", "numbers": {"reverted": 0, "followup_fixed": 9, "mature_prs": 516, "quality_rate": 0.97}, "evidence_ids": ["metrics.reverted", "metrics.followup_fixed", 90752, 107539, 88961]},
+        {"statement": "He adds CI checks that catch whole bug classes, e.g. state-only migrations that orphan foreign keys and gates that pass with zero tests.", "numbers": {"P_98148": 7.3}, "evidence_ids": [98148, 96671, 113813]},
+        {"statement": "Some high-impact changes shipped with weak verification by the readers' standard.", "numbers": {"Q_104208": 1, "Q_91646": 1, "Q_126411": 1, "estimate_Q": 1.5}, "evidence_ids": [104208, 91646, 126411]}
+      ]
+    },
+    "team": {
+      "grade": 8,
+      "rationale": "Most trusted approver of the 20 (trust_rank 1/20) and 4th on team leverage (1461.2, percentile 83.3): 432 reviews on 351 PRs from 54 authors in 21 teams. His 24 change requests are substantive (failing tests found, misplaced shared code, wrong installation id) and 95% were adopted. Not a 9 because 40% of his reviewed PRs belong to one teammate (rnegron, 139), many reviews are posted as agent-run reviews steered by him, and first-review latency is slow (median 18.15h vs 4.03h for rnegron).",
+      "claims": [
+        {"statement": "Highest approval-graph trust among the 20 and broad reach across teams.", "numbers": {"trust_rank": 0.02, "position": 1, "approved_authors_n": 48, "teams_covered_n": 21}, "evidence_ids": ["trust_rank", "role.network.approved_authors_n", "role.network.teams_covered_n"]},
+        {"statement": "His change requests catch real defects and are almost always adopted, e.g. a head failing three existing tests CI never ran, and a Stamphog handoff that would never start a review.", "numbers": {"changes_requested_given": 24, "changes_adopted_rate": 0.95, "adopted_n": 22}, "evidence_ids": [102627, 124327, 124844, 105006, "role.network.changes_adopted_rate"]},
+        {"statement": "His review effort is concentrated on his immediate team.", "numbers": {"reviewed_prs_rnegron": 139, "reviewed_prs_total": 351, "devex_team_prs": 177}, "evidence_ids": ["role.top_reviewed", "team_leverage"]}
+      ]
+    }
+  },
+  "overall": {"grade": 8, "confidence": "medium"},
+  "key_numbers": [
+    {"label": "Delivery estimate (3rd of 20)", "value": 1106.28, "metric_key": "delivery"},
+    {"label": "Authors who built on his files", "value": 106, "metric_key": "downstream_authors"},
+    {"label": "Approval-graph trust (1st of 20)", "value": 0.02, "metric_key": "trust_rank"}
+  ],
+  "calibration": {
+    "ranks": {"delivery": 89.5, "quality_rate": 68.4, "team_leverage": 83.3, "trust_rank": 100.0},
+    "note": "He sits in the top band of the 20: 3rd on delivery, 4th on team leverage, 1st on trust, and mid-pack (7th, equal to the median 0.97) on quality rate. The grades follow that shape: system 9 and delivery/team 8 match the top-quintile ranks plus the qualitative evidence of shared platforms, while quality 7 matches a median quality rate. Overall 8 rather than 9 because no single contribution is landmark-level and much of the value is internal developer tooling; delivery is driven partly by very high PR count (559), which is discounted per the importance-over-volume rule."
+  },
+  "custom_analyses": [
+    {
+      "question": "Who actually checks his work before merge, and is the near-perfect first-pass rate a quality signal or a closed review loop?",
+      "why": "first_pass_rate is 1.0 and he received one CHANGES_REQUESTED in 414 reviews, which is unusual for 559 PRs; at the same time he reviews rnegron heavily, so mutual approval could inflate both trust and quality.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query webjunkie reviews-received --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query webjunkie reviews-given --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query webjunkie compare rnegron",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query webjunkie compare gantoine"
+      ],
+      "finding": "Only 341 of 559 PRs have a recorded human review; rnegron or gantoine reviewed 261 of those 341 (77%), and 217 (64%) were reviewed by nobody else. The single change request came from gantoine on #116859. The relationship is reciprocal: he reviewed 139 rnegron PRs and rnegron reviewed 149 of his. Pre-merge evidence is therefore weak, but post-merge peer behaviour is good (0 reverts, 9 follow-up fixes of 516 mature PRs, fixes_received 10 vs fixes_given 34), and he is a demanding reviewer himself (24 change requests, 95% adopted).",
+      "evidence_ids": [116859, "role.network.first_pass_rate", "role.top_reviewers", "metrics.followup_fixed"],
+      "effect": "quality 8 → 7 because the clean first-pass rate cannot be taken at face value; team stays 8 but trust_rank is read as hub-of-devex rather than company-wide bridge."
+    },
+    {
+      "question": "Is the ingress work a real cross-team platform, and did it hold up after it shipped?",
+      "why": "The ingress PRs are spread across ws1 and misc, so the workstream view hides that they form one platform effort; it looked like his largest piece of multi-team leverage and needed deep reads to confirm.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query webjunkie prs --tier major",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query webjunkie prs --since 2026-09-15 --until 2026-10-13 --area \"Django platform (misc)\"",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query webjunkie deepread 100292",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query webjunkie deepread 102801"
+      ],
+      "finding": "36 ingress PRs (12 major, 15 substantive) between 2026-09-15 and 2026-10-13 moved at least eight providers onto one transport. Deep reads: #100292 P=7.29 with L=3 (platform leverage) and all quotes verified; #102801 P=7.82 with C=3, closing an unauthenticated 20 MB body-read amplification. He also fixed his own edge cases quickly (#101508 retry status, #102218 dedup lease, #103605 cross-region). None of the 9 follow-up-fixed PRs is an ingress PR.",
+      "evidence_ids": [100292, 102801, 101508, 102218, 103605, "ws1", "misc"],
+      "effect": "system 8 → 9 because a shared transport used across many product teams meets the multi-team anchor; delivery stays 8."
+    },
+    {
+      "question": "Does his very high volume (559 PRs, peak 110 in one week) dilute quality, and how much of it is mechanical?",
+      "why": "PR count alone earns nothing, and a 110-PR week risks shallow, agent-driven churn; the follow-up-fixed list is the cleanest way to test that.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query webjunkie timeline",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query webjunkie prs --since 2026-09-21 --until 2026-09-27",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query webjunkie pr 104424",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query webjunkie pr 106688"
+      ],
+      "finding": "The peak week of 2026-09-21 had 110 PRs: 11 major, 63 substantive, 23 routine, 13 mechanical (an /api/environments to /api/projects URL sweep). Two of the 9 follow-up-fixed PRs fall in that week (#104424, #106688, both mechanical), about 1.8% of the week vs about 1.6% elsewhere, so quality does not visibly drop at peak. Work is also uneven: 0 PRs in the week of 2026-10-19 and 2 or fewer in the first two weeks. The 1.89M lines in ws1 are inflated by generated code and the 41,184-line migration squash (#91646), so line counts are not used.",
+      "evidence_ids": [104424, 106688, 91646, "metrics.followup_fixed", "tier_counts.mechanical"],
+      "effect": "no grade change; volume is not credited, but it also does not justify lowering quality."
+    },
+    {
+      "question": "How risky is the late pagination push, especially the platform-wide 1000-row cap?",
+      "why": "Twelve pagination PRs landed after 2026-10-10, three of them major and two merged on 2026-11-02/03, too recent for any revert or follow-up signal to exist.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query webjunkie deepread 126411",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query webjunkie pr 90752"
+      ],
+      "finding": "#126411 caps the default DRF list paginator at 1000 rows across 219 viewsets and updates the cohort and dashboard loaders to follow next; deep read P=5.92 with L=3 but Q=1. It is a sensible protection against unbounded reads, but it changes behaviour for external API clients and has not had time to mature. For comparison, #90752 (CI billing correction, P=7.29) is a major PR from August that was later follow-up-fixed by someone else.",
+      "evidence_ids": [126411, 126694, 126403, 90752],
+      "effect": "no grade change; recorded as an unresolved risk in red_flags and keeps confidence at medium."
+    }
+  ],
+  "insights": [
+    {"insight": "His pattern is platform-first: build one shared mechanism, migrate every caller himself in small PRs, then lock it in with a CI or semgrep rule (ingress, ownership, generated API clients, paging kit). This is why his downstream-author count is far above peers with similar review volume (106 vs 26 for rnegron).", "evidence_ids": [100292, 103852, 105720, 126403, "downstream_authors"]},
+    {"insight": "Much of his review output is agent-run and posted from his account with an explicit note ('Agent review, actively prompted for and steered'). The adopted change requests show the steering is effective, but review counts overstate personal review hours.", "evidence_ids": [89744, 105006, 102627, "metrics.reviews_given"]},
+    {"insight": "He owns the internal tools that review and approve PRs (PostHog Review, Stamphog, Visual review) and 218 of his 559 PRs have no recorded human review, which is consistent with bot approvals through those tools; not verified from this pack.", "evidence_ids": ["ws2", "ws3", "ws4", "role.reviews_received_prs"]}
+  ],
+  "red_flags": [
+    {"flag": "9 of his PRs were later fixed by someone else (peer.followup_fixed), including the major CI billing correction #90752 and the webhook dedupe fix #107539.", "evidence_ids": [83631, 88961, 90752, 96546, 96677, 104424, 106688, 107539, 113112, "peer.followup_fixed"]},
+    {"flag": "Deep read of #86201 failed, so one sampled PR has no score.", "evidence_ids": [86201]},
+    {"flag": "Platform-wide 1000-row list cap merged on the last days of the window with deep-read Q=1; behaviour change for external API clients with no maturity signal yet.", "evidence_ids": [126411]}
+  ],
+  "counter_evidence": "Self-description vs behaviour: his PR descriptions are strong and specific, but pre-merge peer scrutiny is thin (one change request in 414 received reviews, 64% of reviewed PRs seen only by rnegron and gantoine, 218 PRs with no recorded human review), so quality rests on post-merge behaviour (0 reverts, 9 follow-up fixes) rather than review outcomes. Volume overstates impact: 559 PRs include 23 mechanical and 15 trivial, ws1 line counts are dominated by generated code and a migration squash, and the delivery estimate is partly driven by count. Much of the work is internal developer tooling whose user value is indirect. Review counts include agent-run reviews posted from his account. First-review latency is slow (median 18.15h). 61% of diffs were truncated for the readers and only 18 stratified plus 6 on-demand deep reads cover 559 PRs.",
+  "coverage": {"sampled_prs": 18, "ondemand_deepreads": 6, "missing_data": ["review_requested_by", "issue_reactions"], "diff_truncated_share": 0.61, "deepread_errors": 1}
+}

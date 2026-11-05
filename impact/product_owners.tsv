@@ -1,0 +1,97 @@
+access_control	Access control | team-platform-features | 
+account_audits	Account audits | team-growth | 
+actions	Actions | team-product-analytics | 
+aeo	AEO | team-web-analytics | 
+ai_gateway	AI gateway | team-agent-infrastructure | 
+ai_observability	AI observability | team-ai-observability | 
+ai_training	AI training | ai-research | 
+alerts	Alerts | team-apm | 
+alerts_platform	Alerts platform | team-apm | 
+analytics_platform	Analytics platform | team-analytics-platform | 
+annotations	Annotations | team-product-analytics | 
+apm	APM | team-apm | 
+approvals	Approvals | team-platform-features | 
+authorization	Authorization | team-platform-features | 
+autoresearch	Autoresearch | team-self-driving | 
+batch_exports	Batch exports | batch-exports | 
+billing	Billing | team-billing | 
+billing_alerts	Billing alerts | team-billing | 
+business_intelligence	Business intelligence | team-data-tools | 
+business_knowledge	Business knowledge | conversations | 
+canvas	Canvas | team-surfaces | 
+cdp	CDP | team-workflows | 
+cohorts	Cohorts | team-feature-flags | 
+commands	Commands | team-devex | 
+context_layer	Context layer | team-context-and-mcp | 
+conversations	Conversations | conversations | 
+core_events	Core events | team-web-analytics | 
+cross_project_dashboards	Cross-project dashboards | team-platform-features | 
+customer_analytics	Customer analytics | team-web-analytics | 
+dashboards	Dashboards | team-product-analytics | 
+data_catalog	Data catalog | team-data-modeling | 
+data_modeling	Data modeling | team-data-modeling | 
+data_quality	Data quality | team-data-modeling | 
+data_tools	Data tools | team-managed-warehouse | 
+data_warehouse	Data warehouse | team-managed-warehouse | 
+demo	Demo data | team-growth | 
+desktop	Desktop | team-surfaces | 
+early_access_features	Early access features | team-feature-flags | 
+endpoints	Endpoints | team-data-modeling | 
+engineering_analytics	Engineering analytics | team-devex | 
+error_tracking	Error tracking | team-error-tracking | 
+event_definitions	Event definitions | team-product-analytics | 
+experiments	Experiments | team-experiments | 
+exports	Exports | team-product-analytics | 
+feature_flags	Feature flags | team-feature-flags | 
+field_notes	Field notes | @adamleithp | 
+groups	Groups | team-product-analytics | 
+growth	Growth | team-growth | 
+legal_documents	Legal documents | team-growth | 
+links	Links | team-platform-features | 
+live_debugger	Live debugger | clickhouse | 
+llm_analytics	LLM analytics (vestigial) | team-ai-observability | 
+logs	Logs | team-apm | 
+managed_migrations	Managed migrations | team-ingestion | 
+managed_warehouse	Managed warehouse | team-managed-warehouse | 
+marketing_analytics	Marketing analytics | team-web-analytics | 
+mcp_analytics	MCP analytics | mcp-analytics | 
+mcp_registry	MCP registry | mcp-analytics | 
+mcp_store	MCP servers | team-context-and-mcp | 
+messaging	Messaging | team-workflows | 
+metrics	Metrics | team-apm | 
+ml_inference	ML inference | ai-research | 
+mobile	Mobile | team-self-driving | 
+notebooks	Notebooks | team-data-tools | 
+notifications	Notifications | team-platform-features | 
+persons	Persons | team-product-analytics | 
+platform_features	Platform features | team-platform-features | 
+posthog_ai	PostHog AI | team-surfaces | 
+product_analytics	Product analytics | team-product-analytics | 
+product_tours	Product tours | @adboio | 
+pulse	Pulse | team-product-analytics | 
+reminders	Reminders | team-platform-features | 
+replay	Replay | team-replay | 
+replay_vision	Replay vision | team-replay | 
+revenue_analytics	Revenue analytics | team-web-analytics | 
+review_hog	PostHog Review | team-devex | 
+security	Security | team-platform-features | 
+signals	Signals | team-self-driving | 
+skills	Skills | team-context-and-mcp | 
+slack_app	Slack app | team-surfaces | 
+stamphog	Stamphog | team-devex | 
+streamlit_apps	Streamlit apps | team-data-tools | 
+subscriptions	Subscriptions | team-product-analytics | 
+surveys	Surveys | conversations | 
+tasks	Tasks | team-agent-infrastructure | sensitive
+today	Today | team-surfaces | 
+tracing	Tracing | team-apm | 
+uptime_monitoring	Uptime monitoring | team-apm | 
+user_interviews	User interviews | @pauldambra,@fivestarspicy,@ksvat | 
+visual_review	Visual review | team-devex | 
+warehouse_sources	Warehouse sources | team-warehouse-sources | 
+warehouse_sources_queue	Warehouse sources queue | team-warehouse-sources | 
+warehouse_suggestions	Warehouse suggestions | team-data-modeling | 
+web_analytics	Web analytics | team-web-analytics | 
+webmcp	WebMCP | team-context-and-mcp,team-growth | 
+wizard	Wizard | team-growth | 
+workflows	Workflows | team-workflows | 

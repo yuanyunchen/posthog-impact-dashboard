@@ -1,0 +1,23 @@
+{
+ "fetch": {
+  "days": 91,
+  "days_reconciled": 91,
+  "prs": 18715,
+  "search_count": 18715
+ },
+ "quote_check": {
+  "checked": 1980,
+  "failed": 20,
+  "fail_rate": 0.0101,
+  "deepread_prs": 399,
+  "deepread_errors": 3
+ },
+ "audit": {
+  "sample": 300,
+  "selected_into_top20": [
+   "Piccirello",
+   "MattBro"
+  ]
+ },
+ "llm_cost_usd": 7.76
+}

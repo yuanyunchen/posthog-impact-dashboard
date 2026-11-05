@@ -1,0 +1,196 @@
+{
+  "cid": "Piccirello",
+  "positioning": "PostHog's hands-on application-security engineer: he finds and closes privilege-escalation, SSRF and credential-leak holes across the whole product and ran the multi-week program that took the app's Content Security Policy from report-only to enforced.",
+  "role": {
+    "primary_role": "quality guardian",
+    "team": "security",
+    "how_they_create_impact": "Mostly through his own small-to-medium security fixes that land across many teams' code (auth, permissions, warehouse sources, CDP, replay, CI), plus reusable guardrails (a single access-precedence resolver, a shared connect-time host check, semgrep rules, Renovate pins, agent security guidance) that keep the same class of bug from coming back. Reviewing is a second, narrower channel: few but deep security findings on other teams' PRs.",
+    "network_summary": "Trusted, frictionless author but a narrow approval base: every one of his 105 reviewed PRs passed first time with zero change requests (role.network.first_pass_rate = 1.0, role.network.changes_requested_rate = 0), and 84 other authors later built on files he changed (role.network.built_on_by_n). His approvals come mainly from his own team (feliperalmeida reviewed 40 of 105 PRs), so his PageRank-style trust is low (role.network.trust_rank = 0.0079, 17th of 20). As a reviewer he is a cross-team security approver (role.network.approved_authors_n = 28 authors, role.network.teams_covered_n = 18 teams) rather than a hub people route work through (role.network.requested_by_n = 9; importance_flow.reviewer = 9.6 of 671.84)."
+  },
+  "core_contributions": [
+    {
+      "workstream_id": "ws1",
+      "title": "Closing authorization and credential holes in the Django platform",
+      "what": "A steady stream of auth and permission fixes: one precedence resolver for project access so API checks, User.teams and all_users_with_access agree (#114423); a single access-checked function for minting personal API keys (#114412); scoped-key privilege escalation into project secret keys (#105467); invite privilege escalation (#122926); passkey sessions for deactivated users (#113790); public self-service leaked-key revocation and its follow-up hardening (#81587, #81631).",
+      "why_it_matters": "These are cross-tenant and privilege-escalation classes of bug in the core permission layer every product team depends on; #114423 removes the drift that let digests and notifications email users about projects the API denies them.",
+      "outcome": "19 major and 33 substantive PRs in the workstream; the on-demand deep read scored #114423 at P=16 (V3 C3 N2 L3), the highest possible band, and #105467 and #122926 at P=7.8. No reverts.",
+      "his_role": "lead",
+      "evidence_prs": [114423, 114412, 105467, 122926, 113790, 81587, 81631],
+      "numbers": {"ws_prs": 69, "major_prs": 19, "substantive_prs": 33, "deepread_P_114423": 16.0}
+    },
+    {
+      "workstream_id": "ws1",
+      "title": "Content Security Policy rollout: measure, repair, enforce, tighten",
+      "what": "A planned program of about 55 CSP-related PRs from early September to mid October: report-only shadow policies to measure what would break (#104099, #113389), flags and seams to enforce safely (#98025, #106400), a run of fixes so features kept working under enforcement (#99457, #100642, #101381, #104022), then tightening wildcard hosts to named hosts (#106238) and enforcing on shared and embedded documents (#116719).",
+      "why_it_matters": "An enforced, narrow script-src/connect-src is what turns an injected script from a full account takeover into a blocked request; #106238 closed the path where injected code could load from an attacker-controlled PostHog project.",
+      "outcome": "Policy enforced on signed-in, login, shared and embedded pages by 2026-10-15, wildcard hosts replaced by named hosts, and a shadow-policy pipeline for the next tightening step. The cost was roughly 24 repair or relaxation PRs while enforcement exposed broken features.",
+      "his_role": "lead",
+      "evidence_prs": [104099, 113389, 98025, 106400, 99457, 100642, 101381, 104022, 106238, 116719],
+      "numbers": {"csp_prs": 55, "repair_or_allow_prs": 24, "tighten_or_enforce_prs": 16, "measure_prs": 11}
+    },
+    {
+      "workstream_id": "ws4",
+      "title": "SSRF and DNS-rebinding defences for warehouse sources",
+      "what": "Pinned every direct Postgres connection to the addresses already validated by the host policy (#95376), turned the connect-time check into a shared helper and extended it to Temporal.io with a registry-wide test over every host-taking source (#101362), re-validated hosts at connect time (#93742), and closed a cross-tenant S3 read path at the model layer (#81598).",
+      "why_it_matters": "Warehouse syncs dial customer-supplied hosts from inside PostHog's network; a host that resolves public on check and private on connect reached internal addresses. The shared helper makes the fix apply to future sources by default.",
+      "outcome": "Both sampled PRs scored P=9.6 (V2 C3 N2 L2), the top of his stratified sample, though each also carried review findings (Q=1, '1 must fix').",
+      "his_role": "lead",
+      "evidence_prs": [95376, 101362, 93742, 81598, 81603],
+      "numbers": {"ws_prs": 7, "major_prs": 5, "deepread_P_95376": 9.6, "deepread_P_101362": 9.6}
+    }
+  ],
+  "angles": {
+    "delivery": {
+      "grade": 8,
+      "rationale": "The delivery estimate ranks him only 15th of 20 because his PRs are many and small, but importance beats volume here: he has the second-most major episodes of all candidates, and those episodes are privilege escalation, cross-tenant data access, SSRF and credential leaks across products, the critical class in the rubric. He also ran company-wide incident response for the compromised eMudhra CA roots. Held below 9 because the value is preventive (no changelog-visible user features) and the major-stratum deep reads score slightly below the tier prior (calib_diff -0.7).",
+      "claims": [
+        {
+          "statement": "He has 37 episodes containing a major PR, 2nd of 20 candidates, even though his volume-weighted delivery estimate is 15th of 20.",
+          "numbers": {"major_episodes": 37, "major_episodes_pct": 94.7, "delivery": 527.48, "delivery_pct": 26.3},
+          "evidence_ids": ["major_episodes", "delivery"]
+        },
+        {
+          "statement": "His top deliveries are security-critical across tenants: recording-api moved off a shared secret that exposed every team's recordings, and a scoped API key could grant scopes it never held.",
+          "numbers": {"deepread_P_67476": 13.0, "deepread_P_105467": 7.82, "deepread_P_95376": 9.62},
+          "evidence_ids": [67476, 105467, 95376, "ws3"]
+        },
+        {
+          "statement": "In 3 days he shipped about 10 PRs removing compromised eMudhra roots from production images, CI, the customer-deployed metrics agent, the MCP server, desktop builds and bundled Codex.",
+          "numbers": {"ca_prs_oct21_23": 10, "major": 6},
+          "evidence_ids": [121580, 121599, 121626, 121776, 122294, 122820]
+        }
+      ]
+    },
+    "system": {
+      "grade": 7,
+      "rationale": "He builds guardrails, not just patches: a single access-precedence resolver, one function for API key minting, a shared pinned-connect helper with a registry-wide test, semgrep rules and workflow linting in CI, Renovate-managed Node pins, and the CSP measurement pipeline. Other engineers do build on his files (84 downstream authors), but that is mid-pack (8th of 20), and the abstractions are security primitives rather than product platforms, so this is team-pillar level.",
+      "claims": [
+        {
+          "statement": "#114423 replaced three divergent access checks with one precedence rule; the on-demand deep read gave it the maximum P=16 with L=3 (leverage).",
+          "numbers": {"deepread_P": 16.0, "L": 3, "lines": 1088},
+          "evidence_ids": [114423, 114412]
+        },
+        {
+          "statement": "He turned one-off fixes into CI-enforced rules: semgrep CI had been silently loading fewer rules, a new rule fails PR workflows that can publish to public registries, and templates with inline JS are now caught.",
+          "numbers": {"ws2_prs": 21, "ws2_major": 4},
+          "evidence_ids": [104838, 104860, 104022, "ws2"]
+        },
+        {
+          "statement": "84 other authors later changed files he touched by 20 or more lines, 8th of 20 and above the median of 77.",
+          "numbers": {"downstream_authors": 84, "downstream_authors_pct": 63.2, "median": 77},
+          "evidence_ids": ["downstream_authors", "role.network.built_on_by_n"]
+        }
+      ]
+    },
+    "quality": {
+      "grade": 7,
+      "rationale": "Peer behaviour is clean: zero reverts, zero change requests, 100% first-pass approval over 105 reviewed PRs, and risky changes were staged behind report-only policies and flags. Two things keep it at 7: his quality rate (0.95) is 15th of 20 with 5 follow-up fixes received, and his own CSP enforcement broke real features (admin confirmation dialogs, HogQL editor highlighting, replay image exports, template scripts) that he then repaired over about two weeks. His leaked-key feature also needed a post-merge security fix the next day.",
+      "claims": [
+        {
+          "statement": "No reverts and no change requests on any reviewed PR; first-pass rate is 1.0, tied for the best among candidates.",
+          "numbers": {"first_pass_rate": 1.0, "n": 105, "changes_requested_rate": 0, "reverts_received": 0},
+          "evidence_ids": ["first_pass_rate", "role.network.reverts_received", "role.network.changes_requested_rate"]
+        },
+        {
+          "statement": "His quality rate is below the candidate median: about 1 in 20 mature substantive-or-above PRs was explicitly follow-up-fixed.",
+          "numbers": {"quality_rate": 0.954, "quality_rate_pct": 26.3, "median": 0.97, "fixes_received": 5},
+          "evidence_ids": ["quality_rate", "role.network.fixes_received"]
+        },
+        {
+          "statement": "The CSP enforcement shipped breakages he had to repair, e.g. restoring confirmation dialogs CSP was dropping and rebuilding the HogQL parser WASM so the editor parsed under enforcement.",
+          "numbers": {"repair_or_allow_prs": 24, "csp_prs": 55},
+          "evidence_ids": [101381, 101384, 100642, 104022, 99457]
+        },
+        {
+          "statement": "#81631 fixed post-merge security findings on his own leaked-key revocation feature (#81587) one day after it merged.",
+          "numbers": {"days_between": 1, "deepread_P_81587": 4.49, "deepread_P_81631": 7.82},
+          "evidence_ids": [81587, 81631]
+        }
+      ]
+    },
+    "team": {
+      "grade": 6,
+      "rationale": "He reviews widely (98 PRs, 28 authors, 18 teams) and his written reviews are deep, severity-rated security findings whose lines were changed afterwards. But 94 of 108 reviews are plain approvals, only 2 are change requests, only 9 people requested him, and his trust and reviewer importance flow are near the bottom of the 20. He also writes agent security guidance for the review bot, which multiplies his checks, but nothing in the data measures its adoption. Steady and valuable, not yet a team-wide hub.",
+      "claims": [
+        {
+          "statement": "His non-approval reviews are concentrated on security-sensitive PRs and include a High-severity SAML login break and a blocking tag-ruleset finding on a release workflow.",
+          "numbers": {"commented_reviews": 12, "changes_requested": 2, "reviews_total": 108},
+          "evidence_ids": [78527, 106016, 111376, 120672]
+        },
+        {
+          "statement": "He approves across teams but is rarely requested and carries little trust weight in the approval graph.",
+          "numbers": {"cross_team": 18, "requested_by": 9, "requested_by_pct": 71.1, "trust_rank_pct": 15.8, "importance_flow_pct": 15.8},
+          "evidence_ids": ["cross_team", "requested_by", "trust_rank", "importance_flow"]
+        }
+      ]
+    }
+  },
+  "overall": {"grade": 7, "confidence": "medium"},
+  "key_numbers": [
+    {"label": "Episodes with a major PR (2nd of 20)", "value": 37, "metric_key": "major_episodes"},
+    {"label": "First-pass approval rate (105 PRs)", "value": 1.0, "metric_key": "first_pass_rate"},
+    {"label": "Teams whose PRs he approved", "value": 18, "metric_key": "cross_team"}
+  ],
+  "calibration": {
+    "ranks": {"delivery": 26.3, "quality_rate": 26.3, "team_leverage": null, "trust_rank": 15.8},
+    "note": "On the four calibration metrics he sits in the bottom third of the 20: delivery 15th, quality_rate 15th, trust_rank 17th, team_leverage unknown because his L0 metrics are missing. My grades (delivery 8, system 7, quality 7, team 6, overall 7) sit above that position on purpose. The delivery estimate sums episode scores and rewards volume and size; his 144 PRs are small security fixes, yet 37 of his episodes contain a major PR (2nd of 20) and their content is privilege escalation, cross-tenant access and SSRF. The quality_rate gap (0.95 vs median 0.97) is real and is why quality is 7, not 8. Team stays at 6 because trust_rank and importance_flow (both 15.8th percentile) agree with the review mix of mostly approvals. Note: the changes_requested_rate percentile (5.3) is not direction-adjusted; his raw value 0 is the best possible."
+  },
+  "custom_analyses": [
+    {
+      "question": "Is the CSP work a coherent platform program, and how much of it is repair work caused by his own enforcement?",
+      "why": "CSP is his single largest theme, and a long run of 'fix(csp): allow X' PRs could mean either careful incremental hardening or a rollout that kept breaking product features.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Piccirello prs --ws ws1 --since 2026-09-08 --until 2026-09-25",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Piccirello timeline",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Piccirello deepread 106238",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Piccirello pr 95376"
+      ],
+      "finding": "About 55 of his 144 PRs mention CSP (31 substantive, 4 major). Classifying their titles by keyword (approximate): about 11 add measurement or reporting, about 16 tighten or enforce, and about 24 relax the policy or repair a feature enforcement broke. The phases run in order: report-only shadow policies and an embed seam (09-03 to 09-10), a burst of repairs once enforcement started (09-11 to 09-24, 33 ws1 PRs in that span, peaking at 26 PRs in the week of 09-21), wildcard-to-named-host tightening (#106238, deep-read P=7.8, 09-24) and enforcement on shared and embedded documents (#116719, 10-15). It is a deliberate program with measurement first, but enforcement did reach users before all breakages were found (admin confirmation dialogs, HogQL editor, replay image export).",
+      "evidence_ids": [106238, 116719, 104099, 98025, 101381, 100642, 99457, "ws1"],
+      "effect": "system stays 7 (a real program with reusable measurement, but a security primitive rather than a product platform); quality 8 to 7 because roughly 24 PRs went to repairing his own rollout."
+    },
+    {
+      "question": "How did he handle the compromised eMudhra CA incident, and did the response create follow-on breakage?",
+      "why": "The late-October week is his second-largest by PR count and is dominated by dependency bumps; I wanted to know whether this is mechanical churn or company-level incident response.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Piccirello prs --since 2026-10-19 --until 2026-10-26",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Piccirello prs --ws ws7",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Piccirello deepread 122294"
+      ],
+      "finding": "Between 10-21 and 10-23 he shipped about 10 PRs that remove the compromised roots from every trust store PostHog ships or runs: Node in production images and CI (#121580), the Python image CA bundle (#121599), the customer-deployed metrics agent (#121626), the MCP server (#121776, then #122294), desktop builds (#121627, #122821), gRPC (#122221) and bundled Codex (#122820). He then added Renovate managers so Node pins auto-bump (#122387, #122319). The MCP server needed a CA-bundle stopgap and a second PR moving it to Node 24.22.1 with a pinned undici to avoid a crash-loop; the deep read scored that fix P=16 (V3 C3 N2). The data does not show who introduced the crash-loop.",
+      "evidence_ids": [121580, 121599, 121626, 121776, 122294, 121627, 122821, 122221, 122820, 122387, "ws7"],
+      "effect": "delivery held at 8 rather than 7: one person covering every runtime within 3 days, with automation against recurrence, is company-level critical work even though each PR is small."
+    },
+    {
+      "question": "Where does his reviewing carry weight, and how independent is the approval he receives?",
+      "why": "team_leverage is missing for him and trust_rank is low, so I needed the raw review mix to judge the team angle.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Piccirello reviews-given --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Piccirello reviews-received --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Piccirello rank trust_rank",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Piccirello compare webjunkie"
+      ],
+      "finding": "He gave 108 reviews on 98 PRs by 28 authors in 19 team buckets (developer-experience 29 PRs the most); 94 are approvals, 12 comments, 2 change requests. The non-approvals cluster on a few security-sensitive PRs (SAML/SCIM #78527 three times, sandboxed HTML artifacts #111376 four times, a release-workflow tag ruleset #106016 marked blocking), and every review comment listed in the dossier is marked as line changed afterwards. On the receiving side, feliperalmeida, his security-team colleague, reviewed 40 of his 105 reviewed PRs (38%) and the security team 40 overall, which explains a trust_rank of 0.0079 (17th) against webjunkie's 0.02 (1st). Compared with webjunkie, the Django-platform area leader, he has nearly as many major PRs (42 vs 47) on about a quarter of the volume (144 vs 559 PRs), but far less reviewer reach.",
+      "evidence_ids": [78527, 111376, 106016, "trust_rank", "requested_by"],
+      "effect": "team stays 6: individual reviews are high-signal, but volume of substantive reviews and the approval graph do not support 7."
+    }
+  ],
+  "insights": [
+    {"insight": "He is a high-criticality, low-volume-per-PR contributor; a volume-weighted delivery score (15th of 20) understates him, while major-episode count (2nd of 20) and deep reads of his top PRs (P=16, 13, 9.6) are a better read.", "evidence_ids": ["major_episodes", "delivery", 114423, 67476, 95376]},
+    {"insight": "His fixes tend to become guards that run without him: shared helpers with registry-wide tests, one access resolver, semgrep rules, Renovate pins and agent security guidance for the review bot.", "evidence_ids": [101362, 114423, 104860, 122387, 122904]},
+    {"insight": "His work spans many teams' code (warehouse sources, CDP, replay, surveys, MCP, feature flags), but almost all of it is authored by him rather than routed through others' reviews.", "evidence_ids": ["ws3", "ws4", "ws6", "misc", "importance_flow"]}
+  ],
+  "red_flags": [
+    {"flag": "Dossier red flag: #99571 quote not found for L (the leverage score for this deep read is not backed by a verified quote).", "evidence_ids": [99571]},
+    {"flag": "Dossier red flag: #116715 quote not found for N (the novelty score for this deep read is not backed by a verified quote).", "evidence_ids": [116715]},
+    {"flag": "CSP enforcement broke user- and staff-facing features before they were found; about 24 of his CSP PRs relax the policy or repair breakage.", "evidence_ids": [101381, 100642, 104022, 99457]},
+    {"flag": "His L0 metrics are missing (coverage.metrics = 0), so team_leverage, changelog_prs and ai_share are unknown for him.", "evidence_ids": ["team_leverage", "changelog_prs"]}
+  ],
+  "counter_evidence": "His PR descriptions frame nearly every change as 'closing a hole', but peer behaviour gives a more mixed picture: quality_rate 0.95 (15th of 20) and 5 follow-up fixes received, his own feature #81587 needing a security follow-up within a day (#81631), and the CSP rollout producing a long repair tail. The 100% first-pass rate is partly a reviewer-pool effect: 38% of his reviewed PRs were approved by one security colleague. On delivery, many CA-incident PRs are 5 to 24 line dependency bumps (#121626, #121580), so the major tier overstates per-PR effort even if the coverage was important. In the other direction, the deep reads of the two warehouse SSRF PRs both carried must-fix review findings (Q=1), so his top-scored work was not flawless at first submission.",
+  "coverage": {
+    "sampled_prs": 19,
+    "ondemand_deepreads": 6,
+    "missing_data": ["L0 metrics (team_leverage, changelog_prs, ai_share, self_driving_share)", "changes_rounds_mean", "changes_adopted_rate (n=2)", "bridge_rank", "issue_reactions"],
+    "diff_truncated_share": 0.21
+  }
+}

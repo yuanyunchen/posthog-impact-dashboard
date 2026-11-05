@@ -1,0 +1,267 @@
+team,profile_id,name,role,start,lead,github_raw,handle,in_contributors,alltime_commits
+self-driving,30942,Olly Browne,Distributed Systems Engineer,2024-07-01,False,,,False,
+self-driving,37401,Andy Maguire,Product Engineer,2025-10-13,False,,,False,
+self-driving,28619,Annika Schmid,Product Manager,2022-09-05,False,https://github.com/annikaschmid,annikaschmid,True,6
+self-driving,30798,Georgiy Tarasov,Product Engineer,2024-06-12,True,https://github.com/skoob13,skoob13,True,753
+self-driving,47443,Mikayla Thompson,Product Engineer,2026-08-31,False,https://github.com/mikaylathompson,mikaylathompson,True,80
+self-driving,30455,Dylan Martin,Product Engineer,2024-05-12,False,https://github.com/dmarticus,dmarticus,True,549
+mobile-app,42628,Chris Volzer,Product Engineer,2026-01-26,True,,,False,
+workflows,32489,Meikel Ratz,Product Engineer,2025-01-06,True,,,False,
+workflows,43369,Daniel Marchuk,Product Engineer,2026-03-09,False,https://github.com/dmarchuk,dmarchuk,True,411
+workflows,44862,Harley Alexander,Product Engineer,2026-05-26,False,,,False,
+workflows,47552,Michael Reichenbach,Product Engineer,2026-11-02,False,https://github.com/silthus/,silthus,True,33
+surfaces,32304,Peter Kirkham,Product Engineer,2024-12-09,True,https://github.com/k11kirky,k11kirky,True,263
+surfaces,28619,Annika Schmid,Product Manager,2022-09-05,False,https://github.com/annikaschmid,annikaschmid,True,6
+surfaces,36864,Cleo Lant,Product Marketing Manager,2025-10-01,False,https://github.com/cleo-pleurodon,cleo-pleurodon,True,1
+surfaces,45504,Shy Alter,Product Engineer,2026-07-20,False,https://github.com/puemos,puemos,True,478
+surfaces,41391,Vojta Bartos,Product Engineer,2026-03-02,False,https://github.com/VojtechBartos,VojtechBartos,True,382
+surfaces,32193,Adam Leith,UX Platform Engineer,2024-11-26,False,https://github.com/adamleithp,adamleithp,True,696
+demand-gen,32934,Brian Young,Growth Marketing Manager,2025-02-26,True,,,False,
+demand-gen,43064,Jonah Svihus,Propagandist,2026-03-11,False,,,False,
+demand-gen,29070,Joe Black,Chaos Marketer,2021-05-24,False,https://github.com/joethreepwood,joethreepwood,True,90
+customer-analytics,34159,Arthur Moreira de Deus,Product Engineer,2025-06-23,True,https://github.com/arthurdedeus,arthurdedeus,True,531
+builder-relations,34023,Daniel Zaltsman,Developer who organizes events,2025-05-12,True,https://github.com/Zaltsman,Zaltsman,False,
+builder-relations,42638,Kliment Minchev,Dev who organizes events,2026-02-02,False,https://github.com/kliment-slice,kliment-slice,True,2
+builder-relations,47334,Brittany Joiner,Technical Community Manager,2026-08-03,False,https://github.com/brittanyjoiner15,brittanyjoiner15,True,2
+builder-relations,42800,Adlet Smykov,Influence Wrangler ,2026-02-04,False,https://github.com/adletsmykov,adletsmykov,True,1
+context-and-mcp,40548,Richard Solomou,Product Engineer,2026-01-05,True,https://github.com/richardsolomou,richardsolomou,True,142
+context-and-mcp,38198,Adam Bowker,Product Engineer,2025-11-12,False,https://github.com/adboio,adboio,True,357
+context-and-mcp,47336,Jake Ruth,Product Engineer,2026-08-10,False,https://github.com/JakeRuth,JakeRuth,True,42
+revops,48026,Erika Billingsley,Revenue Operations,2026-08-31,False,,,False,
+revops,29862,Mine Kansu,Revenue Operations,2023-12-17,True,,,False,
+revops,46831,Matt Ghering,Finance Lead,2026-08-24,False,,,False,
+billing,33209,Pawel Cebula,Product Engineer,2025-03-10,True,https://github.com/pawel-cebula,pawel-cebula,True,180
+billing,35378,Marce Coll,Back-end Engineer,2025-09-15,False,https://github.com/MarceColl,MarceColl,False,
+billing,44378,Roy Cohen,Backend Engineer,2026-06-01,False,,,False,
+billing,47708,Alexander Mays,Backend Engineer,2026-08-31,False,,,False,
+billing,47335,Daniel Snitkovskiy,Backend Engineer,2026-09-21,False,,,False,
+platform-features,34147,Yasen Slavov,Product Engineer,2025-05-26,True,,,False,
+platform-features,34783,Alex Lider,Product Engineer,2025-07-21,False,,,False,
+platform-features,39146,Reece Jones,Product Engineer,2025-12-03,False,https://github.com/ReeceJones,ReeceJones,True,250
+customer-success-na-west,32596,Sean O'Shaughnessy,Technical Customer Success Manager,2025-01-27,False,https://github.com/seanosh,seanosh,False,
+customer-success-na-west,44792,Luke Baber,Technical Customer Success Manager,2026-06-01,False,https://github.com/LukeBaber1836,LukeBaber1836,False,
+customer-success-na-west,47491,Jack Tomei,Technical Customer Success Manager,2026-08-24,False,,,False,
+customer-success-na-west,32051,Steven Truong,Epic PostHog Human,2024-11-11,False,https://github.com/steventruong,steventruong,False,
+customer-success-na-west,43884,Sebastian Muriel,customer wiz,2026-04-06,True,,,False,
+customer-success-na-west,49659,Chris Corsi,Technical Customer Success Manager,2026-10-28,False,,,False,
+agent-infrastructure,34600,Alessandro Pogliaghi,Product Engineer,2025-06-30,False,https://github.com/tatoalo,tatoalo,True,655
+agent-infrastructure,39757,Charles Vien,Product Engineer,2025-12-05,True,https://github.com/charlesvien,charlesvien,True,215
+agent-infrastructure,43831,Brandon Leung,Product Engineer,2026-04-06,False,https://github.com/brandonleung,brandonleung,True,119
+agent-infrastructure,34571,Jonathan Mieloo,Software Engineer,2025-07-01,False,https://github.com/jonathanlab,jonathanlab,True,114
+experiments,32260,Anders Asheim Hennum,Product Engineer,2024-12-03,False,https://github.com/andehen,andehen,True,547
+experiments,33208,Rodrigo Iloro,Product Engineer,2025-03-10,False,https://github.com/rodrigoi,rodrigoi,True,381
+experiments,29792,Juraj Majerik,Full Stack Engineer,2023-09-19,True,https://github.com/jurajmajerik,jurajmajerik,True,874
+experiments,41477,Marcel Poelker,Product Engineer,2026-01-05,False,,,False,
+experiments,44280,Ruby Childs,Product Manager,2026-04-27,False,,,False,
+finance,46831,Matt Ghering,Finance Lead,2026-08-24,False,,,False,
+finance,41301,Ahmed Amaar,Finance Manager,2026-01-05,False,,,False,
+finance,34497,Janani K,Finance Manager,2025-06-23,True,https://github.com/jkposthog,jkposthog,False,
+youtube,30208,Andy Vandervell,Lord of Content,2022-01-03,False,https://github.com/andyvan-ph,andyvan-ph,False,
+youtube,33708,Alex van Leeuwen,Video Producer,2025-04-22,True,,,False,
+youtube,34804,Jordo Dibb,Video Post-Production Specialist,2025-07-28,False,,,False,
+warehouse,30209,Eric Duong,Software Engineer,2020-05-17,True,https://github.com/EDsCODE,EDsCODE,True,1346
+warehouse,31090,Anna Szell,Product Manager,2024-07-22,False,https://github.com/annaszell,annaszell,True,16
+warehouse,30174,James Greenhill,Software Engineer,2020-06-14,False,https://github.com/fuziontech,fuziontech,True,496
+warehouse,39000,Bill Guowei Yang,Product Engineer,2025-11-19,False,https://github.com/bill-ph,bill-ph,True,32
+warehouse,41804,Jakob Homan,Software Engineer,2026-01-19,False,https://github.com/jghoman,jghoman,True,4
+warehouse,43006,Benjamin Knofe-Vider,Infrastructure Engineer,2026-03-02,False,https://github.com/benben/,benben,True,37
+replay,34861,Tue Haulund,Product Engineer,2025-07-28,True,https://github.com/TueHaulund,TueHaulund,True,541
+replay,34160,Cory Slater,Product Manager,2025-05-26,False,https://github.com/fivestarspicy,fivestarspicy,True,38
+replay,37392,Kim Dugan,Product Engineer,2025-10-13,False,,,False,
+replay,35353,Hayne Ryu,Product Engineer,2025-12-08,False,,,False,
+forward-deployed-engineering,32997,Joshua Ordehi,Forward Deployed Engineer,2025-02-17,False,https://github.com/ordehi,ordehi,True,78
+forward-deployed-engineering,46186,Leonard Scheidemantel,Forward Deployed Engineer,2026-06-29,False,,,False,
+forward-deployed-engineering,47545,Jon Su,Forward Deployed Engineer,2026-08-10,True,https://github.com/jkersu,jkersu,False,
+forward-deployed-engineering,28895,Simon Fisher,Customer Success Lead,2022-01-03,False,https://github.com/simfish85,simfish85,True,5
+feature-flags,32501,Phil Haack,Platform Engineer,2025-01-06,True,https://github.com/haacked,haacked,True,729
+feature-flags,35298,Gustavo Henrique Strassburger,Product Engineer,2025-09-08,False,,,False,
+feature-flags,41646,Matheus Batista,Software Engineer,2026-01-12,False,https://github.com/matheus-vb,matheus-vb,True,162
+feature-flags,31566,Patricio Tarantino,Product Engineer,2024-09-23,False,https://www.github.com/patricio-posthog,patricio-posthog,True,129
+feature-flags,44280,Ruby Childs,Product Manager,2026-04-27,False,,,False,
+product-led-sales-west,34655,Jon Lu,Technical Account Manager,2025-07-07,False,https://github.com/consultingsultan,consultingsultan,False,
+product-led-sales-west,35044,Ryan McCrary,Technical Account Manager,2025-08-18,False,https://github.com/ryanmccrary,ryanmccrary,False,
+product-led-sales-west,34069,Tyler Crandall,Technical Account Manager,2025-05-19,True,,,False,
+product-led-sales-west,41941,Will Wearing,Technical Account Manager,2026-02-23,False,https://github.com/willwearing,willwearing,True,20
+product-led-sales-west,43593,Sean Mallia,Technical Account Manager,2026-04-07,False,,,False,
+product-led-sales-west,44812,Sufiyan Samnani,Technical Account Manager,2026-06-15,False,,,False,
+product-led-sales-west,45802,Patrick McConnell,Technical Account Manager,2026-07-27,False,,,False,
+cloud-platform,35250,Sven Lange,Platform Engineer,2025-10-01,True,https://github.com/langesven,langesven,True,31
+cloud-platform,43879,Stephen Schmidt,Platform Engineer,2026-03-23,False,https://github.com/Z3r0Sum,Z3r0Sum,True,20
+cloud-platform,44485,Keelan Jenkinson,Platform Engineer,2026-04-20,False,,,False,
+support,28949,Steven Shults,Technical Support Engineer,2024-03-20,False,https://github.com/slshults,slshults,True,75
+support,31138,Abigail Richardson,Technical Support Engineer,2024-07-29,True,https://github.com/abigailbramble,abigailbramble,True,29
+support,31567,Ben Lea,Technical Support Engineer,2024-09-23,False,https://github.com/darkopia,darkopia,True,84
+support,31540,Ben Haynes,Technical Support Engineer,2024-09-23,False,https://github.com/HaynesPostHog,HaynesPostHog,True,18
+support,32748,Luke Belton,Technical Support Engineer,2025-03-10,False,https://github.com/luke-belton,luke-belton,True,232
+support,34641,Christian Rafferty,Technical Support Engineer,2025-07-21,False,https://github.com/clr182,clr182,True,70
+support,34696,Kyle Swank,Technical Support Engineer,2025-07-07,False,https://www.github.com/kyleswank,kyleswank,True,40
+support,35074,Eleftheria Trivyzaki,Billing Support Specialist,2025-08-18,False,,,False,
+support,39191,Christiaan Hendriksen,Technical Support Engineer,2026-01-05,False,,,False,
+support,42767,Phillip Ramirez,Technical Support Engineer,2026-02-09,False,,,False,
+support,41403,Xander Jones,Technical Support Engineer,2026-03-09,False,https://github.com/xljones,xljones,True,83
+support,46293,Chris Shine,Support Engineer,2026-08-03,False,,,False,
+support,46294,Alin-emanuel Cîciu,Support Engineer,2026-08-03,False,,,False,
+developer-marketing,29070,Joe Black,Chaos Marketer,2021-05-24,True,https://github.com/joethreepwood,joethreepwood,True,90
+developer-marketing,35224,Sara Miteva,Product Marketer,2025-10-01,False,https://github.com/SaraMiteva,SaraMiteva,True,2
+developer-marketing,36864,Cleo Lant,Product Marketing Manager,2025-10-01,False,https://github.com/cleo-pleurodon,cleo-pleurodon,True,1
+developer-marketing,43387,Lizzie Epton,Developer Marketer,2026-03-16,False,https://github.com/Lizzieepton,Lizzieepton,False,
+developer-marketing,47570,Juliana Meyer,Product Marketer,2026-09-21,False,https://github.com/jumeyermattosarruda,jumeyermattosarruda,False,
+cloud-foundations,28627,Danel J,SRE Engineer,2022-10-11,False,,,False,
+cloud-foundations,31993,Michael Kutsch,Site Reliability Engineer,2024-11-01,True,,,False,
+cloud-foundations,30832,Daniel Escribano,Clickhouse Engineer,2024-06-17,False,,,False,
+cloud-foundations,44015,Aly Fulton,FinOps Engineer,2026-04-20,False,https://github.com/sinthetix,sinthetix,True,2
+cloud-foundations,48536,Adam Dickinson,Site Reliability Engineer,2026-10-05,False,https://github.com/adickinson72,adickinson72,False,
+mcp-analytics,32387,Lucas Faria,Product Engineer,2024-12-19,True,https://github.com/lucasheriques,lucasheriques,True,406
+mcp-analytics,35171,Georgis Andonis,Product Engineer,2025-09-01,False,,,False,
+mcp-analytics,43163,Mike Warren,Product Manager,2026-02-16,False,,,False,
+customer-success-eu,32545,Dana Zou,Technical Customer Success Manager,2025-02-03,True,,,False,
+customer-success-eu,35037,Christophe Eynius Tranberg,Customer Vibe Optimizer,2025-09-01,False,,,False,
+customer-success-eu,35123,Ben Smith,Technical Customer Success Manager,2025-08-18,False,,,False,
+customer-success-eu,28895,Simon Fisher,Customer Success Lead,2022-01-03,False,https://github.com/simfish85,simfish85,True,5
+customer-success-eu,40554,Andre de Vries,Technical CSM,2026-01-26,False,https://github.com/andre347,andre347,True,6
+customer-success-eu,45795,Ella Cullen,Technical Customer Success Manager,2026-07-13,False,,,False,
+customer-success-eu,46197,Carles Salvador,Technical Customer Success Manager,2026-08-10,False,,,False,
+customer-success-eu,47338,Sean Deehan,Technical Customer Success Manager,2026-09-01,False,,,False,
+customer-success-eu,49879,Steven Nance,Technical Customer Success Manager,2026-12-01,False,,,False,
+blitzscale,27732,James Hawkins,Co-CEO,2020-01-23,True,https://github.com/jamesefhawkins,jamesefhawkins,True,48
+blitzscale,27730,Tim Glaser,co-ceo,2020-01-24,False,https://github.com/timgl,timgl,True,1440
+blitzscale,28625,Charles Cook,Generic Exec Person,2020-10-26,False,https://github.com/charlescook-ph,charlescook-ph,True,8
+blitzscale,28693,Raquel Smith,Engineering exec person,2022-11-02,False,https://github.com/raquelmsmith,raquelmsmith,True,354
+blitzscale,32112,Scott Lewis,Executive Assistant,2024-11-12,False,,,False,
+blitzscale,30205,Ben White,Exec Person for the Backend Homies,2022-05-05,False,https://github.com/benjackwhite,benjackwhite,True,1666
+blitzscale,30173,Paul D'Ambra,Engineer exec for anecdotes,2021-09-20,False,https://github.com/pauldambra,pauldambra,True,4102
+blitzscale,32367,Ben Bradley,Sales Team Lead,2024-12-16,False,,,False,
+blitzscale,46831,Matt Ghering,Finance Lead,2026-08-24,False,,,False,
+clickhouse,32302,Pawel Szczur,Product Engineer,2024-12-09,False,https://github.com/orian,orian,True,427
+clickhouse,36766,Rory Shanks,Clickhouse Engineer,2025-11-01,True,https://github.com/rorylshanks,rorylshanks,True,54
+clickhouse,31541,Bryan Ciaraldi,Site Reliability Engineer,2024-09-18,False,,,False,
+clickhouse,43546,Tommy Gilmore,Site Reliability Engineer,2026-03-30,False,,,False,
+clickhouse,47799,Juho Valtonen,Site Reliability Engineer,2026-09-14,False,,,False,
+editorial,29296,Ian Vanagas,Technical Content Marketer,2022-09-19,True,https://github.com/ivanagas,ivanagas,True,13
+editorial,35321,Natalia Amorim,Content Marketing Manager,2025-09-08,False,,,False,
+editorial,38655,Jina Yoon,Technical Content Marketer,2025-12-01,False,https://github.com/jina-yoon,jina-yoon,False,
+editorial,44190,Liam Graham,Hog Poster,2026-04-27,False,https://github.com/liamg-posthog,liamg-posthog,False,
+editorial,44042,Dennis Ivy,Developer Advocate,2026-04-13,False,https://github.com/dennisivy,dennisivy,False,
+editorial,30208,Andy Vandervell,Lord of Content,2022-01-03,False,https://github.com/andyvan-ph,andyvan-ph,False,
+editorial,49660,Sara Verdi,Content Marketer,2026-11-16,False,,,False,
+customer-success-na-north,41001,Phil DelGobbo,Customer Success Manager,2026-01-26,True,,,False,
+customer-success-na-north,34037,Kaya Thomas,Technical Customer Success Manager,2025-05-12,False,https://github.com/kmt901,kmt901,False,
+customer-success-na-north,43452,Jake Sciotto,Technical Customer Success Manager,2026-03-30,False,https://github.com/jakesciotto,jakesciotto,True,111
+customer-success-na-north,28895,Simon Fisher,Customer Success Lead,2022-01-03,False,https://github.com/simfish85,simfish85,True,5
+customer-success-na-north,47613,Ryland Bowles,Technical Customer Success Manager,2026-08-31,False,https://github.com/rylandbowlescz,rylandbowlescz,False,
+customer-success-na-north,48535,Evelynn Oberheitmann,Technical Customer Success Manager,2026-09-21,False,,,False,
+customer-success-na-north,49042,Nathan Chiu,Technical Customer Success Manager,2026-10-12,False,,,False,
+customer-success-na-north,49645,Alexi Ortega,Technical Customer Success Manager,2026-11-30,False,,,False,
+sales-product-led,33186,Landon DePasquale,Product Led Sales Team Lead,2025-03-24,True,,,False,
+sales-product-led,30833,Leon Daly,Technical Account Manager,2024-06-17,False,,,False,
+sales-product-led,37437,Catherine Ferland,Technical Account Manager,2025-11-03,False,,,False,
+sales-product-led,35333,Leo Prinz,Technical Account Manager,2025-12-01,False,https://github.com/leonhardprinz,leonhardprinz,True,4
+sales-product-led,40181,Anna-Marie Doudova,Technical Account Manager,2025-12-10,False,,,False,
+sales-product-led,46560,Yasmin D.,Technical Account Manager,2026-08-03,False,https://github.com/yasmin-xyz,yasmin-xyz,False,
+sales-product-led,47881,Kristofer Gudmundsson,Technical Account Manager,2026-10-01,False,,,False,
+gtm-engineering,41271,Abhischek Thottakara,SalesOps Backend Engineer,2026-01-05,False,https://github.com/abhischekt,abhischekt,True,52
+gtm-engineering,32367,Ben Bradley,Sales Team Lead,2024-12-16,True,,,False,
+platform-ux,32193,Adam Leith,UX Platform Engineer,2024-11-26,True,https://github.com/adamleithp,adamleithp,True,696
+platform-ux,49179,Lucas Mosele,UX Engineer,2026-11-16,False,,,False,
+ai-research,43383,Nicholas Waltz,AI Research Engineer,2026-03-09,True,,,False,
+ai-research,29292,Robbie Coomber,Full Stack Engineer,2023-08-07,False,https://github.com/robbie-c,robbie-c,True,862
+ai-research,30211,Marcus Hof,Product Engineer,2023-08-07,False,https://github.com/MarconLP,MarconLP,True,365
+ai-research,33371,Alex Lebedev,Product Engineer,2025-03-24,False,https://github.com/sortafreel,sortafreel,True,252
+ai-observability,34860,Carlos Marchal,Product Engineer,2025-08-25,False,https://github.com/carlos-marchal,carlos-marchal,False,
+ai-observability,34711,Radu Raicea,Product Engineer,2025-07-18,True,https://github.com/Radu-Raicea,Radu-Raicea,True,271
+ai-observability,45491,Marco Gancitano,Product Manager,2026-06-01,False,https://github.com/mgancita,mgancita,False,
+ai-observability,45895,Bernat Torres,Product Engineer,2026-08-24,False,https://github.com/bernatixer,bernatixer,True,114
+ai-observability,47570,Juliana Meyer,Product Marketer,2026-09-21,False,https://github.com/jumeyermattosarruda,jumeyermattosarruda,False,
+conversations,32498,Aleks Veryayskiy,Product Engineer,2025-01-06,True,https://github.com/veryayskiy,veryayskiy,True,582
+conversations,45491,Marco Gancitano,Product Manager,2026-06-01,False,https://github.com/mgancita,mgancita,False,
+developer-experience,29561,Julian Bez,Full Stack Engineer,2023-11-06,True,https://github.com/webjunkie,webjunkie,True,1440
+developer-experience,43104,Georges-Antoine Assi,Devex Engineer,2026-02-23,False,https://github.com/gantoine,gantoine,True,334
+developer-experience,43265,Raúl Negrón-Otero,DevEx Engineer,2026-03-09,False,https://github.com/rnegron,rnegron,True,753
+graphics,34810,Daniel Hawkins,Production Designer,2025-07-28,False,,,False,
+graphics,27881,Lottie Coxon,Graphics Lead,2020-06-18,True,https://github.com/lottiecoxon,lottiecoxon,True,2
+graphics,40251,Heidi Berton,Digital Illustrator,2026-01-05,False,,,False,
+apm,29192,Frank Hamand,Product Engineer,2023-03-06,True,https://github.com/frankh,frankh,True,636
+apm,38376,Jon McCallum,Product Engineer,2025-11-10,False,,,False,
+apm,34044,Abe Basu,Product Manager,2025-05-19,False,https://github.com/abheek9,abheek9,True,8
+apm,43453,Daniel Visca,Product Engineer,2026-04-14,False,https://github.com/DanielVisca,DanielVisca,True,257
+apm,47337,Jimmy Zhu,Backend Engineer,2026-08-17,False,,,False,
+talent,30207,Fraser Hopper,Hog wrangler,2023-11-19,False,https://github.com/fraserhopper,fraserhopper,False,
+talent,28626,Coua Phang,Talent OG,2022-04-20,True,https://github.com/couaphang,couaphang,False,
+talent,33236,Júlia Esteban Edo,Talent Partner,2025-03-11,False,https://github.com/juliaedo,juliaedo,False,
+talent,34692,Rune Povlsen,Talent Partner,2025-07-21,False,https://github.com/RunePHog,RunePHog,False,
+talent,34997,Mark Deubel,Tech Talent Partner,2025-08-05,False,https://github.com/Doobles-PostHog,Doobles-PostHog,False,
+talent,35811,Zbynek Novotny,Talent Partner,2025-09-15,False,,,False,
+talent,43103,Eliana  Brereton,Sourcer,2026-02-18,False,,,False,
+data-modeling,35094,Jovan Sakovic,Product Engineer,2025-09-01,True,,,False,
+data-modeling,31090,Anna Szell,Product Manager,2024-07-22,False,https://github.com/annaszell,annaszell,True,16
+data-modeling,45980,Thiago Rocha Salvatore,Product Engineer,2026-06-30,False,https://github.com/thiagosalvatore,thiagosalvatore,True,239
+data-modeling,44760,Sinan Kucukkoseler,Product Engineer,2026-06-01,False,,,False,
+warehouse-sources,29577,Tom Owers,Full Stack Engineer,2023-09-11,True,https://github.com/Gilbert09,Gilbert09,True,5847
+warehouse-sources,39615,Estefania Rabadan,Software Engineer,2025-12-01,False,https://github.com/estefaniarabadan,estefaniarabadan,True,179
+warehouse-sources,43038,Daniel Carletti,Software Engineer,2026-02-23,False,,,False,
+warehouse-sources,31090,Anna Szell,Product Manager,2024-07-22,False,https://github.com/annaszell,annaszell,True,16
+people,28628,Kendal Ijeh,People Operations Manager,2022-09-28,False,,,False,
+people,30207,Fraser Hopper,Hog wrangler,2023-11-19,True,https://github.com/fraserhopper,fraserhopper,False,
+people,33607,Hector Rodriguez,Legal & Compliance,2025-04-14,False,https://github.com/hector-r-759,hector-r-759,False,
+people,34526,Tara Alcantarilla-Howard,Operations Manager,2025-06-25,False,,,False,
+people,35076,Carol Donnelly,Operations Manager,2025-08-11,False,,,False,
+people,36433,Judy Opperwall,Office Manager,2025-09-24,False,,,False,
+people,45094,Milagros Pedriel,Payroll Manager,2026-07-07,False,,,False,
+growth,32207,Rafael Audibert,Product Engineer,2024-11-25,True,https://github.com/rafaeelaudibert,rafaeelaudibert,True,995
+growth,36478,Matt Brooker,Product Engineer,2025-10-29,False,,,False,
+growth,42799,Fernando Gomes,Product Engineer,2026-02-03,False,https://github.com/fercgomes?utm_source=posthog,fercgomes,True,236
+error-tracking,33138,Hugues Pouillot,Product Engineer,2025-03-03,True,,,False,
+error-tracking,35198,Aleksander Błaszkiewicz,Product Engineer,2025-09-01,False,https://github.com/ablaszkiewicz,ablaszkiewicz,True,306
+error-tracking,34160,Cory Slater,Product Manager,2025-05-26,False,https://github.com/fivestarspicy,fivestarspicy,True,38
+error-tracking,47339,James Gill,Backend Engineer,2026-08-17,False,,,False,
+data-tools,30202,Marius Andra,Software Engineer,2020-05-12,True,https://github.com/mariusandra,mariusandra,True,2517
+data-tools,31090,Anna Szell,Product Manager,2024-07-22,False,https://github.com/annaszell,annaszell,True,16
+wizard-and-docs,34100,Vincent Ge,Context Engineer,2025-05-19,False,https://github.com/gewenyu99,gewenyu99,True,32
+wizard-and-docs,38173,Sarah Sanders,Context Engineer,2025-11-17,False,https://github.com/sarahxsanders,sarahxsanders,True,24
+wizard-and-docs,33938,Edwin Lim,Context Engineer,2025-05-09,True,https://github.com/edwinyjlim,edwinyjlim,True,26
+wizard-and-docs,48388,John Waters,Context Engineer,2026-09-21,False,https://github.com/johncwaters,johncwaters,True,6
+client-libraries,30206,Manoel Aranda Neto,Mobile Engineer,2023-09-05,True,https://github.com/marandaneto,marandaneto,True,150
+client-libraries,31730,Ioannis Josephides,Mobile Engineer,2024-10-07,False,https://github.com/ioannisj,ioannisj,True,27
+client-libraries,35043,Dustin Byrne,Product Engineer,2025-09-01,False,https://github.com/dustinbyrne,dustinbyrne,True,56
+client-libraries,44258,Anna Garcia,Mobile Engineer,2026-04-13,False,https://github.com/turnipdabeets,turnipdabeets,True,22
+security,34651,Tom Piccirello,Security stuff,2025-07-07,True,https://github.com/Piccirello/,Piccirello,True,437
+security,44061,Felipe Almeida,Security Engineer,2026-04-13,False,https://github.com/feliperalmeida/,feliperalmeida,True,37
+security,50154,Lukas Reschke,Backend Engineer,2026-11-23,False,,,False,
+ingestion,32500,Paweł Ledwoń,Product Engineer,2025-01-06,True,,,False,
+ingestion,32635,Eli Reisman,Data Platform Engineer,2025-02-10,False,https://github.com/elireisman,elireisman,False,
+ingestion,33511,Nick Best,Product Engineer,2025-04-07,False,,,False,
+ingestion,34103,José Sequeira,Backend Engineer,2025-05-12,False,,,False,
+ingestion,41642,Zachary Brown,Software Engineer,2026-02-02,False,,,False,
+ingestion,49882,Jure Malovrh,Backend Engineer,2026-12-01,False,,,False,
+web-analytics,33028,Lucas Ricoy,Product Engineer,2025-02-24,True,https://github.com/lricoy,lricoy,True,577
+web-analytics,33636,Javier Bahamondes,Product Engineer,2025-04-14,False,,,False,
+web-analytics,38389,Jordan Mryyan,Product Engineer,2025-11-17,False,,,False,
+web-analytics,43163,Mike Warren,Product Manager,2026-02-16,False,,,False,
+web-analytics,34159,Arthur Moreira de Deus,Product Engineer,2025-06-23,False,https://github.com/arthurdedeus,arthurdedeus,True,531
+product-analytics,30210,Thomas Obermüller,Product Engineer,2022-11-14,True,https://github.com/thmsobrmlr,thmsobrmlr,True,1315
+product-analytics,42172,Sam Pennington,Product Engineer,2026-01-26,False,https://github.com/sampennington,sampennington,True,801
+product-analytics,43163,Mike Warren,Product Manager,2026-02-16,False,,,False,
+product-analytics,46513,Daniel Parker,Product Engineer,2026-08-10,False,https://github.com/GeneralistDev,GeneralistDev,True,60
+product-analytics,43171,Matt Pua,Product Engineer,2026-03-02,False,https://github.com/mattpua,mattpua,True,476
+website,28804,Eli Kinsey,Front End Engineer,2021-08-02,True,https://github.com/smallbrownbike,smallbrownbike,True,5
+website,46139,Ian Matson,Design Engineer,2026-07-13,False,https://github.com/ianmatson,ianmatson,False,
+query-performance,35944,Vasco De Krijger,Product Engineer,2025-11-17,True,https://github.com/vassiedk,vassiedk,False,
+query-performance,43163,Mike Warren,Product Manager,2026-02-16,False,,,False,
+query-performance,30369,Sandy Spicer,Product Engineer,2024-04-25,False,,,False,
+query-performance,34146,Andy Zhao,Software Engineer,2025-05-26,False,https://github.com/andyzzhao,andyzzhao,True,298
+query-performance,40825,George Munyoro,Product Engineer,2026-01-05,False,https://github.com/georgemunyoro,georgemunyoro,True,125
+sales-cs,30684,Seb M,Solutions Engineer-ish,2024-06-03,False,,,False,
+sales-cs,33387,Alex McKee,Technical Account Executive,2025-03-31,True,,,False,
+sales-cs,33534,Chris McNeill,Technical Account Executive,2025-04-07,False,,,False,
+sales-cs,35355,Tomas Vnuk,Technical Account Executive,2025-10-01,False,,,False,
+sales-cs,42975,Lorena Viana,Friendly Founding BDR,2026-02-23,False,https://github.com/biolorena,biolorena,False,
+sales-cs,45941,Andreas Ford,Business Development Representative,2026-06-29,False,,,False,
+sales-cs,45796,Melad Khajepour,Business Development Representative,2026-06-29,False,https://meladkhajepour.com/,?https://meladkhajepour.com,False,
+sales-cs,48252,Joey Backs,Technical Account Executive,2026-09-14,False,,,False,
+sales-cs,48415,Christopher Bedigian,Technical Account Manager,2026-08-24,False,,,False,
+sales-cs,33750,Sachin Ranchod,Technical Account Executive,2025-05-05,False,,,False,
+onboarding,33065,Magda Olszewska,Onboarding Specialist,2025-02-24,True,,,False,
+onboarding,34722,Daniel Danilov,Onboarding Specialist,2025-07-14,False,https://github.com/danieldanilov,danieldanilov,True,1
+onboarding,45227,Mark Goings,Onboarding Specialist,2026-06-01,False,,,False,
+onboarding,47964,Jordan Terry,Onboarding Specialist,2026-08-31,False,https://github.com/jterry63,jterry63,False,
+onboarding,28895,Simon Fisher,Customer Success Lead,2022-01-03,False,https://github.com/simfish85,simfish85,True,5

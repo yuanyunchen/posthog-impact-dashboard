@@ -1,0 +1,170 @@
+{
+  "cid": "pauldambra",
+  "positioning": "A very high-throughput platform engineer (652 merged PRs in 13 weeks) who owns PostHog's shared frontend platform and spends most of his time on cross-cutting performance, security and reliability work that every product team and every user sits on.",
+  "role": {
+    "primary_role": "platform builder",
+    "team": "blitzscale",
+    "how_they_create_impact": "He removes cost from paths everyone uses: the app boot and bundle path (HTML 544KB to 10KB, ~1.5 MiB of eager JS removed per scene), the Django request path (one fewer query per session request, N+1 batching across 275 team-scoped models), and the CI and test infrastructure. Alongside that he ships a steady stream of access-control and data-integrity fixes and smaller product features (SQL box plots, DORA health tab, dashboard tabs). He then locks the gains in with CI ratchets and guards so they do not regress.",
+    "network_summary": "Trusted author with a wide downstream footprint rather than a heavy reviewer. His approval-graph trust rank is 3rd of 20 (role.network.trust_rank 0.022, p89.5) and 100 distinct authors later built on files he changed (role.network.built_on_by_n, p89.5). 12 people requested his review (role.network.requested_by_n, 2nd of 20) and he approved 38 authors across 15 teams (role.network.approved_authors_n, role.network.teams_covered_n), so he is a go-to reviewer for frontend-platform and developer-experience work. But almost all of his network importance comes from authoring (role.network.importance_flow.author 1913.6 vs reviewer 7.2), and he gave only 1 changes-requested review in the window (role.network.events_given.changes_requested). He sits in community 1 with bridge_rank 5 (role.network.bridge_rank), a moderate bridge between product teams and platform. His own PRs pass first review 98% of the time (role.network.first_pass_rate), slightly below the 20-person median of 0.99."
+  },
+  "core_contributions": [
+    {
+      "workstream_id": "ws1",
+      "title": "Frontend boot and bundle performance campaign",
+      "what": "A sustained campaign on the shared frontend shell: moved the ~474 KB inline esbuild chunk map into a content-hashed static file (#94059), per-chunk minification for byte-stable deploys (#122919), lazy-loaded query node renderers per scene (#127333), split app-context loading into boot and full stages (#128226), scene prefetching during boot (#127407), and dozens of PRs pulling alerts, cohorts, Max/AI, billing and zod off the eager path. Gains are locked in by a CI check that fails new upward frontend layer imports (#126768).",
+      "why_it_matters": "This is the code path every logged-in and logged-out PostHog user runs on every page load. #94059 cites Asian users (27% of traffic) paying 3.3s p75 first paint for the inline map; shrinking the boot document from 544 KB to 10 KB and removing 1.1-1.6 MiB of eager JS per scene is user-visible latency across all products.",
+      "outcome": "192 PRs in ws1 (5 major, 122 substantive, 654 points), 124 PRs across workstreams whose title or summary targets bundle/boot cost, 83 of them since 2026-10-12. Deep reads: #94059 P=9.8, #122919 P=5.5, #127333 P=5.53 (on-demand). One dormant flagged experiment (#119225) was rolled back by himself (#119292) after it slowed scene rendering.",
+      "his_role": "lead",
+      "evidence_prs": [94059, 122919, 127333, 128226, 127407, 126768, 119225, 119292],
+      "numbers": {"ws1_prs": 192, "ws1_major": 5, "ws1_points": 654.21, "bundle_boot_prs": 124, "bundle_boot_prs_since_oct12": 83, "html_kb_before": 544, "html_kb_after": 10, "P_94059": 9.8}
+    },
+    {
+      "workstream_id": "ws3",
+      "title": "Django request-path, ORM and auth hardening",
+      "what": "Backend platform work on the Django layer: team-scoped querysets default to a peer-batching fetch mode so lazy relation reads cost 2 queries instead of N+1 across 275 models (#126463), a PostHog auth middleware that loads the session user with its organization in one query (#126421), a test-time guard against lazy loads plus fixes (#126622), a per-route Postgres query-count metric (#126313), deterministic pagination tiebreakers (#104980), an incident fix for OAuth refresh-token reuse detection that had caused 300s+ endpoint latency (#83929), and a data-integrity fix for settings PATCH wiping server-managed integration tokens with row locking (#108163).",
+      "why_it_matters": "These change default behaviour for every API request and every team-scoped model, so the blast radius is repo-wide. #83929 resolved a production incident, #108163 prevents silent loss of Slack/Teams/GitHub integration state, and the N+1 work comes with a production metric so others can verify the gains.",
+      "outcome": "48 PRs in ws3 (5 major, 25 substantive, 180.9 points). Deep reads: #108163 P=16.0 (C3 L3), #83929 P=13.0 (C3), #126463 P=9.62 (C3 L3, Q1), #104980 P=5.9. #126463 and #126421 merged in the last week of the window, so peer follow-up on them is not yet observable.",
+      "his_role": "lead",
+      "evidence_prs": [126463, 126421, 126622, 126313, 104980, 83929, 108163],
+      "numbers": {"ws3_prs": 48, "ws3_major": 5, "ws3_points": 180.92, "models_affected_126463": 275, "P_108163": 16.0, "P_83929": 13.0, "P_126463": 9.62}
+    },
+    {
+      "workstream_id": "misc",
+      "title": "Access-control and exposure fixes across products",
+      "what": "A run of security fixes outside his home area: project-access check before Signals Slack notifications (#102477), livestream membership recheck that closes streams when access is revoked (#108135), binding hobby Temporal ports to localhost (#114015), OAuth scope-version check that background token calls could bypass (#94116), Cloud egress block for external TypeSafe requests (#108333), and hardening shared LemonTable/project tree menus against unsafe link schemes (#127334).",
+      "why_it_matters": "Each closes a path where data could reach someone without access or where an unauthenticated port was exposed. These are low-line-count, high-criticality changes that the stratified estimate under-weights by volume.",
+      "outcome": "6 major-tier security fixes in the window. Deep reads: #102477 P=16.0 (V3 C3), #114015 P=6.35 (C3, on-demand), #108333 P=4.8.",
+      "his_role": "lead",
+      "evidence_prs": [102477, 108135, 114015, 94116, 108333, 127334],
+      "numbers": {"security_major_prs": 6, "P_102477": 16.0, "P_114015": 6.35, "lines_114015": 4}
+    }
+  ],
+  "angles": {
+    "delivery": {
+      "grade": 8,
+      "rationale": "2nd of 20 on the delivery estimate and the work includes an incident fix, a data-integrity fix and six security fixes, plus page-load gains for all users. Held at 8 rather than 9 because the volume is mostly substantive increments (major_episodes only 20, p34.2, below the median of 21), there are no changelog citations, and the product features he shipped (SQL box plots, DORA tab, proportion bars) are solid but not flagship launches.",
+      "claims": [
+        {"statement": "Delivery estimate is 1404.87, 2nd of 20, behind only Gilbert09 (5340.42).", "numbers": {"delivery": 1404.87, "percentile": 94.7, "position": 2}, "evidence_ids": ["delivery", "estimate.delivery_hat"]},
+        {"statement": "His highest-value deep reads are critical fixes: settings PATCH data loss with row locking, Signals Slack access leak, and an OAuth production incident.", "numbers": {"P_108163": 16.0, "P_102477": 16.0, "P_83929": 13.0}, "evidence_ids": [108163, 102477, 83929]},
+        {"statement": "Major-tier episodes are only 20, below the 20-person median of 21, and none of his PRs appear in the public changelog.", "numbers": {"major_episodes": 20, "major_episodes_percentile": 34.2, "changelog_prs": 0}, "evidence_ids": ["major_episodes", "metrics.changelog_prs"]}
+      ]
+    },
+    "system": {
+      "grade": 9,
+      "rationale": "This is his strongest angle. He changes defaults that all teams inherit (frontend boot path, ORM fetch mode across 275 models, auth middleware, CI sharding and test selection) and adds ratchets and metrics that keep the gains enforced (layer-import CI check, database-free test ratchet, lazy-load test guard, per-route query-count histogram). 100 other authors later built on files he changed.",
+      "claims": [
+        {"statement": "He is the top author in the shared frontend platform area out of 125 authors, with 34% of his PRs there.", "numbers": {"top_area_share": 0.34, "top_area_rank": 1, "top_area_authors_n": 125}, "evidence_ids": ["role.top_area_leader", "ws1"]},
+        {"statement": "Repo-wide ORM default change: team-scoped querysets batch lazy relation reads (2 queries instead of N+1) across 275 models; deep read scores it C3 L3.", "numbers": {"models": 275, "P": 9.62, "C": 3, "L": 3}, "evidence_ids": [126463, 126622, 126313]},
+        {"statement": "He enforces architecture with CI ratchets rather than one-off fixes: upward layer imports and database-free test classes fail PRs.", "numbers": {"ratchet_prs": 2}, "evidence_ids": [126768, 97837]},
+        {"statement": "100 distinct authors later changed files he touched by at least 20 lines, 3rd of 20.", "numbers": {"downstream_authors": 100, "percentile": 89.5}, "evidence_ids": ["downstream_authors", "role.network.built_on_by_n"]}
+      ]
+    },
+    "quality": {
+      "grade": 6,
+      "rationale": "Individually his work is careful: first-pass approval 98%, flag-gated experiments, fail-safe loaders with tests, and he rolled back his own slow experiment. But the peer-behaviour quality rate is the lowest of the 20 (0.93 vs median 0.97): 2 reverts and 13 explicit follow-up fixes, five of them in the boot-performance campaign. 368 of his 652 PRs have no recorded review, including 5 of his 20 major PRs, and two of the riskiest changes (#126463, #126421) landed in the last week, too new for peer correction to show.",
+      "claims": [
+        {"statement": "Quality rate is 0.93, last of 20 candidates (median 0.97), from 2 reverted and 13 follow-up-fixed PRs.", "numbers": {"quality_rate": 0.93, "percentile": 0.0, "reverted": 2, "followup_fixed": 13}, "evidence_ids": ["quality_rate", "metrics.reverted", "metrics.followup_fixed"]},
+        {"statement": "Five of the 15 affected PRs are boot/bundle performance changes on the shared shell, the highest-velocity part of his work.", "numbers": {"affected_prs": 15, "affected_in_boot_campaign": 5}, "evidence_ids": [115140, 117799, 119102, 119225, 103466]},
+        {"statement": "He controls risk with flags and self-rollback: #119225 shipped behind a 0% flag and he reverted it himself in #119292 when it slowed scene rendering.", "numbers": {"self_reverts": 1, "flag_rollout_pct": 0}, "evidence_ids": [119225, 119292]},
+        {"statement": "Only 284 of 652 PRs have a recorded review; 5 of 20 major PRs have none, including #94059 and #108163.", "numbers": {"reviewed_prs": 284, "prs": 652, "major_unreviewed": 5}, "evidence_ids": [94059, 108163, 127333, 95172, 100534]},
+        {"statement": "When reviewed, his PRs are rarely sent back: 9 changes-requested reviews on 8 PRs out of 280 reviewed, mean 1.12 rounds.", "numbers": {"changes_requested_rate": 0.03, "first_pass_rate": 0.98, "changes_rounds_mean": 1.12}, "evidence_ids": ["role.network.changes_requested_rate", "role.network.first_pass_rate", 83929]}
+      ]
+    },
+    "team": {
+      "grade": 6,
+      "rationale": "People seek him out (12 review requesters, 2nd of 20) and his approvals carry weight (trust rank 3rd), and his CI, test-sharding and agent-guidance work saves time for every engineer. But his reviewing is modest in volume and gatekeeping: team_leverage is below the median, 95 of 147 reviews are approvals, only 1 changes-requested, and several of his substantive review comments are posted by an automated QA Swarm rather than written by hand. His team leverage comes mostly from tooling, not review.",
+      "claims": [
+        {"statement": "12 distinct people requested his review, 2nd of 20.", "numbers": {"requested_by": 12, "percentile": 92.1}, "evidence_ids": ["requested_by", "role.network.requested_by_n"]},
+        {"statement": "Team leverage is 798.46, 12th of 19 and below the median of 831.49; he gave 147 reviews on 109 PRs for 42 authors.", "numbers": {"team_leverage": 798.46, "percentile": 38.9, "reviews": 147, "authors": 42}, "evidence_ids": ["team_leverage", "metrics.reviews_given"]},
+        {"statement": "Reviews are approval-heavy: 95 approvals, 51 comments, 1 changes-requested; the QA Swarm comments on #104782 and #90805 are labelled as automated, not human-written.", "numbers": {"approved": 95, "commented": 51, "changes_requested": 1}, "evidence_ids": [104782, 90805, 101133]},
+        {"statement": "CI and test infrastructure work benefits all engineers: shard sizing, merge-queue image builds, Jest retry with preserved attempts, deploy gating on push ranges.", "numbers": {"ws4_prs": 57, "ws4_points": 168.15}, "evidence_ids": ["ws4", 83138, 116402, 101769, 98181]}
+      ]
+    }
+  },
+  "overall": {"grade": 8, "confidence": "medium"},
+  "key_numbers": [
+    {"label": "Delivery estimate (2nd of 20)", "value": 1404.87, "metric_key": "delivery"},
+    {"label": "Authors who built on his files", "value": 100, "metric_key": "downstream_authors"},
+    {"label": "Quality rate (lowest of 20)", "value": 0.93, "metric_key": "quality_rate"}
+  ],
+  "calibration": {
+    "ranks": {"delivery": 94.7, "quality_rate": 0.0, "team_leverage": 38.9, "trust_rank": 89.5},
+    "note": "He is 2nd of 20 on delivery and 3rd on trust rank, but last on quality rate and below median on team leverage. The grades follow that shape: system 9 and delivery 8 reflect top-decile output on repo-wide paths; quality 6 reflects the lowest peer-correction rate in the cohort, softened only because the absolute rate is still 93% and he controls risk with flags; team 6 reflects being sought out and trusted but reviewing lightly. Overall 8 rather than 9 because the volume is mostly substantive increments (major episodes p34.2) and peer correction is higher than anyone else's."
+  },
+  "custom_analyses": [
+    {
+      "question": "Is the frontend performance work a sustained, deliberate campaign, and how large are its individual pieces?",
+      "why": "Over a third of his PRs are in ws1 and the late-window weeks are his busiest, so the question is whether this is one strategic programme or a pile of small lazy-load PRs inflating volume.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query pauldambra timeline",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query pauldambra prs --ws ws1 --since 2026-10-12",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query pauldambra deepread 127333",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query pauldambra deepread 119225"
+      ],
+      "finding": "It is a sustained programme that accelerates: 124 PRs across workstreams target bundle or boot cost, rising from 27 in September to 67 in October and 30 in November up to the window end on 2026-11-03; his two busiest weeks are 2026-10-12 (87 PRs) and 2026-10-26 (109 PRs). ws1 alone has 100 PRs since 2026-10-12 (2 major, 67 substantive). The anchor PR #94059 is genuinely large (P=9.8), but the on-demand deep reads of later pieces score modestly: #127333 P=5.53 (Q1) and #119225 P=5.53, and #119225 was reverted by himself in #119292. The campaign is strategically coherent and guarded by a CI layer check (#126768), but most of its value is spread across many medium-sized increments.",
+      "evidence_ids": [94059, 127333, 119225, 119292, 126768, "ws1"],
+      "effect": "delivery held at 8 (not 9) because the campaign's later pieces are medium-sized; system 8 → 9 because the work is a coherent, enforced platform programme rather than isolated fixes."
+    },
+    {
+      "question": "Where do his quality problems come from, and do reviewers catch them before merge?",
+      "why": "He is last of 20 on quality rate while having a 98% first-pass approval rate; these two signals conflict, so I checked which PRs drew follow-up fixes and how many of his PRs were reviewed at all.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query pauldambra rank quality_rate",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query pauldambra reviews-received --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query pauldambra pr 115140",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query pauldambra pr 117799",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query pauldambra pr 119225",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query pauldambra prs --tier major",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query pauldambra compare webjunkie"
+      ],
+      "finding": "None of the 15 affected PRs is one of his 20 major PRs; they are substantive or routine changes (CI sharding, migrations, UI fixes, boot-path perf). Five sit in the boot-performance campaign (#115140, #117799, #119102, #119225, #103466), so the defects cluster where he moves fastest. Reviews do not explain the high first-pass rate: only 284 of 652 PRs have a recorded review (354 reviews from 62 reviewers), and 5 of his 20 major PRs have none, including #94059, #108163 and #127333. Compared with webjunkie, a peer with similar volume (559 PRs), he has 2 reverts vs 0 and 13 follow-up fixes vs 9. Note that one revert is his own rollback of a 0%-flagged experiment, which is good practice rather than a defect escaping to users.",
+      "evidence_ids": [115140, 117799, 119102, 119225, 103466, 94059, 108163, 127333, "quality_rate", "metrics.followup_fixed"],
+      "effect": "quality 7 → 6 because peer corrections are the highest in the cohort and concentrate in the high-velocity shell work, with much of it merged without a recorded review; not lower because no major PR was reverted or fixed and he uses flags and self-rollback."
+    },
+    {
+      "question": "How much weight does his reviewing carry, and for whom?",
+      "why": "His trust rank and review-request count are top-3 but team leverage is below median, so I checked whether his reviews actually gate others' work or mostly approve.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query pauldambra reviews-given --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query pauldambra rank team_leverage",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query pauldambra rank requested_by",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query pauldambra rank cross_team"
+      ],
+      "finding": "He gave 147 reviews on 109 PRs for 42 authors: 95 approvals, 51 comments and a single changes-requested (#101133). Reviews concentrate on developer-experience (37 PRs) and on webjunkie (28 PRs), with product-analytics next (16). Cross-team approval breadth is exactly the median (15 teams, p42.1). The substantive review comments surfaced in the dossier on #104782 and #90805 are posted by an automated QA Swarm and labelled not human-written, although one of them on #90805 did catch a real permission inconsistency that the author then resolved. His review volume fell from 71 in September to 41 in October as his own PR output peaked.",
+      "evidence_ids": [101133, 104782, 90805, "team_leverage", "requested_by", "cross_team"],
+      "effect": "team held at 6: he is trusted and sought out, but his reviews rarely block changes and part of their substance is automated; the team grade leans on his CI and tooling work rather than on review."
+    },
+    {
+      "question": "How risky are the late-window backend default changes, and are they validated by peers yet?",
+      "why": "Two of his major backend PRs change behaviour for every request or every team-scoped model and merged in the last five days of the window, so peer-behaviour signals cannot yet show problems.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query pauldambra prs --ws ws3 --since 2026-10-20",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query pauldambra deepread 126463",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query pauldambra deepread 126421",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query pauldambra deepread 83929"
+      ],
+      "finding": "16 ws3 PRs landed since 2026-10-20 (2 major, 11 substantive). #126463 scores P=9.62 with C3 and L3 but Q1: it changes default ORM fetch behaviour across all 275 team-scoped models, merged 2026-11-02 with one approval from webjunkie. #126421 (P=5.53, Q1) replaces Django's auth middleware on every session request. By contrast the earlier #83929 (P=13.0, C3) went through a changes-requested round from rafaeelaudibert before approval and fixed a real production incident. The late changes are high-leverage but their correctness is not yet tested by time.",
+      "evidence_ids": [126463, 126421, 83929, "ws3"],
+      "effect": "confidence set to medium rather than high; system stays 9 on the strength of the design, quality not raised because the riskiest changes are immature."
+    }
+  ],
+  "insights": [
+    {"insight": "His impact is mainly about making shared defaults cheaper (boot path, ORM fetch mode, auth middleware, CI sharding) and then enforcing them with ratchets, so other teams benefit without doing anything. That is why downstream_authors (100) and trust_rank sit in the top 3 while major_episodes sits at p34.", "evidence_ids": [126463, 94059, 126768, 97837, "downstream_authors", "trust_rank"]},
+    {"insight": "Security and data-integrity fixes are an under-counted second line of value: six major access-control or exposure fixes, several only a few lines long (#114015 is 4 lines, C3), done outside his home area.", "evidence_ids": [102477, 108135, 114015, 94116, 108333, 127334]},
+    {"insight": "Output accelerated sharply in the last three weeks (109 PRs in the week of 2026-10-26) while his review volume fell, so the end of the window is his least-reviewed and least-matured work.", "evidence_ids": ["ws1", "ws3", 126463, 127333]},
+    {"insight": "104 of his PRs (16%) are co-authored with an AI assistant and only 1 of those was reverted or follow-up fixed, so AI collaboration is not where his quality problems come from.", "evidence_ids": ["metrics.ai_coauthored_prs", "metrics.ai_reverted_or_fixed"]}
+  ],
+  "red_flags": [
+    {"flag": "2 PRs reverted and 13 explicitly follow-up-fixed by peers; quality rate 0.93 is the lowest of the 20 candidates (median 0.97). Affected PRs listed in the dossier: #83138, #84994, #95749, #96642, #99100, #101769, #103431, #103466, #103666, #108240, #111314, #115140, #117799, #119102, #119225.", "evidence_ids": ["metrics.reverted", "metrics.followup_fixed", "quality_rate", 83138, 84994, 95749, 96642, 99100, 101769, 103431, 103466, 103666, 108240, 111314, 115140, 117799, 119102, 119225]},
+    {"flag": "368 of 652 PRs have no recorded review, including 5 of 20 major PRs (#94059, #95172, #100534, #108163, #127333); this may be a data-coverage gap, but if real it means high-blast-radius changes merged without a second reader.", "evidence_ids": [94059, 95172, 100534, 108163, 127333, "role.network.first_pass_rate"]},
+    {"flag": "Deep-read quote check failed for the Q dimension on #124669, so its quality score is not grounded in a verified quote; #83929's N quote also failed verification on the on-demand read.", "evidence_ids": [124669, 83929]},
+    {"flag": "Repo-wide default changes (#126463 ORM fetch mode across 275 models, #126421 auth middleware) merged in the final days of the window with Q1 deep-read scores and a single approver each; their real-world correctness is not yet observable.", "evidence_ids": [126463, 126421]}
+  ],
+  "counter_evidence": "Peer behaviour cuts against his self-described PRs in two places. First, many PR summaries claim large byte or millisecond savings, but those numbers come from his own descriptions; the behavioural check is that 5 of his 15 peer-corrected PRs are in that same boot-performance campaign, and his flagged boot experiment #119225 was rolled back (by himself, #119292). Second, his 98% first-pass approval looks like high quality, yet only 284 of 652 PRs have a recorded review, so the approval rate covers less than half his output and the quality-rate signal (last of 20) is the more reliable one. There is also a data inconsistency: metrics.reverted is 2 while role.network.reverts_received is 0; I treated the revert count as real because #119292 is an explicit revert of his own #119225. On the positive side, no major PR appears among the affected PRs, and the critical fixes (#83929, #108163, #102477) score the highest deep-read P values in his pack.",
+  "coverage": {
+    "sampled_prs": 19,
+    "ondemand_deepreads": 6,
+    "missing_data": ["review_requested_by", "issue_reactions"],
+    "diff_truncated_share": 0.32
+  }
+}

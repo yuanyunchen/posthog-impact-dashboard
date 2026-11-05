@@ -1,0 +1,538 @@
+{
+ "top5": [
+  {
+   "login": "Gilbert09",
+   "cid": "C10",
+   "rank": 1,
+   "borda": 20,
+   "consensus_rank": 1,
+   "primary_rank": 1,
+   "second_rank": 1,
+   "R": 80.6,
+   "R_rank": 1,
+   "stability": "stable",
+   "stability_freq": 1.0,
+   "gates": {
+    "a": true,
+    "b": true,
+    "c": true
+   },
+   "justification": null,
+   "why": "He owns the area that produced 15.9% of all major+ episodes, and his 130 major episodes are 6.5 times the next candidate's even after the templated catalogue PRs are set aside. His top work fixed fleet-wide stalls and duplicate rows on the shared loader path (#110610 and #113196, both P=16.0) and stopped billing for jobs that never ran (#114623). He then built a credentials service and integrations SDK that 21 products now use (#124844, #125029), and 106 other authors build on his files. The self-inflicted credential outage (#86546 then #122385) and thin review on half his PRs are real, but they do not close a gap this large.",
+   "evidence": [
+    110610,
+    113196,
+    114623
+   ]
+  },
+  {
+   "login": "webjunkie",
+   "cid": "C07",
+   "rank": 2,
+   "borda": 18,
+   "consensus_rank": 2,
+   "primary_rank": 2,
+   "second_rank": 2,
+   "R": 76.2,
+   "R_rank": 2,
+   "stability": "stable",
+   "stability_freq": 1.0,
+   "gates": {
+    "a": true,
+    "b": true,
+    "c": true
+   },
+   "justification": null,
+   "why": "He repeatedly finds a failure class that hurts many teams and replaces it with one shared mechanism. The ingress transport ended silent webhook data loss across at least eight providers (#100292, #101508), the granian pin restored web analytics dashboard latency (#104208), and the ownership reader unified four products (#103852, P=16.0). He is the most trusted approver in the pool (trust_rank P100), 106 authors build on his files, and his 24 change requests were 95% adopted. His own record is clean after merge (0 reverts, 9 follow-up fixes over 516 mature PRs).",
+   "evidence": [
+    100292,
+    101508,
+    102218
+   ]
+  },
+  {
+   "login": "pauldambra",
+   "cid": "C03",
+   "rank": 3,
+   "borda": 16,
+   "consensus_rank": 3,
+   "primary_rank": 3,
+   "second_rank": 3,
+   "R": 63.99,
+   "R_rank": 4,
+   "stability": "stable",
+   "stability_freq": 1.0,
+   "gates": {
+    "a": true,
+    "b": true,
+    "c": true
+   },
+   "justification": null,
+   "why": "He changed defaults that every user and team inherits. The boot document shrank from 544 KB to 10 KB (#94059), lazy relation reads across 275 team-scoped models were batched (#126463), and CI ratchets keep the gains from regressing (#126768). He also fixed a production OAuth incident (#83929, P=13.0), integration-token data loss (#108163, P=16.0) and six access-control gaps (#102477, P=16.0), and 100 authors build on his files. He makes the top 5 despite the pool's lowest quality_rate (0.934), because none of his 20 major PRs was reverted or follow-up-fixed.",
+   "evidence": [
+    94059,
+    122919,
+    127333
+   ]
+  },
+  {
+   "login": "Piccirello",
+   "cid": "C17",
+   "rank": 4,
+   "borda": 14,
+   "consensus_rank": 4,
+   "primary_rank": 4,
+   "second_rank": 4,
+   "R": 47.82,
+   "R_rank": 11,
+   "stability": "verdict_only",
+   "stability_freq": 0.0,
+   "gates": {
+    "a": true,
+    "b": true,
+    "c": true
+   },
+   "justification": "Reference-weight sensitivity is low (R rank 11) because his team-leverage and trust metrics are weak, but every judgment layer placed him in the top 5: both independent decisions ranked him #4, and he beat the strongest alternative (rafaeelaudibert) in both presentation orders of a direct comparison. His case rests on delivery importance: 37 major episodes (P95 among the 20), concentrated in company-wide security hardening (CSP enforcement, CA emergency fix). The reference score under-weights that concentration by design, so the verdict overrides it; the self-repair share of his CSP work is disclosed as a red flag.",
+   "why": "He is the pool's dedicated security owner, with 37 major episodes (2nd of 20) whose content is privilege escalation, cross-tenant access, SSRF and credential exposure. He unified project-access precedence in the core permission layer (#114423, P=16.0), enforced CSP across signed-in, shared and embedded pages (#106238, #116719), and pinned connect-time hosts for every warehouse source (#95376, #101362). He also removed the compromised eMudhra roots from every runtime PostHog ships within three days (#121580, #122294). The CSP repair tail and his weak review network are the cost, but no other candidate reduced company-wide risk as directly.",
+   "evidence": [
+    114423,
+    114412,
+    105467
+   ]
+  },
+  {
+   "login": "haacked",
+   "cid": "C11",
+   "rank": 5,
+   "borda": 11,
+   "consensus_rank": 6,
+   "primary_rank": 5,
+   "second_rank": 6,
+   "R": 56.47,
+   "R_rank": 5,
+   "stability": "borderline",
+   "stability_freq": 0.598,
+   "gates": {
+    "a": true,
+    "b": true,
+    "c": true
+   },
+   "justification": null,
+   "why": "He completed a cross-cutting storage migration inside the window. Feature-flag calls moved out of the events table through cutover (#110254), a transparent HogQL rewrite (#124397, P=16.0) and removal of its rollout flag (#126076), with every deletion path updated for compliance (#117395, P=16.0). He also fixed silent CDP event drops and /flags 503s on core pipelines (#121819, #108772). He is the go-to reviewer for feature flags and experiments (12 requesters, 2nd of 20). The four-day correction chain after the HogQL rewrite shows the work was not right first time, but every fix was his own and none needed a revert.",
+   "evidence": [
+    110254,
+    124397,
+    110149
+   ]
+  }
+ ],
+ "next5": [
+  {
+   "login": "rafaeelaudibert",
+   "cid": "C15",
+   "rank": 6,
+   "borda": 11,
+   "consensus_rank": 5,
+   "primary_rank": 6,
+   "second_rank": 5,
+   "R": 67.69,
+   "R_rank": 3,
+   "stability": "stable",
+   "stability_freq": 1.0,
+   "gates": {
+    "a": true,
+    "b": true,
+    "c": true
+   },
+   "justification": null,
+   "why": "Growth-team engineer who has become PostHog's de facto owner of OAuth/MCP authentication security while also shipping agent-facing platform work (MCP, WebMCP, the new hog CLI) and growth UX at very high, heavily AI-assisted volume.",
+   "evidence": [
+    113013,
+    113014,
+    113012
+   ]
+  },
+  {
+   "login": "mayteio",
+   "cid": "C20",
+   "rank": 7,
+   "borda": 5,
+   "consensus_rank": 8,
+   "primary_rank": 10,
+   "second_rank": 7,
+   "R": 53.8,
+   "R_rank": 7,
+   "stability": "verdict_only",
+   "stability_freq": 0.0,
+   "gates": {
+    "a": true,
+    "b": true,
+    "c": false
+   },
+   "justification": null,
+   "why": "The highest-volume builder on the Workflows/Messaging product, who in October drove the migration of PostHog's own transactional email (password resets, invites, alerts) off Customer.io onto Workflows, while also hardening the CDP job queue and realtime cohorts that every workflow depends on.",
+   "evidence": [
+    117663,
+    121871,
+    122019
+   ]
+  },
+  {
+   "login": "tatoalo",
+   "cid": "C01",
+   "rank": 8,
+   "borda": 5,
+   "consensus_rank": 7,
+   "primary_rank": 9,
+   "second_rank": 8,
+   "R": 55.34,
+   "R_rank": 6,
+   "stability": "verdict_only",
+   "stability_freq": 0.324,
+   "gates": {
+    "a": true,
+    "b": true,
+    "c": false
+   },
+   "justification": null,
+   "why": "Leading builder of PostHog's cloud agent Tasks product (PostHog Code / Desktop cloud runs): he owns the sandbox lifecycle, run reliability and the agent side of the LLM gateway, and is the top author in Product: Tasks among 58 authors.",
+   "evidence": [
+    86676,
+    109870,
+    116932
+   ]
+  },
+  {
+   "login": "dmarchuk",
+   "cid": "C12",
+   "rank": 9,
+   "borda": 5,
+   "consensus_rank": 9,
+   "primary_rank": 8,
+   "second_rank": 9,
+   "R": 46.26,
+   "R_rank": 14,
+   "stability": "verdict_only",
+   "stability_freq": 0.0,
+   "gates": {
+    "a": true,
+    "b": true,
+    "c": false
+   },
+   "justification": null,
+   "why": "Lead author of PostHog Workflows (rank 1 of 41 authors in that area) who also acted as the de facto security owner of CDP destination secrets this quarter, shipping a coordinated leak-remediation campaign alongside the Broadcasts and Customer.io-migration features.",
+   "evidence": [
+    80919,
+    109384,
+    109381
+   ]
+  },
+  {
+   "login": "TueHaulund",
+   "cid": "C16",
+   "rank": 10,
+   "borda": 4,
+   "consensus_rank": 10,
+   "primary_rank": 7,
+   "second_rank": 11,
+   "R": 47.91,
+   "R_rank": 10,
+   "stability": "verdict_only",
+   "stability_freq": 0.0,
+   "gates": {
+    "a": true,
+    "b": true,
+    "c": false
+   },
+   "justification": null,
+   "why": "Lead builder of Replay Vision (AI analysis of session recordings): he authors 76% of the area's PRs and also owns its billing, privacy and rasterizer plumbing, with an unusually clean quality record.",
+   "evidence": [
+    79085,
+    86606,
+    113767
+   ]
+  }
+ ],
+ "method_notes": {
+  "context_summary": {
+   "primary": "Product: Warehouse sources looks like the centre of gravity (`area[Product: Warehouse sources].prs_share` 18.7%, `major_share` 15.9%, `changelog` 46), but much of that is templated catalogue breadth (C10 alone has about 874 add-source/add-table PRs and the changelog themes read '161 new source tables'); the durable leverage in that area is the shared sync pipeline (loader stall #80285, claim-query incident #110610, CDC correctness #82568) and the new credentials service migrated across 21 products (#124844, #125029). The clearest cross-team priority of the quarter was security and data-trust hardening: Django platform has the highest major-to-volume ratio of any area (`area[Django platform (API/models/auth)].major_share` 10.6% on 4.4% of PRs), and at least eight of the twenty candidates carry security majors (C17 with 37 major episodes, C15 with 13 of 26 majors on OAuth/MCP, C12 with 11 of 26 on CDP secrets, plus C10, C03, C02, C14, C01). Ingestion pipeline & CDP (`area[Ingestion pipeline & CDP (nodejs)].major_share` 8.4%, `changelog` 0) is where invisible but critical reliability work lives (C11 #121819, C20 #97591, C12 #89177, C06 #128013), so changelog counts understate it, while the changelog itself is inflated by repeated 'N new MCP tools' entries that count once per area. The script reports no single point of approval, but effective concentration exists: C05 approves 778 of C10's PRs with no blocking review after 2026-08-04 and about 1,200 of C10's 2,939 PRs have no recorded review, so the company's highest-volume stream has the thinnest independent gate; closed review loops (the developer-experience trio C07/C09/C14 in `community[1]` with purity 0.176, the Workflows trio around C12/C20, the C13/C04 pair) mean first_pass_rate is weak evidence and post-merge quality_rate and follow-up fixes are the more reliable quality signals. The structurally critical positions are foundation code (downstream_authors 106 for C10 and C07, 100 for C03, 95 for C15) and cross-community bridging (`bridge[C15].betweenness` 0.0792, `bridge[C14].betweenness` 0.0776, `bridge[C10].betweenness` 0.0746), though C14's bridging comes from CI approvals rather than substantive review.",
+   "second": "PostHog's highest-leverage work in this window was correctness, security and reliability on shared paths rather than new features: Django platform (API/models/auth) holds 10.6% of major episodes on 4.4% of PRs (area[Django platform (API/models/auth)].major_share) and Ingestion pipeline & CDP (nodejs) holds 8.4% on 3.4% with zero changelog entries (area[Ingestion pipeline & CDP (nodejs)].changelog=0), and that is where C17, C15, C03, C07, C11, C20 and C12 landed their critical work; at least seven candidates (C17, C15, C12, C16, C19, C03, C11) shipped several security-class majors each, which reads as an org-wide security push rather than one team's job. The warehouse-sources numbers mislead (area[Product: Warehouse sources].prs_share=18.7%, changelog=46): 2,939 of the team's 2,969 PRs are C10's, roughly 32% of those are templated add-table or add-source PRs, and nearly all of the area's 172 major episodes belong to C10 (130) and C19 (32), so the area's real weight is the shared sync pipeline's incident and data-correctness fixes (#110610, #113196, #82568) and C10's credentials service, not catalogue breadth. Per-area changelog counts are also inflated because one 'N new MCP tools' entry is counted in every area it touches (changelog[Product: Experiments]=3 consists only of such entries). The agent/AI push (Tasks, Desktop, Signals with changelog[Product: Signals]=21, MCP) is the most visible product priority, but much of it is still flag-gated (Autoresearch, the Today rail port, the hog CLI), so part of C01, C18, C08 and C15's agent work is prospective. Structurally there is no single point of approval (single_points=[]), but review runs in closed loops (the devex trio C07/C09/C14, warehouse C10 with C05 at 778 of 854 reviewed PRs and C19 mostly bot-approved, workflows C20/C12, product-analytics C04/C13), so first_pass_rate is weak evidence; the structural signals that matter are foundation code (downstream_authors: C07 106, C10 106, C03 100, C15 95), real bridging (C15 at betweenness 0.0792 with the security team routing auth reviews to him, unlike C14's 0.0776 built on 94% approvals) and the HogQL owner mariusandra in community 3, who is the effective gate on core-engine changes by C11 and C02. Community 1 (community[1].purity=0.176) is the real platform hub: it mixes developer-experience, security, blitzscale and growth (C07, C03, C17, C15, C09, C14), the people who change defaults every other team inherits."
+  },
+  "consensus_voters": [
+   "primary",
+   "second (blind)",
+   "R rank"
+  ],
+  "primary_vs_second": {
+   "top5_overlap": 4,
+   "kendall_tau": 0.853
+  },
+  "consensus": [
+   "Gilbert09",
+   "webjunkie",
+   "pauldambra",
+   "Piccirello",
+   "rafaeelaudibert",
+   "haacked",
+   "tatoalo",
+   "mayteio",
+   "dmarchuk",
+   "TueHaulund",
+   "danielcarletti",
+   "sampennington",
+   "sakce",
+   "puemos",
+   "rnegron",
+   "thmsobrmlr",
+   "andrewm4894",
+   "gantoine",
+   "fuziontech",
+   "frankh"
+  ],
+  "disputed_pairs": [
+   [
+    "rafaeelaudibert",
+    "haacked"
+   ],
+   [
+    "tatoalo",
+    "mayteio"
+   ]
+  ],
+  "after_pairwise": [
+   "Gilbert09",
+   "webjunkie",
+   "pauldambra",
+   "Piccirello",
+   "haacked",
+   "rafaeelaudibert",
+   "mayteio",
+   "tatoalo",
+   "dmarchuk",
+   "TueHaulund",
+   "danielcarletti",
+   "sampennington",
+   "sakce",
+   "puemos",
+   "rnegron",
+   "thmsobrmlr",
+   "andrewm4894",
+   "gantoine",
+   "fuziontech",
+   "frankh"
+  ],
+  "after_devil": [
+   "Gilbert09",
+   "webjunkie",
+   "pauldambra",
+   "Piccirello",
+   "haacked",
+   "rafaeelaudibert",
+   "mayteio",
+   "tatoalo",
+   "dmarchuk",
+   "TueHaulund",
+   "danielcarletti",
+   "sampennington",
+   "sakce",
+   "puemos",
+   "rnegron",
+   "thmsobrmlr",
+   "andrewm4894",
+   "gantoine",
+   "fuziontech",
+   "frankh"
+  ],
+  "gate_log": [
+   {
+    "login": "Gilbert09",
+    "gates": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "action": "pass",
+    "justification": null
+   },
+   {
+    "login": "webjunkie",
+    "gates": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "action": "pass",
+    "justification": null
+   },
+   {
+    "login": "pauldambra",
+    "gates": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "action": "pass",
+    "justification": null
+   },
+   {
+    "login": "Piccirello",
+    "gates": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "action": "pass",
+    "justification": "Reference-weight sensitivity is low (R rank 11) because his team-leverage and trust metrics are weak, but every judgment layer placed him in the top 5: both independent decisions ranked him #4, and he beat the strongest alternative (rafaeelaudibert) in both presentation orders of a direct comparison. His case rests on delivery importance: 37 major episodes (P95 among the 20), concentrated in company-wide security hardening (CSP enforcement, CA emergency fix). The reference score under-weights that concentration by design, so the verdict overrides it; the self-repair share of his CSP work is disclosed as a red flag."
+   },
+   {
+    "login": "haacked",
+    "gates": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "action": "pass",
+    "justification": null
+   }
+  ],
+  "devil": [
+   {
+    "cid": "Gilbert09",
+    "objection": "Weak objection: his lead is partly volume that peers barely verified. About 32% of his 2939 PRs are templated add-source/add-table/GA flips (~874), and about 1200 PRs carry no recorded review. The reviewer behind 778 of them (C05) gave zero blocking reviews after 2026-08-04 and up to 71 approvals a day, so the 0.99 first-pass and 0.98 quality_rate are weakly tested. He also caused a fleet-wide credential outage himself (#86546 -> #122385, about 2h), received 31 peer follow-up fixes (9 major), and as a reviewer he is light: 269 approvals vs 1 changes-requested, reviewer importance_flow 4.8, requested_by 7 (P63). None of this offsets 130 major episodes (next best 37) and 129 major fixes such as #110610 and #113196, so the objection does not overturn him.",
+    "replacement_cid": "rafaeelaudibert",
+    "replacement_reason": "C15 is the highest-R candidate outside the Top 5 (67.7, R rank 3) and is a real cross-team multiplier where C10 is not: 50 authors approved across 25 teams, trust_rank P84, bridge_rank 1, and 13 company-wide auth/security majors deep-read at C=3 (#113014, #127775, #105547 P=13).",
+    "rebuttal": "Kept. The objection itself rates as weak: 130 major+ episodes against 37 for the next candidate. The templated share (~32%) and the self-caused credential outage are real and are shown on his card as caveats, but even discounting templated work he leads delivery by a wide margin. Both independent decisions ranked him #1.",
+    "decision": "keep"
+   },
+   {
+    "cid": "webjunkie",
+    "objection": "His trust_rank #1 and 0.997 first-pass rate come from a closed developer-experience loop, not company-wide validation. C09/C14 reviewed 261 of his 341 reviewed PRs, 217 (64%) were seen by nobody else, the C09 relationship is reciprocal (139 vs 149 PRs), and 218 of 559 PRs have no human review, which fits approval by Stamphog, a tool he owns himself (unverified). He received one change request across 414 reviews, much of his own reviewing is agent-run, and his deep-read Q averages 1.5 (Q=1 on #104208, #91646 and #126411, the platform-wide 1000-row cap merged in the last days). The value is internal tooling with no landmark PR and only 4 changelog PRs, quality_rate sits mid-pack (P68), and the delivery estimate is inflated by 559 PRs including generated code and a 41k-line migration squash.",
+    "replacement_cid": "tatoalo",
+    "replacement_reason": "C01 matches C07's trust (trust_rank P95, 2nd) with a perfect first-pass rate over 271 reviewed PRs, and his majors protect a paid, customer-facing product (Tasks area leader among 58 authors: #109870 P=16, #108247 P=13, #116932 P=13, #120934 C=3). He also gives first reviews in 3.47h against C07's 18.15h.",
+    "rebuttal": "Kept. The closed-review-loop concern applies to his own PRs, and the dashboard states it. His impact runs the other way: shared platform work (inbound-webhook transport, CI and merge-queue health) that every team depends on, plus approvals for 48 authors across 21 teams. Both decisions ranked him #2.",
+    "decision": "keep"
+   },
+   {
+    "cid": "pauldambra",
+    "objection": "He has the worst peer-behaviour quality of the 20: quality_rate 0.934 (P0), 2 reverts and 13 follow-up fixes, 5 of them inside his own boot-performance campaign (#115140, #117799, #119102, #119225, #103466). 368 of 652 PRs have no recorded review, including 5 of 20 majors (#94059, #108163, #127333). The P95 delivery figure is volume-driven (652 PRs, including 46 mechanical and 42 trivial per the C16 comparison), while major_episodes is only 20 (P34, below the median of 21) and changelog_prs is 0. On the team side he gave 1 changes-requested in 147 reviews (team_leverage P42), and some of his substantive review comments are automated QA Swarm output. His riskiest repo-wide default changes (#126463 across 275 models, #126421 auth middleware) merged in the final week with Q=1 and a single approver each. His R (64.0) is below the excluded C15 (67.7).",
+    "replacement_cid": "rafaeelaudibert",
+    "replacement_reason": "C15 outranks C03 on R (67.7 vs 64.0) with zero reverts (vs 2), 21 vs 20 major episodes, 4 vs 0 changelog PRs and much wider review reach (25 vs 15 teams, bridge_rank 1), and half his majors are critical-class auth/security fixes rather than performance increments.",
+    "rebuttal": "Kept. Tested directly: C03 beat the proposed replacement C15 in both presentation orders (delivery 1,405 vs 691; defaults inherited by every team). His weaker quality rate (2 reverts, 13 follow-up fixes) stays on his card as a caveat. Both decisions ranked him #3.",
+    "decision": "keep"
+   },
+   {
+    "cid": "Piccirello",
+    "objection": "He is R rank 11 (47.8), so including him means jumping six higher-R candidates (C15, C01, C20, C13, C02, C16) on the strength of one column, major_episodes P95. Every other column is weak: delivery P26 (15th of 20), quality_rate 0.954 (P26) with 5 follow-up fixes, team_leverage P5 (his own report says the L0 metrics were missing), and trust_rank and importance_flow both P16. His 1.0 first-pass rate leans on one security colleague, who reviewed 40 of his 105 reviewed PRs. About 24 of his ~55 CSP PRs repair or relax his own rollout after enforcement broke features users saw (admin dialogs, HogQL editor, replay export). His leaked-key feature #81587 needed a security fix one day later (#81631). Many of the CA-incident 'major' PRs are 5-24 line dependency bumps (#121626, #121580). His own report deliberately grades him above his percentiles.",
+    "replacement_cid": "rafaeelaudibert",
+    "replacement_reason": "C15 covers the same security ground with far stronger peer signals: the security team sends him its auth PRs (12 of C17's PRs), 13 of his 26 majors are C=3 auth/security fixes, and he leads C17 on R (67.7 vs 47.8), trust_rank (P84 vs P16), team_leverage (889 vs 350), cross_team (25 vs 18) and changelog PRs (4 vs 0).",
+    "rebuttal": "Kept. Tested directly: C17 beat C15 in both presentation orders (37 major episodes vs 21; company-wide security changes shipped, including CSP enforcement and the CA emergency fix). The self-repair share of his CSP work is disclosed as a red flag. Both decisions ranked him #4.",
+    "decision": "keep"
+   },
+   {
+    "cid": "haacked",
+    "objection": "His work needs more correction than almost anyone's. first_pass_rate 0.961 and changes_requested_rate 0.047 are both 19th of 20, across 13 change requests with a mean of 2.17 rounds. His flagship HogQL flag-call rewrite #124397 needed four more major fixes from him within four days (#125115, #125267, #125649, #126076), so part of his October major count is self-repair. The session-replay relink bug took 7 PRs from August to October (#77598 through #119939), the root cause was never removed, and #119939 was then fixed by someone else. 26 of his 54 majors sit in one storage migration. Beyond that he has no changelog PRs, cross_team 14 (P29), trust_rank and team_leverage at the median (P47), and a 25.7h median first review. His R lead over the next candidate is only 1.2 points (56.5 vs C01's 55.3).",
+    "replacement_cid": "tatoalo",
+    "replacement_reason": "C01 is almost tied on R (55.3) and beats C11 on first_pass_rate (1.0 vs 0.961), trust_rank (P95 vs P47), team_leverage (902 vs 820), importance_flow (1247 vs 1141), delivery (719 vs 696) and changelog PRs (2 vs 0), and his unsampled majors deep-read at a mean P of 9.87.",
+    "rebuttal": "Kept. Tested directly: C11 beat C01 in both presentation orders (28 vs 21 major episodes, in the core flag_evaluations migration and privacy-deletion paths; 85 vs 66 downstream authors). He had already beaten C15 in both orders. His low first-pass approval rate is disclosed.",
+    "decision": "keep"
+   }
+  ],
+  "sixth_place_note": "C15 nearly made the top 5: his OAuth/MCP security fixes (13 of 26 majors, including the cross-customer MCP prompt leak #105547) are as critical as any in the pool, and he holds the strongest network position (bridge betweenness 0.0792, 95 downstream authors). He falls just short of C11 and C17 on three counts. He has fewer major episodes (21 vs 28 and 37). His quality_rate is weaker (0.945, 18/20), and his security majors had thin independent review (83 PRs approved by one teammate alone; only 3 of 13 security majors reviewed by the security team). And his largest new platform, the hog CLI, was days old at window end with posthog-cli not yet retired.",
+  "evidence_requests": [
+   {
+    "cid": "Gilbert09",
+    "need": "Classify the roughly 1,200 PRs with no recorded review (bot or Stamphog approval vs truly unreviewed), and sample review timing and text from C05's 816 consecutive approvals of his PRs, to decide whether the warehouse-sources stream has a functioning independent gate.",
+    "by": "primary"
+   },
+   {
+    "cid": "pauldambra",
+    "need": "Post-window revert and follow-up-fix signals, and any production query-count metric, for #126463 (ORM fetch mode across 275 models) and #126421 (auth middleware replacement), both merged in the final week with deep-read Q=1.",
+    "by": "primary"
+   },
+   {
+    "cid": "webjunkie",
+    "need": "Whether #126411 (default 1000-row DRF list cap across 219 viewsets) broke external API clients after merge (issues or follow-up PRs), and whether the 218 PRs without a human review were approved by Stamphog or other bots he owns.",
+    "by": "primary"
+   },
+   {
+    "cid": "Piccirello",
+    "need": "Recompute his missing L0 metrics (team_leverage, changelog_prs, ai_share) so his team angle and R score are comparable with the other 19.",
+    "by": "primary"
+   },
+   {
+    "cid": "haacked",
+    "need": "Any further flag_evaluations reader fixes or customer-visible gaps after #126076, and confirmation that deletion sweeps reach flag_evaluations in production for mode-2 organisations.",
+    "by": "primary"
+   },
+   {
+    "cid": "rafaeelaudibert",
+    "need": "Diffs and review threads for the security majors #83980, #96835 and #99353, which were approved only by fercgomes, to confirm someone with security context checked them.",
+    "by": "primary"
+   },
+   {
+    "cid": "danielcarletti",
+    "need": "Human review coverage and any later fixes for majors #98817, #118548 and #90152, which merged on bot approval alone.",
+    "by": "primary"
+   },
+   {
+    "cid": "mayteio",
+    "need": "Identify which PR was reverted (the report says 1 revert but not which) and whether it sits on the transactional-email or credential path.",
+    "by": "primary"
+   },
+   {
+    "cid": "pauldambra",
+    "need": "Post-merge status of #126463 (ORM fetch-mode default across 275 models) and #126421 (auth middleware): any follow-up fixes, reverts or production query-count changes after 2026-11-02. This decides whether he holds rank 3 over C17.",
+    "by": "second"
+   },
+   {
+    "cid": "Piccirello",
+    "need": "Reconcile his L0 metrics: the report says team_leverage, changelog_prs and ai_share are missing, but the matrix shows team_leverage 350.3 and changelog_prs 0. Also list which CSP repair PRs (#99457, #100642, #101381, #104022) fixed user-facing breakage versus staff-only pages.",
+    "by": "second"
+   },
+   {
+    "cid": "Gilbert09",
+    "need": "Review coverage of his roughly 1,200 PRs with no recorded review: bot (Stamphog) approval versus truly unreviewed, split by tier; plus the list of the 9 major PRs that peers follow-up-fixed.",
+    "by": "second"
+   },
+   {
+    "cid": "rafaeelaudibert",
+    "need": "Review records and later fixes for the security majors approved only by fercgomes (#83980, #96835, #99353), and whether the hog CLI (#124303 onward) has any users or a posthog-cli deprecation date.",
+    "by": "second"
+   },
+   {
+    "cid": "webjunkie",
+    "need": "Whether his 218 PRs with no human review were approved by his own Stamphog/Review tools, and whether the platform-wide 1000-row list cap (#126411) broke external API clients after merge.",
+    "by": "second"
+   },
+   {
+    "cid": "haacked",
+    "need": "Review discussion and diffs for the four follow-up fixes after #124397 (#125115, #125267, #125649, #126076): did any missing flag-call data reach customer insights before the fixes?",
+    "by": "second"
+   },
+   {
+    "cid": "dmarchuk",
+    "need": "Deep reads of the three unread security majors #109381, #105619 and #125927, to confirm the secret-leak campaign's tier.",
+    "by": "second"
+   },
+   {
+    "cid": "mayteio",
+    "need": "Which of his PRs was reverted, and whether the transactional-email cutover reached production for any region inside the window.",
+    "by": "second"
+   },
+   {
+    "cid": "danielcarletti",
+    "need": "Whether the 2026-09-02 to 09-04 replica re-read regression chain (#93764, #94379) duplicated or dropped rows in customer warehouses, and how many of his 46 bot-approved major PRs later drew follow-up fixes.",
+    "by": "second"
+   }
+  ],
+  "r_divergence": [
+   {
+    "login": "Piccirello",
+    "final_rank": 4,
+    "R_rank": 11
+   }
+  ],
+  "verdict_only_unjustified": [],
+  "sensitivity": "1000 draws, weights × U(0.5,1.5), seed 7"
+ }
+}

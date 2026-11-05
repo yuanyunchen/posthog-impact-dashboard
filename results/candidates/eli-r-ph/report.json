@@ -1,0 +1,152 @@
+{
+  "cid": "eli-r-ph",
+  "positioning": "Data-correctness engineer for PostHog's persons store and capture ingestion: he owns the deletion, deduplication and Postgres/ClickHouse consistency machinery for person data, and the capture rate limiter, shipping a long series of fixes in core pipelines that every product reads from.",
+  "role": {
+    "primary_role": "platform builder",
+    "team": "Unmapped in team data (role.team = unknown); by collaboration he works in the persons/ingestion infrastructure group with nickbest-ph, z0br0wn, jose-sequeira and pl, who give 129 of his approvals and receive 115 of the 135 PRs he reviewed.",
+    "how_they_create_impact": "He finds correctness gaps in person data (duplicate rows, revived persons hidden by stale tombstones, stray distinct-id mappings, Postgres/ClickHouse divergence) and in capture (rate-limiter under-enforcement, batch-dropping panics), then ships both the fix and the operator tooling to detect and repair affected data. 51 of his 159 PRs were triaged major and 91% of his weighted work is in core areas.",
+    "network_summary": "Tightly embedded reviewer-and-author inside one infrastructure group rather than a cross-team hub. Approval-network centrality (role.network.trust_rank 0.015, 7th of 22) is above median because he exchanges approvals with the group's central members, but few people outside it pull him in: only 3 distinct people requested his review (role.network.requested_by_n), he approved authors from 7 teams (role.network.teams_covered_n, 19th of 22) and 15 distinct authors (role.network.approved_authors_n). His reviews are deep rather than broad (294 reviews on 135 PRs, 164 of them comment reviews). He rarely needs correction: 3 changes-requested reviews across 149 reviewed PRs (role.network.changes_requested_rate 0.02) and 0 reverts received (role.network.reverts_received). 51 later authors changed files he touched (role.network.built_on_by_n), which is below the candidate median of 73."
+  },
+  "core_contributions": [
+    {
+      "workstream_id": "ws1",
+      "title": "Person deletion and Postgres/ClickHouse consistency: dedup, tombstones, divergence repair",
+      "what": "Built persons_dedup to remove duplicate (team_id, uuid) person rows so the missing unique index could be created (#81532), then hardened it for production with a survivor gate and reachability checks (#85945). Reworked person deletion to tombstone by default and bound hard deletes by version so revived persons are not hidden (#111380, #111670, #111396, #111239), and built a divergence scan, classifier and repair command with restore, merge, republish and fold verbs (#111675, #111676, #117440, #117445, #118360).",
+      "why_it_matters": "Persons rows drive attribution for every analytics product; the defects fixed here made returning users vanish from analytics, attributed events to the wrong person, or risked hard-deleting Postgres rows whose ClickHouse data still existed. This is data-correctness and data-loss territory in the core pipeline.",
+      "outcome": "Merged: 40 PRs in ws1 (19 major, 16 substantive) over 81 days, plus the personhog RPCs in ws3 that the repair tools call. Deep reads score the key PRs at P=16.0 (#85945), 9.62 (#81532, #111239, #111670) and 7.82 (#111380). Rollout scope beyond merge is not in the data: most repair pieces are operator commands, and running them against production is not evidenced here.",
+      "his_role": "lead",
+      "evidence_prs": [81532, 85945, 111380, 111670, 111396, 111239, 111675, 117445, 118360],
+      "numbers": {"prs": 40, "major_prs": 19, "lines": 24139, "top_P": 16.0}
+    },
+    {
+      "workstream_id": "ws2",
+      "title": "Capture rate limiter and v1 ingestion robustness",
+      "what": "Rebuilt the capture global rate limiter's Redis behaviour: bounded per-tick work to enforceable keys (#83250), clamped and then spread key expiry (#89726, #106188), made it fail open on Redis read outages (#107014), stopped busy pods losing count updates (#116680) and added two-cluster sharding (#117238). In capture v1 he removed whole-batch drop paths: a timestamp char-boundary panic (#103274), an out-of-range offset panic (#116599), strict option parsing (#108097), duplicate-uuid batch rejection (#122305), and capped lz64 decompression against resource exhaustion (#102546).",
+      "why_it_matters": "The rate limiter enforces customer usage limits (billing-adjacent), and under-counting let over-limit projects bypass limiting; each v1 panic or strict-validation path dropped entire event batches and triggered SDK retry loops. The lz64 cap closes a resource-exhaustion vector on a public endpoint.",
+      "outcome": "Merged: 43 PRs in ws2 (14 major, 17 substantive) spanning 89 days. Deep reads: #116680 P=7.29, #83250 P=7.29 (Q=1, reviewers flagged remaining unbounded paths), #89726 P=5.92. One limiter change was itself a production incident fix (#106188).",
+      "his_role": "lead",
+      "evidence_prs": [83250, 89726, 106188, 107014, 116680, 103274, 116599, 108097, 122305, 102546],
+      "numbers": {"prs": 43, "major_prs": 14, "lines": 17293, "deep_read_n": 4}
+    },
+    {
+      "workstream_id": "ws4",
+      "title": "Scheduled ClickHouse deletion sweep and Postgres cleanup drain",
+      "what": "Added persisted snapshot tables and a Dagster sweep job for ClickHouse person/cohort deletion (#80943), fixed the never-working weekly cohort sweep by collapsing rows to distinct cohorts and bounding memory (#94573), added the Postgres cleanup drain job and its daily per-region schedule (#97995, #104640), sweep metrics for alerting (#100596), and guards so background_delete_model refuses persons-database models (#112934).",
+      "why_it_matters": "GDPR and project deletions only complete when these background jobs actually run; before #94573 the cohort sweep crashed on memory exhaustion, and an unbounded tombstone backlog grows without the drain.",
+      "outcome": "Merged: 19 PRs in ws4 (2 major, 11 substantive) over 38 days; #94573 deep-read at P=9.62. The drain needed ordering and version-bound fixes two weeks after it was scheduled (#111239, #111396), which he also shipped.",
+      "his_role": "lead",
+      "evidence_prs": [80943, 94573, 97995, 104640, 100596, 112934],
+      "numbers": {"prs": 19, "major_prs": 2, "lines": 16008, "top_P": 9.62}
+    }
+  ],
+  "angles": {
+    "delivery": {
+      "grade": 8,
+      "rationale": "High concentration of critical work: 51 major PRs (Piccirello 42, pauldambra 20), almost all in data correctness, data loss, usage-limit enforcement, billing metering and security. The episode-based delivery estimate ranks him 18th of 22 because 159 PRs collapse into 76 episodes, which discounts long serial fix chains; the count of episodes with a major PR (32, 3rd of 22) better reflects the weight. Not 9 because rollout scope of the repair tooling is not evidenced and he has no landmark-tier PR or changelog entry.",
+      "claims": [
+        {"statement": "He has the third-highest count of episodes containing a major PR among the 22 candidates.", "numbers": {"major_episodes": 32, "position": 3, "candidates": 22}, "evidence_ids": ["major_episodes", "tier_counts.major"]},
+        {"statement": "His top deep-read PRs fix data-loss and hang risks in core paths: persons_dedup safety and the elements_chain linear-time parser both scored P=16.0.", "numbers": {"P_85945": 16.0, "P_119842": 16.0}, "evidence_ids": [85945, 119842]},
+        {"statement": "He also shipped billing and security fixes: metering every $ai_* event on both billing surfaces and capping lz64 decompression.", "numbers": {"P_103256": 5.92, "major_prs": 2}, "evidence_ids": [103256, 102546]}
+      ]
+    },
+    "system": {
+      "grade": 7,
+      "rationale": "He built real platform pieces: new personhog RPCs (delete-tombstoned, version floors, restore, write distinct ids), a reusable divergence scan/classify/repair framework, Dagster sweep and drain jobs, and a stateright model change that halved the slowest Rust CI job. Held at 7 because 51 later authors touched his files (18th of 22) and much of the tooling has a single main consumer, his own repair commands.",
+      "claims": [
+        {"statement": "He added at least six personhog RPCs that the consistency repair calls, giving it race-aware write paths.", "numbers": {"ws3_prs": 22, "P_118342": 5.53}, "evidence_ids": [97994, 111465, 117411, 118342, 118343, 126569, "ws3"]},
+        {"statement": "Downstream reuse is limited: fewer later authors changed his files than the candidate median.", "numbers": {"downstream_authors": 51, "median": 73, "percentile": 16.7}, "evidence_ids": ["downstream_authors"]},
+        {"statement": "He cut CI time on the personhog stateright model, halving the slowest Rust CI job.", "numbers": {"prs": 7}, "evidence_ids": [79896, 79898, 79900]}
+      ]
+    },
+    "quality": {
+      "grade": 6,
+      "rationale": "Peer signals are clean: 0 reverts, 3 follow-up fixes by others, 3 changes-requested reviews in 149 reviewed PRs, and his designs add explicit safety (survivor gates, tombstone-by-default, rejecting hard deletes, fail-open limiting). But a large share of his output repairs his own earlier work: 16 self-repaired PRs (12%), the dedup tool needed production-safety fixes two days after it merged, the cleanup drain needed ordering and version-bound fixes after being scheduled daily, and the limiter went through a same-day incident fix. 93% of his PRs are AI co-authored and 4 major PRs had only AI approval.",
+      "claims": [
+        {"statement": "No PR of his was reverted and only 3 were follow-up-fixed by others.", "numbers": {"reverted": 0, "followup_fixed": 3, "quality_rate": 0.97}, "evidence_ids": ["metrics.reverted", "metrics.followup_fixed", 83250]},
+        {"statement": "He repaired his own work in 16 PRs; examples are the persons_dedup hardening right after its first merge and the drain ordering fixes after its daily schedule.", "numbers": {"self_repaired_prs": 16, "self_repair_rate": 0.12}, "evidence_ids": ["metrics.self_repaired_prs", 81532, 85945, 104640, 111239, 111396]},
+        {"statement": "Most of his PRs are AI co-authored, and a few major ones merged with only AI approval.", "numbers": {"ai_share": 0.93, "ai_only_approved_major_prs": 4, "ai_reverted_or_fixed": 2}, "evidence_ids": ["metrics.ai_share", "metrics.ai_only_approved_major_prs"]}
+      ]
+    },
+    "team": {
+      "grade": 5,
+      "rationale": "His reviews are substantive and catch real defects (severity-ranked findings on personhog coordination PRs whose lines were changed afterwards, and a broken join found in the flag_evaluations HogQL table), and he reviews his group heavily. But the reach is narrow: team_leverage 19th of 22, requested by only 3 people, approvals across 7 teams. That is a solid in-group reviewer, not a team multiplier.",
+      "claims": [
+        {"statement": "His review comments identify concrete correctness issues that the authors then changed.", "numbers": {"comment_reviews": 164, "reviews_given": 294}, "evidence_ids": [76169, 76100, 98900]},
+        {"statement": "His review reach is narrow: few requesters, few teams, low team leverage.", "numbers": {"team_leverage": 395.98, "requested_by": 3, "cross_team": 7, "authors_served": 17}, "evidence_ids": ["team_leverage", "requested_by", "cross_team"]},
+        {"statement": "He gives deep multi-round reviews to his core collaborators, up to 12 reviews on a single PR.", "numbers": {"reviews_on_74228": 12, "reviews_on_79225": 12, "reviews_on_83680": 12}, "evidence_ids": [74228, 79225, 83680]}
+      ]
+    }
+  },
+  "overall": {"grade": 7, "confidence": "medium"},
+  "key_numbers": [
+    {"label": "Episodes with a major PR (3rd of 22)", "value": 32, "metric_key": "major_episodes"},
+    {"label": "Major-tier PRs", "value": 51, "metric_key": "tier_counts.major"},
+    {"label": "Self-repaired PRs", "value": 16, "metric_key": "metrics.self_repaired_prs"}
+  ],
+  "calibration": {
+    "ranks": {"delivery": 19.0, "quality_rate": 38.1, "team_leverage": 14.3, "trust_rank": 71.4},
+    "note": "The matrix puts him in the bottom quarter on delivery (18th of 22) and team leverage (19th), mid-pack on quality rate (14th) and upper third on approval-network centrality (7th). My delivery grade of 8 deliberately departs from the delivery percentile: the estimate is episode-based (max P + 0.25 x rest), and his 159 PRs collapse into 76 episodes of long serial fix chains, so it discounts him; only 19 of his PRs were sampled, and the stratified estimate (968.8) is nearly double the episode figure (502.96). The episode count with a major PR (32, 3rd of 22) and 51 major PRs, versus 42 for Piccirello and 20 for pauldambra, support a high delivery grade. Quality 6 and team 5 agree with the matrix: no reverts but frequent self-repair, and a narrow review audience. Overall 7: a core pillar of the persons/ingestion group, below the company-level band."
+  },
+  "custom_analyses": [
+    {
+      "question": "Does the episode-based delivery estimate understate him relative to finalists?",
+      "why": "He was cut at the coarse stage, yet his major-PR count looks as high as finalists'. The delivery metric compresses PRs into episodes, which would hit someone who ships long chains of related fixes.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query eli-r-ph rank delivery",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query eli-r-ph rank major_episodes",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query eli-r-ph compare Piccirello",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query eli-r-ph compare pauldambra",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query eli-r-ph timeline"
+      ],
+      "finding": "Yes. He has 51 major PRs (Piccirello 42, pauldambra 20) and 32 major episodes (3rd of 22), but delivery ranks 18th because 159 PRs fold into 76 episodes. The week of 2026-10-05 alone has 25 PRs and 14 major PRs, nearly all in one persons-deletion episode chain (#111380, #111670, #111396, #111239, #112098). His total pack points (770.0) exceed Piccirello's (662.2), whose delivery percentile is higher.",
+      "evidence_ids": ["delivery", "major_episodes", "tier_counts.major", 111380, 111670, 111396, 111239, 112098],
+      "effect": "delivery 7 -> 8 because the weight of critical work is better captured by major-episode count than by the episode-compressed delivery sum."
+    },
+    {
+      "question": "How much of his output repairs his own earlier work, and does it point to quality problems in his critical systems?",
+      "why": "His fix chains cluster on systems he built himself (persons_dedup, cleanup drain, rate limiter), and the audit wording rules require self-repairs to be counted as a quality caveat.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query eli-r-ph deepread 81532",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query eli-r-ph deepread 111239",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query eli-r-ph deepread 83250",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query eli-r-ph prs --ws ws2 --since 2026-08-17 --until 2026-10-16",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query eli-r-ph prs --tier major --since 2026-10-05 --until 2026-10-09"
+      ],
+      "finding": "16 PRs (12%) are self-repairs. Three chains stand out: persons_dedup merged 2026-08-18 (#81532, P=9.62) and needed production-safety fixes two days later (#85945) plus three more follow-ups (#86849, #87402, #87475); the cleanup drain was scheduled daily on 2026-09-22 (#104640) and on 2026-10-07 he reordered it so it no longer hard-deletes Postgres rows whose ClickHouse data still exists (#111239, P=9.62) and bounded it by version (#111396); the rate limiter got an absolute-expiry change and a same-day production-incident fix for synchronized expiry (#104891, #106188). #83250 deep-read Q=1, with reviewers flagging remaining unbounded paths, and it is one of the 3 PRs follow-up-fixed by others. On the positive side he caught and fixed these himself, with no reverts.",
+      "evidence_ids": ["metrics.self_repaired_prs", 81532, 85945, 104640, 111239, 111396, 104891, 106188, 83250],
+      "effect": "quality 7 -> 6 because a meaningful share of his critical-path work needed his own follow-up repair, though peers never had to revert it."
+    },
+    {
+      "question": "Where do his reviews carry weight, and is his review influence broad or concentrated?",
+      "why": "Team leverage ranks him 19th, but his review comments in the dossier are unusually detailed; the question is whether the low metric reflects low value or narrow reach.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query eli-r-ph reviews-given --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query eli-r-ph reviews-received --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query eli-r-ph rank team_leverage",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query eli-r-ph rank requested_by",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query eli-r-ph rank cross_team"
+      ],
+      "finding": "Concentrated. 115 of the 135 PRs he reviewed belong to four colleagues (z0br0wn 37, nickbest-ph 36, pl 28, jose-sequeira 14), and those same four approve most of his work. Reviews are deep: 164 of 294 are comment reviews, several PRs got 10-12 reviews from him (#74228, #79225, #83680, #100633), and his comments on #76100 and #76169 rank findings by severity and led to line changes. Outside the group the reach is small: 3 requesters (20th of 22) and 7 teams (19th of 22).",
+      "evidence_ids": ["team_leverage", "requested_by", "cross_team", 74228, 79225, 83680, 100633, 76100, 76169],
+      "effect": "team stays at 5: review quality is high, but influence does not extend beyond one group."
+    }
+  ],
+  "insights": [
+    {"insight": "He works as an end-to-end owner of person-data integrity: for each defect class he ships the ingestion fix, the personhog RPC, the scan that finds affected rows and the repair verb, so the workstreams ws1, ws3, ws4 and ws5 are one system seen from four directories.", "evidence_ids": ["ws1", "ws3", "ws4", "ws5", 111457, 118342, 117440, 117445]},
+    {"insight": "His most important contributions are the least visible: there are no changelog entries, and the impact shows up as analytics that stop losing or misattributing users rather than as features.", "evidence_ids": ["metrics.changelog_prs", 112098, 111676]},
+    {"insight": "The burst of 14 major PRs in the week of 2026-10-05 is a coordinated rework of person deletion (tombstone by default, version-bounded hard delete, drain ordering), which reads as a response to a discovered class of hidden-person bugs rather than routine shipping.", "evidence_ids": [112069, 111670, 111396, 111239, 111380]}
+  ],
+  "red_flags": [
+    {"flag": "Three PRs were follow-up-fixed by others (peer.followup_fixed = 3); #83250 also deep-read Q=1 with reviewers flagging remaining unbounded write paths.", "evidence_ids": [78609, 83250, 88785, "peer.followup_fixed"]},
+    {"flag": "The L quote for #85945 was not found in the source, so its L score is unverified.", "evidence_ids": [85945]},
+    {"flag": "16 self-repaired PRs (12%), including fixes to the cleanup drain after it was scheduled daily and a same-day incident fix on the rate limiter.", "evidence_ids": ["metrics.self_repaired_prs", 104640, 111239, 104891, 106188]},
+    {"flag": "93% of his PRs are AI co-authored; 10 PRs (4 major) were approved only by an AI reviewer.", "evidence_ids": ["metrics.ai_share", "metrics.ai_only_approved_prs", "metrics.ai_only_approved_major_prs"]}
+  ],
+  "counter_evidence": "His PR summaries describe production-grade safety, but peer behaviour shows several of those systems needed his own corrections after merge (dedup safety fixes two days after first merge, drain reordering after daily scheduling, a same-day limiter incident fix); where the two conflict, behaviour is weighted and quality is held at 6. The low delivery percentile conflicts with the high major-PR and major-episode counts; I side with the counts because the episode metric compresses his serial fix chains. Repair tooling is merged, but evidence of it being run in production at scale is absent. Team assignment is unknown, so cross-team reach may be understated if his group spans several teams in reality.",
+  "coverage": {
+    "sampled_prs": 19,
+    "on_demand_deep_reads": 6,
+    "missing_data": ["review_requested_by", "issue_reactions", "team"],
+    "diff_truncated_share": 0.26
+  }
+}

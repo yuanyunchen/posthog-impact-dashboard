@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PostHog Engineering Impact</title>
+<meta name="description" content="Who were the five most impactful PostHog engineers over the last 90 days, and why.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&family=Syne:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="banner" class="banner" hidden></div>
+
+<header class="head" id="sec-a">
+  <div class="eyebrow">PostHog/posthog · last 90 days</div>
+  <div class="head-row">
+    <h1>The five most impactful <em>engineers</em></h1>
+    <div class="readout" id="head-meta"></div>
+  </div>
+  <p class="definition" id="definition"></p>
+  <nav class="explore" id="explore" aria-label="Explore further"></nav>
+</header>
+
+<main>
+  <section id="sec-b" aria-label="Top 5 engineers">
+    <div class="cards" id="cards"><p class="muted">Loading…</p></div>
+    <p class="agree" id="agree"></p>
+    <p class="hint">Click a card for the full case. Hover or tap any underlined number for how it is calculated.</p>
+  </section>
+
+  <section id="sec-d" aria-labelledby="next-title">
+    <h2 class="group-title" id="next-title">Ranks 6–10 and why they missed the top 5</h2>
+    <div class="next-grid" id="next-grid"></div>
+  </section>
+
+  <section id="sec-e" aria-labelledby="how-title">
+    <h2 class="group-title" id="how-title">How the ranking was built</h2>
+    <div class="how-grid" id="how-grid"></div>
+  </section>
+</main>
+
+<footer class="foot" id="foot"></footer>
+
+<div class="modal-wrap" id="modal" hidden>
+  <div class="modal-scrim" data-close></div>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-head">
+      <h2 id="modal-title"></h2>
+      <button class="close" data-close aria-label="Close">×</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<aside class="drawer" id="drawer" aria-hidden="true" aria-label="Candidate detail">
+  <div class="drawer-head">
+    <div id="drawer-title"></div>
+    <button class="close" id="drawer-close" aria-label="Close detail">×</button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+</aside>
+<div class="scrim" id="scrim" hidden></div>
+<div class="tip" id="tip" role="tooltip" hidden></div>
+
+<script src="app.js"></script>
+</body>
+</html>

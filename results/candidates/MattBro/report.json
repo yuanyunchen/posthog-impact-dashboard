@@ -1,0 +1,156 @@
+{
+  "cid": "MattBro",
+  "positioning": "Growth-team engineer who owns the security and billing correctness of PostHog's partner integrations (Vercel Marketplace, Stripe app, partner provisioning, OAuth/CIMD) while also running the growth signup-enrichment and ICP-scoring pipeline, shipping a small number of high-criticality fixes rather than high volume.",
+  "role": {
+    "primary_role": "product builder",
+    "team": "growth (inferred; role.team is unknown, role.team_inferred = growth)",
+    "how_they_create_impact": "He finds and closes account-takeover, privilege-escalation and credential-spoofing paths in the flows partners use to create, link and bill PostHog accounts (Vercel SSO and connect, Stripe marketplace OAuth, partner provisioning, OAuth introspection and token cleanup), then adds the billing guardrails that keep partner-paid organizations from being charged twice. In parallel he maintains the growth enrichment pipeline (Harmonic, Clearbit, AI labeler, Hog-based ICP formulas) that scores new signups for sales.",
+    "network_summary": "A focused pair-reviewer inside one growth sub-team, not a broad approver. He approved work for 11 authors across 4 teams (role.network.approved_authors_n=11, role.network.teams_covered_n=4; cross_team is last of 22), and 44 of the 64 PRs he reviewed belong to one teammate, rafaeelaudibert (role.top_reviewed). His own PRs are reviewed by the same pair: rafaeelaudibert on 47 and fercgomes on 22 of 79 reviewed PRs (role.top_reviewers). Even so, 13 people requested his review (role.network.requested_by_n=13, 81st percentile), so he is a recognized go-to reviewer for partner-auth and enrichment changes. He rarely needs correction (role.network.first_pass_rate=0.99, role.network.changes_requested_rate=0.01, no reverts received). His approval-network centrality is mid-pack (role.network.trust_rank=0.01, 12th of 22) and he is not a bridge between communities (role.network.bridge_rank unknown, community 1). 54 other authors later changed files he touched (role.network.built_on_by_n=54, 17th of 22). Almost all his importance flow comes from authoring, not reviewing (role.network.importance_flow.author=441.35 vs role.network.importance_flow.reviewer=7.2)."
+  },
+  "core_contributions": [
+    {
+      "workstream_id": "ws1",
+      "title": "Closing account-takeover and spoofing holes in partner auth and OAuth",
+      "what": "A run of security fixes across the OAuth server and partner sign-in flows: client-credentials introspection scoped to the verified caller (#82258), CIMD verification tokens bound to their metadata URL (#74913) and partner-only promotion to confidential clients (#80748), the Stripe marketplace OAuth app split from the provisioning orchestrator so Stripe-account members can no longer mint deep-link sessions as the installing admin (#84698, #87261), symmetric and private keys rejected in client JWKS (#110193), a proxy-generated nonce for the OAuth-proxy callback (#97529, ws6), Vercel SSO requiring a PostHog login and then the mapped user's verified email before linking (#97534, #107067, ws4), browser-bound Vercel connect sessions and callback state (#106042, #116411), partners required to sign provisioning requests with private_key_jwt (#112182), and Stripe headless linking restricted to Stripe-verified emails (#119795).",
+      "why_it_matters": "These are the flows through which partners create and log into PostHog accounts. Most of the holes let an outsider sign in as another user, read another client's tokens, or act for a partner with only a public client_id, which is the highest criticality class in the rubric (security).",
+      "outcome": "All listed PRs merged in the window with no reverts. Deep reads give P=13.0 (V3 C3) to #82258, #97529, #97534, #84698 and #107067, and P=7.8 (C3) to #110193 and #116411; #112182 scores lower (P=5.92, Q=1) and ships with a time-boxed grace period, so enforcement for existing partners was staged rather than immediate.",
+      "his_role": "lead",
+      "evidence_prs": [82258, 74913, 80748, 84698, 87261, 110193, 97529, 97534, 107067, 106042, 116411, 112182, 119795],
+      "numbers": {"ws1_prs": 32, "ws1_major_prs": 15, "security_language_major_prs": 11, "deepreads_at_P13": 6}
+    },
+    {
+      "workstream_id": "ws3",
+      "title": "Billing guardrails for partner-paid organizations",
+      "what": "Built the partner-billing model end to end: an OrganizationProvisioning record of which partner created each organization (#107869, #107870, #107081), a staff-controlled pays_for_customers flag with a billing lock that returns 403 on self-serve activate, plan switch, portal, credits and trial for partner-paid orgs and disables upgrade CTAs (#109479), routing externally billed orgs to their provider's invoices instead of Stripe (#107953), a lock on self-serve plan changes for Vercel-billed orgs (#115507), a payer_partner_id token claim for the billing service (#111103), a paying-partner consent flow for existing users (#112249) and alerting for partner billing exceptions (#112140).",
+      "why_it_matters": "Without these locks a Vercel- or partner-billed organization could acquire its own Stripe customer or be asked to pay an invoice twice, which is a billing-correctness problem with direct customer and revenue impact.",
+      "outcome": "Merged between 2026-10-01 and 2026-10-19; deep read #109479 P=7.82 (V2 C3 L2 Q2). Rollout scope beyond partner-paid orgs is not visible in the data. #107870 carries a dossier red flag (quote not found for C) and a lower score (P=4.49, C1, Q1).",
+      "his_role": "lead",
+      "evidence_prs": [109479, 107953, 115507, 107870, 107869, 107081, 111103, 112249, 112140],
+      "numbers": {"billing_major_prs": 6, "partner_related_prs": 32, "partner_related_major_prs": 17}
+    },
+    {
+      "workstream_id": "ws2",
+      "title": "Growth signup enrichment and ICP scoring pipeline",
+      "what": "Maintained and extended the pipeline that enriches new signups and scores ICP fit: first-attempt scoring without a third-party bridge write (#79064), Harmonic ownership, web-traffic and status polling (#79061, #79062, #93858), a shared egress budget for Harmonic calls (#92785), EU region dispatch (#79254, #109196), an AI enrichment labeler with web-search tools and pacing (#93859, #110040), Hog-formula ICP scoring editable by growth staff (#103792), a context-object refactor with characterization tests (#98497), and a fix for a sweep that never ran in production (#88758).",
+      "why_it_matters": "It feeds sales and RevOps routing for every new signup; the Hog formula editor (#103792) moves scoring rules out of hardcoded Python so non-engineers on the growth team can change them.",
+      "outcome": "29 PRs in ws2 (21 substantive, 2 major) plus billing-side Harmonic pacing (#96708, #101033). Deep reads are moderate: #103792 P=4.49 (L2, Q1), #100322 P=3.56, #79072 P=3.65. This is the bulk of his volume but internal-facing, so it adds less to delivery than the security work.",
+      "his_role": "lead",
+      "evidence_prs": [79064, 103792, 92785, 98497, 93859, 110040, 88758, 96708],
+      "numbers": {"prs": 29, "major_prs": 2, "substantive_prs": 21, "lines": 21443}
+    }
+  ],
+  "angles": {
+    "delivery": {
+      "grade": 7,
+      "rationale": "His delivery estimate is 21st of 22 (347.07), but that estimate sums episode scores and rewards volume: he shipped 85 PRs against a peer median well above 200. On content he matches the median finalist: 21 major episodes (11th of 22) and 26 major PRs, the same count as rafaeelaudibert who shipped 243 PRs. The major PRs are unusually critical (account takeover, OAuth token exposure, partner credential spoofing, double billing), with 6 deep reads at the P=13.0 ceiling. I hold it at 7 rather than 8 because the surface is the partner-integration channel rather than a company-wide product, none of his PRs appear in the changelog (changelog_prs=0), and the larger half of his volume is internal growth tooling scored V1–V2.",
+      "claims": [
+        {"statement": "Major content is at the candidate median even though the volume-weighted delivery estimate is near the bottom.", "numbers": {"major_episodes": 21, "major_episodes_position": 11, "delivery": 347.07, "delivery_position": 21, "candidates": 22}, "evidence_ids": ["major_episodes", "delivery"]},
+        {"statement": "Six of his 24 deep reads (18 sampled plus 6 on-demand) hit P=13.0 with V3 C3, all on security fixes in partner auth or OAuth.", "numbers": {"deepreads_P13": 6, "deepreads_total": 24, "major_stratum_mean_P": 9.99}, "evidence_ids": [82258, 85861, 97529, 97534, 84698, 107067]},
+        {"statement": "Partner-paid billing locks prevent double billing and stray Stripe customers for Vercel- and partner-billed organizations.", "numbers": {"billing_major_prs": 6, "deepread_P_109479": 7.82}, "evidence_ids": [109479, 107953, 115507, "ws3"]}
+      ]
+    },
+    "system": {
+      "grade": 6,
+      "rationale": "He builds reusable pieces, but mostly inside his own domain: the OrganizationProvisioning model and partner billing lock, a shared Harmonic egress budget, Fix204Middleware hardening, the enrichment context object and the Hog ICP formula editor. Deep-read leverage is low on average (estimate.L=1.33) and later authors of his files are below the median (built_on_by_n=54, 17th of 22), so this is a stable, effective contribution rather than a platform others build on.",
+      "claims": [
+        {"statement": "Leverage scores across deep reads stay low; only a handful reach L2.", "numbers": {"estimate.L": 1.33, "L2_deepreads": 8, "deepreads_total": 24}, "evidence_ids": [107981, 109479, 103792, 85747, "estimate.L"]},
+        {"statement": "Reusable infrastructure he introduced includes a shared egress budget for Harmonic, a partner provisioning record and Hog-based scoring formulas.", "numbers": {"lines_92785": 1498, "lines_103792": 5662, "lines_107870": 382}, "evidence_ids": [92785, 103792, 107870, 98497]},
+        {"statement": "Fewer later authors changed his files than for most candidates.", "numbers": {"downstream_authors": 54, "position": 17, "candidates": 22}, "evidence_ids": ["downstream_authors"]}
+      ]
+    },
+    "quality": {
+      "grade": 7,
+      "rationale": "Peer behaviour is clean: no reverts, 2 follow-up fixes by others across 85 PRs, first-pass approval 0.99 and one CHANGES_REQUESTED in 97 reviews. quality_rate (0.97) sits at the median, and 16 of 18 sampled deep reads score Q=2. The caveats keep it at 7: several flows needed repeated fixes by him in quick succession (Vercel popup, 204 handling, Vercel connect, Vercel SSO), which count as self-repairs, three of six on-demand deep reads of his larger PRs score only Q=1, and the near-perfect first-pass rate comes from a two-person reviewer pool.",
+      "claims": [
+        {"statement": "No reverts and only two follow-up fixes by other people.", "numbers": {"reverts_received": 0, "fixes_received": 2, "prs": 85, "quality_rate": 0.97}, "evidence_ids": ["quality_rate", "role.network.fixes_received"]},
+        {"statement": "His PRs almost always pass review on the first round.", "numbers": {"first_pass_rate": 0.99, "first_pass_n": 79, "changes_requested_received": 1}, "evidence_ids": ["first_pass_rate", "changes_requested_rate"]},
+        {"statement": "Self-repair chains: the same Vercel and 204 flows were fixed again by him days or weeks later.", "numbers": {"vercel_sso_prs": 3, "vercel_connect_prs": 2, "vercel_popup_prs": 2, "fix_204_prs": 2}, "evidence_ids": [97534, 107067, 112775, 106042, 116411, 96904, 108534, 107967, 107981]},
+        {"statement": "On-demand deep reads of large partner and growth PRs found only adequate quality.", "numbers": {"ondemand_Q1": 3, "ondemand_total": 6}, "evidence_ids": [112182, 84698, 103792]}
+      ]
+    },
+    "team": {
+      "grade": 5,
+      "rationale": "His review comments are specific and catch real problems (for example nine live cohort and flag consumers that a scale change would silently break, and a rate-limit refund that made resource-ID enumeration free), and 13 people request his review. But the reach is narrow: team_leverage is last of 22, he approved only 11 authors across 4 teams, and 44 of his 64 reviewed PRs come from one teammate.",
+      "claims": [
+        {"statement": "Reviews catch concrete production risks in partner auth and growth scoring.", "numbers": {"changes_requested_given": 3, "comments_given": 18, "review_prs": 64}, "evidence_ids": [83944, 83935, 115789, 83936, 116268]},
+        {"statement": "Review reach is the narrowest among candidates.", "numbers": {"team_leverage": 164.16, "team_leverage_position": 22, "approved_authors_n": 11, "teams_covered_n": 4, "top_author_share": 0.69}, "evidence_ids": ["team_leverage", "cross_team", "role.top_reviewed"]},
+        {"statement": "He is still a requested reviewer beyond his pair.", "numbers": {"requested_by": 13, "requested_by_percentile": 81}, "evidence_ids": ["requested_by"]}
+      ]
+    }
+  },
+  "overall": {"grade": 7, "confidence": "medium"},
+  "key_numbers": [
+    {"label": "Episodes with a major PR (median of 22)", "value": 21, "metric_key": "major_episodes"},
+    {"label": "First-pass approval rate (79 reviewed PRs)", "value": 0.99, "metric_key": "first_pass_rate"},
+    {"label": "Share of PRs co-authored with an AI assistant (highest of 22)", "value": 0.98, "metric_key": "ai_share"}
+  ],
+  "calibration": {
+    "ranks": {"delivery": 4.8, "quality_rate": 47.6, "team_leverage": 0.0, "trust_rank": 47.6},
+    "note": "Among the 22 candidates in the matrix he is 21st on delivery, 12th on quality_rate and trust_rank, and last on team_leverage. My grades (delivery 7, system 6, quality 7, team 5, overall 7) sit above the delivery rank on purpose and agree with the other three. The delivery estimate sums episode scores, so it tracks PR volume: 85 PRs versus 226 to 243 for peers like sakce and rafaeelaudibert. On content he is at the median: 21 major episodes (11th of 22), 26 major PRs (same as rafaeelaudibert), and on-demand deep reads of unsampled major PRs scored P=7.82 to 13.0 on four of five. Quality 7 matches a median quality_rate with no reverts. Team 5 matches the last-place team_leverage and mid-pack trust_rank; requested_by (81st percentile) is the only team signal above the median."
+  },
+  "custom_analyses": [
+    {
+      "question": "Is his near-bottom delivery estimate a fair reading of his work, or a volume artifact?",
+      "why": "The independent audit flagged that his major workload is not below the finalists, yet the delivery estimate puts him 21st of 22. I needed to know whether the gap comes from fewer important changes or just fewer PRs.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query MattBro rank delivery",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query MattBro rank major_episodes",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query MattBro compare rafaeelaudibert",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query MattBro compare sakce",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query MattBro prs --tier major",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query MattBro deepread 112182",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query MattBro deepread 116411",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query MattBro deepread 109479",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query MattBro deepread 84698",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query MattBro deepread 107067"
+      ],
+      "finding": "It is a volume artifact. Against rafaeelaudibert he has the same 26 major PRs and the same 21 major episodes, but 85 PRs instead of 243 and pack points of 441.4 instead of 935.6, so his delivery estimate is half (347.07 vs 690.64). Against sakce (delivery at the median) he has 21 vs 24 major episodes on 85 vs 226 PRs. To check that the major tier is not inflated, I deep-read five unsampled major PRs: #84698 and #107067 scored P=13.0 (V3 C3), #116411 and #109479 P=7.82 (C3), and #112182 P=5.92 (C2, Q1). That is in line with the sampled major stratum mean of 9.99. Only #107870 among the major PRs scored low (P=4.49, C1).",
+      "evidence_ids": [84698, 107067, 116411, 109479, 112182, 107870, "delivery", "major_episodes"],
+      "effect": "delivery raised from the 4–5 the estimate implies to 7, because his major content is median-level and highly critical; kept below 8 because the scope is partner integrations and growth tooling, with no changelog entries."
+    },
+    {
+      "question": "Is the partner-integration security work a deliberate program or a string of repairs to flows he built himself?",
+      "why": "Vercel, Stripe and partner provisioning account for 32 of his 85 PRs and 17 of his 26 major PRs. Repeated fixes in the same flow could mean careful hardening, or could mean his own earlier changes kept needing correction (self-repairs count as a quality caveat).",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query MattBro prs --ws ws1",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query MattBro prs --since 2026-09-20 --until 2026-10-20 --area \"Django platform (API/models/auth)\"",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query MattBro pr 106042",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query MattBro pr 116411",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query MattBro timeline"
+      ],
+      "finding": "Mostly a program, with a visible self-repair tail. Keyword grouping of his PR titles and summaries (approximate): 13 mention Vercel (8 major), 9 Stripe (8 major), 16 provisioning or partners (6 major); 11 of his 26 major PRs describe a security hole. The work moves in order: OAuth and CIMD hardening (08-07 to 08-25), Stripe marketplace OAuth split and rotation (08-18 to 08-21), Vercel SSO and OAuth-proxy fixes (09-09), then partner provisioning and billing locks (09-28 to 10-19). Inside it, four flows were fixed again by him shortly after: Vercel SSO (#97534, then #107067 four weeks later, then #112775 relaxing it for verified emails), Vercel connect (#106042 session binding, then #116411 callback state 16 days later), the Vercel popup (#96904, then #108534) and 204 handling (#107967 and #107981 on the same day). Whether the original holes were his own code is not visible; the dossier shows #97534 reversing a shortcut from #45067, which predates the window. Weekly output stays steady at 4–12 PRs except one quiet week (09-21, 1 PR), so this is not a release crunch.",
+      "evidence_ids": [97534, 107067, 112775, 106042, 116411, 96904, 108534, 107967, 107981, "ws1", "ws4"],
+      "effect": "quality held at 7 instead of 8: no reverts and only 2 fixes by others, but 5 PRs are his own follow-ups in 4 flows he had just changed (9 PRs across the chains)."
+    },
+    {
+      "question": "How much weight do his reviews carry, and is the 0.99 first-pass rate independent evidence of quality?",
+      "why": "team_leverage is last of 22 while requested_by is at the 81st percentile; I wanted to know whether he is a narrow but sharp reviewer, and whether his own clean review record depends on a closed reviewer pair.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query MattBro reviews-given",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query MattBro reviews-received",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query MattBro rank team_leverage",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query MattBro rank trust_rank"
+      ],
+      "finding": "Narrow and sharp. He gave 81 reviews on 64 PRs for 12 authors, 44 of them for rafaeelaudibert and 49 for the growth team; 60 approvals, 18 comments, 3 change requests. The sampled comments are substantive: on #83944 he listed nine live cohorts and flags tuned to the old icp_score scale; on #83935 he showed that refunding not_found made resource-ID enumeration free of partner quota; on #115789 he showed a bridge condition never matches in production. Reviews flow both ways within the same pair: 47 of his 79 reviewed PRs were reviewed by rafaeelaudibert and 22 by fercgomes, all three in growth. So first_pass_rate 0.99 mostly reflects approval inside a tight pair rather than broad scrutiny.",
+      "evidence_ids": [83944, 83935, 115789, 83936, "team_leverage", "requested_by", "first_pass_rate"],
+      "effect": "team set to 5 (sharp reviews but one-team reach); quality evidence from first-pass rate discounted, which supports quality 7 rather than 8."
+    }
+  ],
+  "insights": [
+    {"insight": "He is a low-volume, high-criticality engineer: 26 major PRs out of 85 (31%), most of them account-takeover or billing-correctness fixes in partner integrations, which the volume-based delivery estimate undercounts.", "evidence_ids": ["major_episodes", "delivery", 84698, 107067, 97534]},
+    {"insight": "Almost all his PRs are co-authored with an AI assistant (ai_share 0.98, highest of 22), and they still pass review first time at 0.99 with no reverts, so heavy AI use has not shown up as quality loss in peer behaviour; the larger AI-assisted PRs do score only Q=1 in deep reads (#112182, #103792).", "evidence_ids": ["ai_share", "first_pass_rate", 112182, 103792]},
+    {"insight": "He leads the Product: Growth area by share among 18 authors (role.top_area_leader), but his most valuable work lies outside it in partner auth and billing.", "evidence_ids": ["role.top_area_leader", "ws2", "ws1"]}
+  ],
+  "red_flags": [
+    {"flag": "Dossier red flag: #107870 quote not found for C (the criticality score of this deep read is not backed by a verified quote; it scored C=1, P=4.49).", "evidence_ids": [107870]},
+    {"flag": "Self-repairs: 5 PRs are his own follow-up fixes in 4 flows he had just changed (Vercel SSO, Vercel connect, Vercel popup, 204 handling).", "evidence_ids": [107067, 116411, 108534, 107981]},
+    {"flag": "Review reach is the narrowest of the 22 candidates (team_leverage last, cross_team last) and his review loop is a closed growth pair.", "evidence_ids": ["team_leverage", "cross_team"]}
+  ],
+  "counter_evidence": "His PR summaries frame most changes as closing a security hole, and peer behaviour mostly backs that (no reverts, 2 fixes by others), but the 0.99 first-pass rate is weak independent evidence because 47 of his 79 reviewed PRs were approved by one teammate who is also his main review target. Several flows needed repeat fixes from him within days or weeks (#97534 then #107067, #106042 then #116411), and #112182, the partner request-signing change, shipped with a grace period and scored only Q=1, so enforcement for existing partners was staged. In the other direction, the volume-weighted delivery estimate (21st of 22) understates him: five unsampled major PRs deep-read at P=5.92 to 13.0, consistent with the sampled major stratum. Team and network data cannot identify which two PRs others fixed, and his team is inferred, not mapped.",
+  "coverage": {
+    "sampled_prs": 18,
+    "ondemand_deepreads": 6,
+    "missing_data": ["role.team (inferred growth)", "changes_rounds_mean (n=1)", "changes_adopted_rate (n=3)", "bridge_rank", "changelog entries (none)", "identity of the 2 follow-up fixes received", "issue_reactions"],
+    "diff_truncated_share": 0.28
+  }
+}

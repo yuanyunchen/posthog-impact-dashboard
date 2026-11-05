@@ -1,0 +1,238 @@
+{
+  "cid": "rafaeelaudibert",
+  "positioning": "Growth-team engineer who has become PostHog's de facto owner of OAuth/MCP authentication security while also shipping agent-facing platform work (MCP, WebMCP, the new hog CLI) and growth UX at very high, heavily AI-assisted volume.",
+  "role": {
+    "primary_role": "platform builder",
+    "team": "growth",
+    "how_they_create_impact": "He closes security holes in PostHog's identity surface (OAuth revocation, ID-JAG token exchange, CIMD, MCP prompts, secret API tokens) and builds the plumbing that lets AI agents use PostHog safely: scope step-up challenges, WebMCP, the MCP tool catalog and the hog CLI. Around that he ships growth-facing navigation and onboarding changes and reviews broadly for other teams.",
+    "network_summary": "A widely used approver rather than a gatekeeper: he approved work for 50 authors across 25 teams (role.network.approved_authors_n=50, role.network.teams_covered_n=25, cross_team percentile 84.2) and 10 people explicitly request his review (role.network.requested_by_n=10, percentile 78.9). He is the go-to auth reviewer for the security team's Piccirello (12 PRs) and for MattBro (47 PRs). His approval graph position is strong (role.network.trust_rank=0.02, 4/20) and he is the top bridge in his community (role.network.bridge_rank=1). He rarely needs correction (role.network.changes_requested_rate=0.03, role.network.first_pass_rate=0.98), but his own approvals lean on one growth teammate, fercgomes (97 of 202 reviewed PRs). 95 other authors later built on files he changed (role.network.built_on_by_n=95). Almost all of his importance flow comes from authoring, not reviewing (role.network.importance_flow.author=935.67 vs role.network.importance_flow.reviewer=16.2)."
+  },
+  "core_contributions": [
+    {
+      "workstream_id": "ws1",
+      "title": "OAuth, ID-JAG and API-token security hardening",
+      "what": "A sustained series of fixes across PostHog's OAuth server and token handling: client authentication and binding on the ID-JAG jwt-bearer grant (#113013), identity linking by IdP subject instead of email (#113014), jti replay protection and lifetime caps (#113012), gating CIMD partner promotion on the client's own opt-in (#83980), blocking the CGNAT range in the shared SSRF validator (#86093), stopping cross-client token revocation (#105396), race-safe connected-app revocation (#84974) and hiding the project secret API token from callers lacking its scopes (#127775).",
+      "why_it_matters": "Each of these is an account-takeover, privilege-escalation, auth-bypass or data-exposure path on a surface every customer and every third-party MCP/OAuth client touches. Security is in the highest criticality class of the rubric.",
+      "outcome": "13 of his 26 major PRs are auth/security fixes. Deep reads score them P=7.8 to 16.0 with C=3 on most (#113013, #86093, #113014, #127775, #84974). No reverts in the workstream; one (#84974) needed a follow-up fix.",
+      "his_role": "lead",
+      "evidence_prs": [113013, 113014, 113012, 83980, 86093, 105396, 84974, 127775, 99353, 101269, 104809],
+      "numbers": {"prs": 40, "major_prs": 9, "points_sum": 173.48, "security_major_prs_all_workstreams": 13}
+    },
+    {
+      "workstream_id": "ws6",
+      "title": "Making the PostHog MCP server safe and usable for AI agents",
+      "what": "Removed per-account data from advertised MCP prompts that hosts cache across customers (#105547), built the OAuth step-up flow so MCP clients get a proper insufficient_scope challenge and scope checks before a tool runs (#127698, #127702, #127703, #127704, #128333), shipped WebMCP so browser agents can drive PostHog from a logged-in tab (#109255), bundled the MCP tool catalog as a library (#125197) and added a wizard tool catalog with per-source detection signals (#115756).",
+      "why_it_matters": "#105547 closed a cross-customer data leak (P=13.0, the highest-scored deep read in his sample). The step-up and catalog work turns MCP from an ad hoc integration into a scoped, reusable platform that other surfaces (hog CLI, WebMCP, wizard) consume.",
+      "outcome": "9 MCP-server PRs plus 7 wizard PRs; deep reads #105547 P=13.0, #115756 P=12.1 (L=3), #109255 P=9.19. One experiment (#118844, MCP no-data guard) needed a follow-up fix and he later removed it himself (#127452).",
+      "his_role": "lead",
+      "evidence_prs": [105547, 127702, 127703, 127698, 127704, 128333, 109255, 125197, 115756, 118844, 127452],
+      "numbers": {"prs": 9, "major_prs": 2, "points_sum": 50.46, "wizard_prs": 7}
+    },
+    {
+      "workstream_id": "ws5",
+      "title": "Porting posthog-cli into the new hog CLI",
+      "what": "Scaffolded the @posthog/hog package and, within about four days, ported auth, query, error-tracking symbol uploads (ProGuard, JS sourcemaps, Hermes, dSYM/ELF/Mach-O), schema, endpoints, API tools, telemetry and HOG_ env configuration with byte parity to posthog-cli, plus a ZIP64 fix for large symbol bundles.",
+      "why_it_matters": "It consolidates CLI tooling that error-tracking customers rely on for symbolication into one agent-aware tool owned by growth, and wires it to the MCP tool catalog.",
+      "outcome": "19 PRs and 29,728 lines between 2026-10-27 and 2026-10-30. posthog-cli is not yet retired: a remaining-work checklist (#125164) and a draft migration guide (#125564) are the latest state, so user impact is still prospective.",
+      "his_role": "lead",
+      "evidence_prs": [124303, 124568, 125182, 125525, 124575, 125199, 125164, 125564],
+      "numbers": {"prs": 19, "major_prs": 2, "lines": 29728, "span_days": 2}
+    }
+  ],
+  "angles": {
+    "delivery": {
+      "grade": 8,
+      "rationale": "His tier-weighted delivery estimate sits mid-pack (690.64, 9/20), but the work is unusually critical: half his major PRs close security holes on a company-wide auth surface, and on-demand deep reads of unsampled majors scored well above the major-stratum mean. Breadth into growth UX, onboarding and MCP adds user value. Not 9 because no single piece is a landmark launch and the largest new project (hog CLI) has not yet replaced posthog-cli.",
+      "claims": [
+        {
+          "statement": "13 of 26 major PRs fix auth/security defects (bypass, takeover, privilege escalation, SSRF, cross-customer leak, token exposure).",
+          "numbers": {"tier_counts.major": 26, "security_major_prs": 13},
+          "evidence_ids": [113013, 113014, 83980, 86093, 105396, 105547, 127775, "tier_counts.major"]
+        },
+        {
+          "statement": "Unsampled majors re-scored on demand at P=7.82 (#113014, #127775), 9.19 (#109255) and 16.0 (#84974, #125182), versus a sampled major mean of 8.74, so the stratified estimate is not inflated.",
+          "numbers": {"estimate.strata.major+landmark.mean_P": 8.74, "ondemand_P_min": 7.82, "ondemand_P_max": 16.0},
+          "evidence_ids": [113014, 127775, 109255, 84974, 125182, "estimate.strata.major+landmark.mean_P"]
+        },
+        {
+          "statement": "Four PRs reached the public changelog (OAuth flow, MCP connection lifetime, weekly digests, brand refresh).",
+          "numbers": {"metrics.changelog_prs": 4},
+          "evidence_ids": [101343, 105394, 115763, 104078, "metrics.changelog_prs"]
+        }
+      ]
+    },
+    "system": {
+      "grade": 7,
+      "rationale": "He builds reusable platform pieces rather than one-off features: the OAuth step-up/scope framework, the MCP tool catalog library consumed by the hog CLI, WebMCP, the wizard tool catalog with an enforcement test, and the campaign system that replaced ad hoc product suggestions. 95 other authors later built on files he touched. Not 8 because much of the newest platform (hog CLI) is days old with no evidence yet of others extending it.",
+      "claims": [
+        {
+          "statement": "95 distinct authors later changed files he touched by at least 20 lines, 4th of 20.",
+          "numbers": {"peer.downstream_authors": 95, "downstream_authors_percentile": 84.2},
+          "evidence_ids": ["peer.downstream_authors", "role.network.built_on_by_n"]
+        },
+        {
+          "statement": "The wizard tool catalog makes every released warehouse source declare detection signals, enforced by a test, so new sources become detectable on deploy (L=3).",
+          "numbers": {"P": 12.1, "L": 3},
+          "evidence_ids": [115756, 116268, "ws7"]
+        },
+        {
+          "statement": "Shared scope-check helpers (scopes_caller_lacks, InsufficientScope) and the MCP catalog library are reused by multiple surfaces: API serializers, MCP server, hog CLI.",
+          "numbers": {"step_up_prs": 5, "catalog_prs": 1},
+          "evidence_ids": [127775, 128333, 127702, 125197, 125199]
+        }
+      ]
+    },
+    "quality": {
+      "grade": 6,
+      "rationale": "Zero reverts and a 0.98 first-pass rate, but 7 PRs needed explicit follow-up fixes, putting his quality rate at 0.94 (18/20). In absolute terms that is about 3% of 243 PRs, and the affected set includes two majors. Review assurance is thin for the risk profile: nearly half his reviewed PRs were approved by one teammate and only 3 of 13 security majors had a security-team reviewer.",
+      "claims": [
+        {
+          "statement": "Seven PRs were followed by explicit fixes; none were reverted.",
+          "numbers": {"metrics.followup_fixed": 7, "metrics.reverted": 0, "quality_rate": 0.94},
+          "evidence_ids": [84974, 90654, 97134, 101294, 104078, 109564, 118844, "metrics.followup_fixed"]
+        },
+        {
+          "statement": "Colleagues rarely ask for changes: 5 of 200 reviewed PRs drew CHANGES_REQUESTED, mostly from MattBro on growth onboarding PRs.",
+          "numbers": {"role.network.changes_requested_rate.value": 0.03, "role.network.first_pass_rate.value": 0.98},
+          "evidence_ids": [115789, 118247, 118246, 122817, 123749, "role.network.changes_requested_rate.value"]
+        },
+        {
+          "statement": "97 of 202 reviewed PRs were approved by fercgomes, 83 of them with no other reviewer; 41 PRs have no review record.",
+          "numbers": {"fercgomes_reviewed_prs": 97, "fercgomes_sole_reviewer_prs": 83, "no_review_record_prs": 41},
+          "evidence_ids": ["role.top_reviewers", 83980, 96835, 99353, 125182]
+        }
+      ]
+    },
+    "team": {
+      "grade": 7,
+      "rationale": "A broad, trusted reviewer: 184 PRs reviewed for 52 authors across 25 teams, explicit review requests from 10 people and a top-4 trust rank. His few change requests land (8 of 9 adopted) and his inline comments catch real issues such as a full-table lock in an OAuth token cleanup. Not 8 because most of his reviewing is approval with little substantive reviewer credit (importance flow from reviewing is 16.2 of 951.87) and team_leverage is only mid-pack.",
+      "claims": [
+        {
+          "statement": "Reviewed 184 PRs for 52 authors across 25 teams; trust_rank 4/20 and cross_team 4/20.",
+          "numbers": {"role.reviews_given_prs": 184, "role.reviewed_authors_n": 52, "role.network.teams_covered_n.value": 25, "trust_rank_percentile": 84.2},
+          "evidence_ids": ["role.reviews_given_prs", "role.network.teams_covered_n.value", "trust_rank"]
+        },
+        {
+          "statement": "His change requests are usually adopted, and his comments target concrete risks (table locking and batching on #83929, Stripe provisioning spec on #110812).",
+          "numbers": {"role.network.events_given.changes_requested": 9, "role.network.changes_adopted_rate.value": 0.89},
+          "evidence_ids": [83929, 110812, 112622, "role.network.changes_adopted_rate.value"]
+        },
+        {
+          "statement": "He is the recurring auth reviewer for the security team's Piccirello (12 PRs) and MattBro (47 PRs).",
+          "numbers": {"piccirello_prs_reviewed": 12, "mattbro_prs_reviewed": 47},
+          "evidence_ids": ["role.top_reviewed"]
+        }
+      ]
+    }
+  },
+  "overall": {"grade": 7, "confidence": "medium"},
+  "key_numbers": [
+    {"label": "Delivery estimate", "value": 690.64, "metric_key": "delivery"},
+    {"label": "Major PRs (half are security fixes)", "value": 26, "metric_key": "tier_counts.major"},
+    {"label": "Authors who built on his files", "value": 95, "metric_key": "downstream_authors"}
+  ],
+  "calibration": {
+    "ranks": {"delivery": 57.9, "quality_rate": 10.5, "team_leverage": 55.6, "trust_rank": 84.2},
+    "note": "He sits mid-pack on delivery (9/20) and team leverage (9/19), near the bottom on quality rate (18/20) and near the top on trust rank (4/20), downstream authors and cross-team reach (both 4/20). The delivery grade of 8 is above his percentile because the tier-weighted estimate does not separate security criticality, and on-demand deep reads of unsampled security majors scored P=7.8 to 16.0. The quality grade of 6 is above his 10.5 percentile because the column is compressed (median 0.97, his 0.94) and he has zero reverts; it stays at 6 because of the 7 follow-up fixes and concentrated review. Team 7 matches his top-quartile trust and reach but mid-pack leverage. Overall 7 (core team pillar) with medium confidence because 53% of diffs were truncated."
+  },
+  "custom_analyses": [
+    {
+      "question": "Does his low quality-rate rank (18/20) reflect real defects or a compressed metric?",
+      "why": "Quality rate is the one calibration column where he sits in the bottom quartile, and he is credited with 243 PRs, so a few defects could be read either way.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rafaeelaudibert rank quality_rate",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rafaeelaudibert rank first_pass_rate",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rafaeelaudibert pr 84974",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rafaeelaudibert pr 97134",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rafaeelaudibert pr 118844",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rafaeelaudibert deepread 84974",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rafaeelaudibert compare fercgomes"
+      ],
+      "finding": "The 7 follow-up-fixed PRs are 0.94 vs a 0.97 median: a gap of three percentage points that the rank stretches into 18/20. Two are majors (#84974 OAuth revocation, #97134 CI schema restore), the rest are mid-sized features (#90654 replay empty state, #104078 brand migration, #109564, #101294, #118844). #84974 still deep-reads at P=16.0 with Q=2, so the fix followed a high-value change rather than a broken one. #118844 was an experiment he later removed himself (#127452). Zero reverts. His closest collaborator fercgomes has 4 follow-up fixes on 47 PRs (quality_q 0.90 vs his 0.96), so per PR he is cleaner than his own reviewer.",
+      "evidence_ids": [84974, 97134, 90654, 104078, 109564, 101294, 118844, 127452, "metrics.followup_fixed", "quality_rate"],
+      "effect": "quality 5 → 6: defects are real but light and not concentrated in his security work; the bottom-quartile rank overstates the gap."
+    },
+    {
+      "question": "Who actually checks his work, especially the security-critical PRs?",
+      "why": "He ships about 20 PRs a week, 85% AI co-authored, many on auth. Peer review is the main independent quality signal, so its concentration matters.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rafaeelaudibert reviews-received --top 12",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rafaeelaudibert reviews-given --top 12",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rafaeelaudibert prs --tier major"
+      ],
+      "finding": "fercgomes, a growth teammate, reviewed 97 of his 202 reviewed PRs, and the pack's reviews.json shows he was the only reviewer on 83 of them (58 substantive, 8 major), including security majors #83980, #96835 and #99353. Only 3 of the 13 security majors (#86093, #104809, #113014) carry a security-team reviewer. 41 of 243 PRs have no review record (the data may be incomplete; review_requested_by is missing). The relationship is reciprocal: he reviewed 24 fercgomes PRs. Conversely, he is the security team's recurring reviewer (12 Piccirello PRs), so security-team members trust his auth judgment.",
+      "evidence_ids": [83980, 96835, 99353, 86093, 104809, 113014, "role.top_reviewers", "role.top_reviewed"],
+      "effect": "quality held at 6 (not 7) and overall confidence medium: the clean first-pass record rests largely on one reviewer."
+    },
+    {
+      "question": "Does the mid-pack delivery rank (9/20) undercount his security work?",
+      "why": "Only 8 of 26 majors were deep-read, and the delivery estimate weights tiers, not criticality. Half his majors are security fixes.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rafaeelaudibert rank delivery",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rafaeelaudibert rank major_episodes",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rafaeelaudibert prs --tier major",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rafaeelaudibert deepread 113014",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rafaeelaudibert deepread 127775",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rafaeelaudibert deepread 109255"
+      ],
+      "finding": "13 of 26 majors are auth/security. The unsampled ones deep-read on demand at P=7.82 (#113014, C=3, account takeover via reassigned emails), 7.82 (#127775, C=3, secret token exposure to read-only keys) and 9.19 (#109255 WebMCP). That matches or beats the sampled major mean of 8.74, and with sampled #113013 (7.8, C=3), #86093 (7.8, C=3), #105396 (9.8) and #105547 (13.0) the criticality score is consistently 3. Major episodes are exactly at the median (21), so the volume is ordinary; the criticality is not.",
+      "evidence_ids": [113014, 127775, 109255, 113013, 86093, 105396, 105547, "delivery", "major_episodes"],
+      "effect": "delivery 7 → 8 because security criticality is company-wide and consistent across a dozen PRs, which the tier-weighted rank does not capture."
+    },
+    {
+      "question": "Is the late-October hog CLI burst durable platform work or volume?",
+      "why": "The last full week (42 PRs, 164.1 points) is his largest, driven by 19 hog PRs within days. Bursts of AI-assisted porting can inflate counts.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rafaeelaudibert timeline",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rafaeelaudibert prs --ws ws5",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query rafaeelaudibert deepread 125182"
+      ],
+      "finding": "ws5 is 19 PRs and 29,728 lines from 2026-10-27 to 10-30, 16 of them merged on 10-30, mostly substantive ports with posthog-cli parity. Sampled #124568 scores P=7.5. The ZIP64 fix #125182 deep-reads at P=16.0, but it corrects his own three-day-old port before any migration, so its real user impact is far below the score. posthog-cli is not retired yet (#125164 checklist, #125564 draft migration guide). He owns the package and wired it to the MCP catalog (#125197, #125199), which is real platform intent, but nobody else has built on it yet within the window.",
+      "evidence_ids": [124303, 124568, 125182, 125164, 125564, 125197, 125199, "ws5"],
+      "effect": "system stays 7, not 8; the burst adds breadth but its delivery credit is discounted because the deep-read P on #125182 overstates prospective impact."
+    }
+  ],
+  "insights": [
+    {
+      "insight": "Although his team label is growth, his highest-value work is security: he acts as the OAuth/MCP security owner, and the security team asks him to review their auth PRs.",
+      "evidence_ids": [113013, 113014, 105547, 127775, "role.top_reviewed", "ws1"]
+    },
+    {
+      "insight": "AI collaboration does not degrade his quality: 206 of 243 PRs are AI co-authored (ai_share 0.85, 3rd highest), 6 of those had a follow-up fix (about 2.9%), and the 37 non-AI PRs had 1 (about 2.7%).",
+      "evidence_ids": ["metrics.ai_share", "metrics.ai_coauthored_prs", "metrics.ai_reverted_or_fixed"]
+    },
+    {
+      "insight": "He removes what does not work: he deleted ~3,700 lines of dual sidebar code (#117250), an unadopted toolbar survey creator (#115619) and his own failed MCP no-data experiment (#127452).",
+      "evidence_ids": [117250, 115619, 127452, 118844, "ws2"]
+    },
+    {
+      "insight": "His breadth is extreme (74 areas, 243 PRs, 12 active weeks), so his tier-weighted delivery is spread thin. Importance flow (12/20) is lower than his trust and reach ranks.",
+      "evidence_ids": ["metrics.areas", "metrics.prs", "importance_flow"]
+    }
+  ],
+  "red_flags": [
+    {
+      "flag": "Seven PRs needed explicit follow-up fixes by others (peer.followup_fixed=7), including two majors; quality rate 0.94, 18/20.",
+      "evidence_ids": [84974, 90654, 97134, 101294, 104078, 109564, 118844, "peer.followup_fixed"]
+    },
+    {
+      "flag": "Deep read of #97123 could not verify its quote for N, so its novelty score is unsupported.",
+      "evidence_ids": [97123]
+    },
+    {
+      "flag": "Deep read of #105396 could not verify its quotes for C and Q, so the criticality and quality parts of its P=9.8 are unsupported.",
+      "evidence_ids": [105396]
+    },
+    {
+      "flag": "Review concentration: 83 PRs approved by fercgomes alone, including security majors, and only 3 of 13 security majors reviewed by the security team; 41 PRs have no review record.",
+      "evidence_ids": [83980, 96835, 99353, "role.top_reviewers"]
+    }
+  ],
+  "counter_evidence": "Behaviour tempers several self-descriptions. The PR descriptions present the hog CLI as completing the posthog-cli port, but posthog-cli is not retired and the ZIP64 'critical data loss' fix (#125182, P=16.0) repaired his own three-day-old code. #84974 is described as making revocation stick, yet it needed a follow-up fix. #118844 shipped as a guard for empty projects and was removed as a failed experiment (#127452). In the other direction, the low quality-rate rank overstates the problem: there are zero reverts, his first-pass rate is 0.98, and his main reviewer has a higher follow-up-fix rate than he does. #105396 is graded critical but its C and Q quotes failed verification, so its score is only partly backed.",
+  "coverage": {
+    "sampled_prs": 19,
+    "ondemand_deepreads": 5,
+    "missing_data": ["review_requested_by", "issue_reactions"],
+    "diff_truncated_share": 0.53
+  }
+}

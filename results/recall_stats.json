@@ -1,0 +1,30 @@
+{
+ "prs_path": "data/prs.jsonl",
+ "changelog_loaded": true,
+ "team_map_loaded": true,
+ "commit_authors_loaded": true,
+ "triage_for_tiers": "out_full/triage.jsonl",
+ "people": 208,
+ "eligible": 139,
+ "below_floor": 69,
+ "core_spike_threshold": 8.529,
+ "recalled": 83,
+ "carried_over_audit": 1,
+ "over_cap": 23,
+ "route_hits": {
+  "delivery": 40,
+  "team": 15,
+  "system": 10,
+  "changelog": 62,
+  "critical": 1
+ },
+ "only_route": {
+  "delivery": 7,
+  "team": 4,
+  "system": 0,
+  "changelog": 38,
+  "critical": 0
+ },
+ "audit_population": 2229,
+ "audit_sampled": 300
+}

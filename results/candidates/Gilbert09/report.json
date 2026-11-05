@@ -1,0 +1,148 @@
+{
+  "cid": "Gilbert09",
+  "positioning": "The de facto owner and highest-throughput engineer of PostHog's warehouse-sources product: he keeps the ingestion pipeline running through a constant stream of incident and data-correctness fixes, expands the source catalogue at industrial scale, and in October began moving every integration credential behind a new credentials service.",
+  "role": {
+    "primary_role": "platform builder",
+    "team": "warehouse-sources",
+    "how_they_create_impact": "Mostly as an author. Three kinds of work run in parallel. (1) Reliability of the shared warehouse sync pipeline: claim queries, append-run rollback, repartitioning, Temporal retry classification. (2) Catalogue breadth: hundreds of new sources, tables and GA promotions, 412 of them cited in the public changelog. (3) Platform foundations other teams now build on: sync-to-destinations, durable source cursors, the integrations SDK and the credentials service. His impact flows almost entirely through the code he ships (importance_flow author 10530 vs reviewer 4.8).",
+    "network_summary": "Lead author of the Product: Warehouse sources area (role.top_area_leader, 88% of his PRs there, 64 authors in the area). His PRs are approved on the first pass 99% of the time (role.network.first_pass_rate 0.99, n=1363), mainly by three warehouse reviewers: fuziontech 778 PRs, bill-ph 480, benben 449 (role.top_reviewers). Many people build on his code: 106 other authors later changed files he touched (role.network.built_on_by_n, downstream_authors p97.4). As a reviewer he is a broad but light-touch approver: 269 approvals for 52 authors across 23 teams (role.network.approved_authors_n, role.network.teams_covered_n) and only 1 changes-requested. Only 7 people explicitly requested his review (role.network.requested_by_n). He acts as the warehouse gatekeeper for contributors from customer success and other teams, not as a sought-after critic. He sits in community 5 with bridge_rank 3 (role.network.bridge_rank), so he links the warehouse cluster to adjacent teams."
+  },
+  "core_contributions": [
+    {
+      "workstream_id": "ws1",
+      "title": "Keeping the warehouse sync pipeline correct and alive",
+      "what": "A long run of major-tier fixes to the shared ingestion path. He rewrote the V3 batch-claim query so its gates run once per group or run instead of per candidate batch, which ended an incident that stalled every loader pod (#110610). He made append syncs roll back unfinished runs, which stopped duplicate rows (#113196). He stopped orphaned Running jobs from being billed (#114623), added autovacuum settings to the new partitions to prevent claim slowdowns (#111096), and added a stalled-schedule gauge plus a repair command for syncs that silently stalled for days (#102914). Earlier he fixed Redshift OOMs, a sync that had failed for 46 days (#79500), and the repartitioning budget and resume logic (#80079, #95747).",
+      "why_it_matters": "Every customer warehouse source shares this pipeline. These bugs meant the whole fleet stalled, rows were duplicated (a data-correctness problem), or customers were billed for jobs that never ran.",
+      "outcome": "The two incident fixes are the highest-scored deep reads in his pack (P=16.0, V3 C3), and nothing he shipped was reverted. 129 of his 211 major-tier PRs are fixes, most of them on this path.",
+      "his_role": "lead",
+      "evidence_prs": [110610, 113196, 114623, 111096, 102914, 79500, 80079, 95747],
+      "numbers": {"major_fix_prs": 129, "incident_fix_P": 16.0, "ws1_major_prs": 195, "reverted": 0}
+    },
+    {
+      "workstream_id": "ws3",
+      "title": "Credentials service and integrations SDK",
+      "what": "He built a platform that moves integration secrets out of pod environment variables. Steps: an integration-service deployable (#79462); Kubernetes watch-based secret distribution, so replicas pick up a rotation within about 1s (#116078); OAuth client keys for every integration read from the service with a kill switch (#120995); an integrations SDK with three auth types and a semgrep ratchet against direct model access (#124844). He then migrated call sites in 21 products (#125029), the PostHog/EE code (#125005), Tasks (#124994) and the Slack app (#125018).",
+      "why_it_matters": "This is security work across the company: credential rotation and revocation, plus keeping warehouse credentials out of code paths that should not see them. It touches integrations owned by many teams.",
+      "outcome": "The SDK and the service are live, and the call-site migration finished inside the window. On-demand deep reads score #124844 at P=7.29 with L=3 and #120995 at P=5.92. The rollout did cause one fleet-wide credential-read outage, fixed by #122385 (see red_flags).",
+      "his_role": "lead",
+      "evidence_prs": [79462, 116078, 120995, 124844, 125029, 125005, 124994, 122385],
+      "numbers": {"prs": 35, "products_migrated": 21, "secret_propagation_s": 1}
+    },
+    {
+      "workstream_id": "ws1",
+      "title": "New warehouse capabilities: destinations, cursors, incremental views, catalogue breadth",
+      "what": "He added a multi-destination abstraction so a source can sync its tables to external Postgres (#86986, P=12.13), then wrote destination writers for BigQuery, Databricks and S3 (#87964, #87963, #87965). He added durable typed source cursors, which fixed a V3 ordering bug where the cursor could move past rows not yet loaded (#108390). He added incremental materialized views (#81686). Alongside this he shipped catalogue growth at scale: dozens of new sources per month, with the changelog crediting him for '54 new Data Warehouse sources' and 'Hundreds more warehouse source tables'.",
+      "why_it_matters": "Destinations make the warehouse a two-way product, and cursors are the foundation for new source types such as Kafka. The breadth of the catalogue is what customers see first.",
+      "outcome": "412 of his PRs are cited in the public changelog, the most of the 20 candidates. Most of the catalogue PRs are templated (about 870 add-source or add-table PRs), so this work counts for breadth, not depth.",
+      "his_role": "lead",
+      "evidence_prs": [86986, 87964, 87963, 87965, 108390, 81686, 85631],
+      "numbers": {"changelog_prs": 412, "destinations_P": 12.13, "add_source_or_table_prs": 874}
+    }
+  ],
+  "angles": {
+    "delivery": {
+      "grade": 9,
+      "rationale": "He is first of 20 by a wide margin, and the lead survives once volume is stripped out. Counting only episodes that contain a major PR, he has 130 against 20 for the runner-up on delivery. The major work also lands in the categories the rubric weights most: incidents (#110610), data correctness (#113196), billing (#114623, #87465) and security (#81559, #82905, #123893, #125154). I discounted the templated catalogue PRs heavily, and that discount is the only reason this is not a 10.",
+      "claims": [
+        {"statement": "Two production-incident and data-correctness fixes on the shared loader path are his top deep reads.", "numbers": {"P_110610": 16.0, "P_113196": 16.0}, "evidence_ids": [110610, 113196, "ws1"]},
+        {"statement": "His count of major-tier episodes is 6.5 times the runner-up on delivery.", "numbers": {"major_episodes": 130, "pauldambra_major_episodes": 20}, "evidence_ids": ["major_episodes", "delivery"]},
+        {"statement": "Several major PRs close security or customer-data leaks: node-role read redirection, MCP telemetry credential leaks, cross-project query capture in MCP analytics, and CDP Hog code reading source credentials.", "numbers": {"security_major_prs": 5}, "evidence_ids": [81559, 82905, 123893, 124889, 125154]},
+        {"statement": "Billing correctness: orphaned Running jobs were being billed, and hogland reserved capacity was undercounted 8x for CPU and 16x for memory.", "numbers": {"cpu_undercount_x": 8, "mem_undercount_x": 16}, "evidence_ids": [114623, 87465]}
+      ]
+    },
+    "system": {
+      "grade": 8,
+      "rationale": "He built several reusable abstractions that other teams now depend on: destinations, typed source cursors, the integrations SDK with a ratchet, and the credentials service with kill switch and watch-based propagation. Other authors build on his files at the 97th percentile. I stop at 8, not 9, because most of the platform work landed in the last three weeks of the window, so adoption beyond his own migrations is not yet visible, and peers asked for changes on the SDK PR (#124844, webjunkie).",
+      "claims": [
+        {"statement": "106 other authors later changed files he touched by 20 or more lines.", "numbers": {"built_on_by_n": 106, "downstream_authors_pct": 97.4}, "evidence_ids": ["role.network.built_on_by_n", "downstream_authors"]},
+        {"statement": "The integrations SDK and the call-site migrations reach 21 products plus EE, Tasks and the Slack app.", "numbers": {"products_migrated": 21, "P_124844": 7.29, "L_124844": 3}, "evidence_ids": [124844, 125029, 125005, 124994, 125018, "ws3"]},
+        {"statement": "The destination abstraction and durable cursors are generic extension points, not single-source fixes.", "numbers": {"P_86986": 12.13, "P_108390": 5.92}, "evidence_ids": [86986, 108390]},
+        {"statement": "Shared Temporal transient-error classification now covers every activity, not only his own sources.", "numbers": {"ws5_prs": 25}, "evidence_ids": [111823, 102603, 116018, "ws5"]}
+      ]
+    },
+    "quality": {
+      "grade": 7,
+      "rationale": "Peer-behaviour numbers are good for this volume: no reverts, 99% first-pass approval, quality_rate 0.98 (6th of 20). The absolute counts still need weighing. Peers made follow-up fixes to 31 of his PRs, 9 of them major. One of his own design choices appears to have caused a fleet-wide outage: #86546 refused a half-configured client, and two months later #122385 restored the environment fallback after a two-hour worker outage. Peers also pushed back on a batch of nine templated sources on 2026-08-05, and his deep reads score Q=1 on several platform PRs (#124844, #86986, #108390, #122385). A 7 is solid but not exemplary.",
+      "claims": [
+        {"statement": "Nothing of his was reverted, and the quality rate is above the median of the 20.", "numbers": {"reverted": 0, "quality_rate": 0.98, "quality_rate_pct": 73.7, "first_pass_rate": 0.99}, "evidence_ids": ["quality_rate", "metrics.reverted", "role.network.first_pass_rate.value"]},
+        {"statement": "Peers made follow-up fixes to 31 of his 2396 mature PRs: 9 major, 13 substantive, 8 routine, 1 trivial.", "numbers": {"followup_fixed": 31, "mature_prs": 2396, "major_affected": 9}, "evidence_ids": ["peer.followup_fixed", 81559, 108390, 119691, 114376]},
+        {"statement": "A self-inflicted fleet-wide credential outage: a fail-closed choice in August was reversed in October after a two-hour worker outage.", "numbers": {"outage_hours": 2, "days_between": 63, "P_122385": 13.0, "Q_122385": 1}, "evidence_ids": [86546, 122385]},
+        {"statement": "fuziontech requested changes on nine of the new-source PRs he merged on 2026-08-05, a batch-level pushback on the source template.", "numbers": {"changes_requested_prs": 17, "fuziontech_batch": 9}, "evidence_ids": [77083, 77086, 77098, 77106, 77130, 77133, 77135, 77142, 77147]}
+      ]
+    },
+    "team": {
+      "grade": 6,
+      "rationale": "He is a broad, reliable approver with real reach (52 authors, 23 teams), and the few review comments that have text are substantive. The pattern is still approval-heavy: 269 approvals against 1 changes-requested. Only 7 people explicitly asked for his review, and his reviewer importance flow is negligible. His team value comes mostly from unblocking others, such as customer-success engineers shipping sources and peers building on his code, not from catching problems in review. That matches his percentiles of about 63–76 on the team columns.",
+      "claims": [
+        {"statement": "He approves widely across teams, most heavily for customer-success contributors.", "numbers": {"approvals": 269, "authors": 52, "teams": 23, "jakesciotto_prs": 57, "customer_success_na_north_prs": 58}, "evidence_ids": ["role.network.approved_authors_n.value", "role.network.teams_covered_n.value", "cross_team"]},
+        {"statement": "His single changes-requested caught a real issue: usage-report metrics computed in two places could drift apart.", "numbers": {"changes_requested_given": 1}, "evidence_ids": [89875]},
+        {"statement": "His review of a customer-success PR traced the dangerous watermark path and pushed back on three points, including stale verification claims.", "numbers": {"comment_reviews": 14}, "evidence_ids": [101811]},
+        {"statement": "Few explicit review requests and almost no reviewer-side importance flow.", "numbers": {"requested_by_n": 7, "importance_flow_reviewer": 4.8, "team_leverage": 1248.55, "team_leverage_pct": 72.2}, "evidence_ids": ["role.network.requested_by_n.value", "role.network.importance_flow.reviewer", "team_leverage"]}
+      ]
+    }
+  },
+  "overall": {"grade": 9, "confidence": "medium"},
+  "key_numbers": [
+    {"label": "Delivery estimate (1st of 20, 3.8x the runner-up)", "value": 5340.42, "metric_key": "delivery"},
+    {"label": "Episodes with a major PR", "value": 130, "metric_key": "major_episodes"},
+    {"label": "PRs cited in the public changelog", "value": 412, "metric_key": "changelog_prs"}
+  ],
+  "calibration": {
+    "ranks": {"delivery": 100.0, "quality_rate": 73.7, "team_leverage": 72.2, "trust_rank": 68.4},
+    "note": "He is first of 20 on delivery (5340 vs 1405 for pauldambra) and on major_episodes, changelog_prs and importance_flow. He is upper-middle on quality_rate (6th), team_leverage (6th of 19) and trust_rank (7th). The grades follow that shape: delivery 9 and system 8 match the top position once the templated volume is discounted, and quality 7 and team 6 match the roughly 70th-percentile placements. The overall 9 rests on delivery and system. Even after stripping templated catalogue PRs, his count of major incident, correctness and security fixes alone exceeds any other candidate's total major work."
+  },
+  "custom_analyses": [
+    {
+      "question": "Is his delivery lead just PR volume from templated source and table additions?",
+      "why": "He has 2939 PRs, about 33 per day, and 1.08M lines in ws1. The rules say count alone must not earn credit, and much of the catalogue work is visibly repetitive (dozens of 'add X tables' and GA-flip PRs).",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Gilbert09 prs --tier major --ws ws1",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Gilbert09 compare pauldambra",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Gilbert09 timeline"
+      ],
+      "finding": "A title tally over the pack's prs.jsonl finds about 773 add-table PRs, 101 add-source PRs and 77 GA or release-status flips, roughly 32% of his output and mostly templated. The lead does not depend on them. Of 211 major PRs, 129 are fixes (incidents, data correctness, OOMs, billing) and 79 are features. He has 130 major episodes against 20 for pauldambra, the runner-up on delivery. His output also accelerated: weekly PRs went from 94–202 in the six weeks from 2026-08-03 to 2026-09-07 to 300–365 in the weeks of 2026-09-28 to 2026-10-19, with major PRs per week rising from 4–11 to 27–36.",
+      "evidence_ids": ["major_episodes", "delivery", "ws1", 110610, 113196],
+      "effect": "delivery 10 → 9: the templated catalogue work is discounted, but the major-fix stream alone keeps him first."
+    },
+    {
+      "question": "Did the credentials-service rollout create the problems it later fixed?",
+      "why": "Several late-window major PRs (#122385 'two-hour worker outage', #124931 retries) read like fixes to the platform he was building. The rules say peer and production behaviour beats a PR's own framing.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Gilbert09 prs --ws ws3",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Gilbert09 prs --ws ws6",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Gilbert09 pr 86546",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Gilbert09 deepread 122385",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Gilbert09 deepread 120995",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Gilbert09 deepread 124844"
+      ],
+      "finding": "Yes, at least once. On 2026-08-20, #86546 changed the client to raise on a half-configured setup instead of falling back to environment variables. On 2026-10-22, #122385 reversed that because a half-configured pod was 'taking down every credential read fleet-wide' (P=13.0, but Q=1). #124931 then added client retries for dropped keep-alives and 5xx. The platform itself is substantial: #124844 scores P=7.29 with leverage L=3, #120995 P=5.92 with Q=2, and the migrations cover 21 products. The fallout he caused he also detected and fixed within the same window.",
+      "evidence_ids": [86546, 122385, 124931, 120995, 124844, 125029, "ws3", "ws6"],
+      "effect": "system stays 8 because the platform is real and cross-team; quality 8 → 7 for the self-inflicted fleet-wide outage."
+    },
+    {
+      "question": "Where does his review weight sit, and do his approvals catch problems?",
+      "why": "team_leverage is at p72 with 269 approvals, but approval counts can hide rubber-stamping. I wanted to see whom he reviews and whether he ever blocks a PR.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Gilbert09 reviews-given --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Gilbert09 reviews-received --top 10",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Gilbert09 rank team_leverage",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query Gilbert09 rank trust_rank"
+      ],
+      "finding": "He gave 284 reviews on 268 PRs: 269 approvals, 14 comment-only reviews and 1 changes-requested. The largest share went to customer-success engineers adding warehouse sources (jakesciotto 57 PRs; customer-success-na-north 58 PRs). The comments that have text are substantive: #101811 traces a watermark-promotion path and pushes back on three points, and #89875 (his only changes-requested) flags duplicated usage-report logic. On #115501 he pushed fixes directly onto a peer's PR. In the other direction, his own PRs are reviewed almost entirely by three warehouse peers (fuziontech 778, bill-ph 480, benben 449). Only 1365 of his 2939 PRs carry any recorded review, even though review detail was fetched for 2562 of them.",
+      "evidence_ids": [101811, 89875, 115501, "team_leverage", "role.network.requested_by_n.value", "role.network.events_given.changes_requested"],
+      "effect": "team set at 6, not 7: broad and reliable gatekeeping, but rarely a corrective reviewer and rarely sought out."
+    }
+  ],
+  "insights": [
+    {"insight": "His output runs at a pace that implies a heavily tool-assisted workflow: about 33 merged PRs a day on average and about 52 a day in the peak week, and review replies signed 'via talyn.dev'. Yet only 13 PRs carry an AI co-author trailer (ai_share 0.004). The AI-share metric therefore understates AI use for him, and his catalogue volume should be read as a well-run generation pipeline, with his judgment showing in the incident and platform PRs.", "evidence_ids": ["metrics.ai_coauthored_prs", "ai_share", 115501, "ws1"]},
+    {"insight": "He is the single point of ownership for warehouse sources: 88% of his PRs are in the area and he leads 64 authors there. Three warehouse peers review almost all of his PRs. That is efficient, but the area's correctness depends heavily on one author's judgment and a small reviewer set.", "evidence_ids": ["role.top_area_share", "role.top_area_leader", "role.top_reviewers"]},
+    {"insight": "He works far outside his home area when the problem calls for it: the Tasks sandbox backend (hogland routing, billing attribution, OOM fixes), MCP security fixes and the desktop and mobile inbox. He covers 56 areas in total.", "evidence_ids": [87253, 87465, 107389, 123893, "ws4", "ws2", "metrics.areas"]}
+  ],
+  "red_flags": [
+    {"flag": "Peers made follow-up fixes to 31 of his PRs (peer.followup_fixed=31), including 9 major ones such as the node-role security fix, durable source cursors, sync-alert internal events and claim-window ageing. The rate is low (1.3% of mature PRs) but the absolute count is high.", "evidence_ids": ["peer.followup_fixed", 81559, 82517, 83489, 96393, 104483, 108390, 114376, 114879, 119691]},
+    {"flag": "A self-inflicted fleet-wide outage. His August change made a half-configured credentials client raise instead of falling back. In October a half-configured pod took down every credential read for about two hours, and his #122385 reverted the behaviour.", "evidence_ids": [86546, 122385]},
+    {"flag": "About half of his PRs (1365 of 2939 reviewed) carry no recorded review. Review detail covers 2562 of his PRs, so at least about 1200 appear to have merged without any review. This may be partly a data artefact, but at 30+ PRs a day it is a real risk-control question.", "evidence_ids": ["role.reviews_received_prs", "coverage.review_detail_prs"]}
+  ],
+  "counter_evidence": "Several things argue against the top-tier reading. (1) Volume: about 32% of his PRs are templated source, table or GA additions, and his 1.14M changed lines are dominated by them. Delivery points over-credit this, and I discounted it. (2) His PR descriptions frame credentials-service fixes such as #122385 as improvements. The behavioural evidence shows the outage came from his own earlier design (#86546), so I scored that against quality. (3) Peers requested changes on 17 PRs, including a batch of nine templated sources on 2026-08-05 and the integrations SDK (#124844, webjunkie). The 99% first-pass rate is therefore partly a product of approvals from a small, familiar reviewer set. (4) Only 19 of 2939 PRs (0.6%) were deep-read in the stratified sample, plus 6 on demand, and 32% of the diffs were truncated. The quality of the routine and substantive bulk is inferred from triage summaries, not verified. (5) As a reviewer he almost never blocks (1 changes-requested out of 284 reviews), so team credit rests on reach, not on correction. None of this overturns delivery or system, but it is why overall confidence is medium, not high.",
+  "coverage": {"sampled_prs": 19, "missing_data": ["review_requested_by", "issue_reactions"], "diff_truncated_share": 0.32, "ondemand_deepreads": 6, "review_detail_prs": 2562}
+}

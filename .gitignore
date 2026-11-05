@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+.pytest_cache/
+data/
+out/*
+!out/site_data.json
+.agents/
+out_full/

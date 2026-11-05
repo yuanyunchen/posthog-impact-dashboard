@@ -1,0 +1,437 @@
+{
+ "cid": "mayteio",
+ "positioning": "The highest-volume builder on the Workflows/Messaging product, who in October drove the migration of PostHog's own transactional email (password resets, invites, alerts) off Customer.io onto Workflows, while also hardening the CDP job queue and realtime cohorts that every workflow depends on.",
+ "role": {
+  "primary_role": "product builder",
+  "team": "Workflows / Messaging (inferred from role.team_inferred = workflows; official team mapping is missing)",
+  "how_they_create_impact": "Ships a steady stream of end-to-end product work in Workflows and Messaging (174 + 38 PRs) and repeatedly reaches down into the shared CDP/Node pipeline and Rust cohorts to fix the reliability and correctness bugs his product exposes: a queue-stalling counter overflow, OOM crashes on cohort recomputes, unbounded tenant templates, zero-member realtime cohorts. Reviews heavily for his two closest teammates and approves work for authors across 23 teams.",
+  "network_summary": "Core member of a tight three-person Workflows loop: dmarchuk and meikelmosby review 83 and 74 of his PRs, and he reviews 60 and 80 of theirs (role.top_reviewers, role.top_reviewed). Beyond that loop he is a broadly trusted approver, signing off PRs from 43 authors across 23 teams (role.network.approved_authors_n, role.network.teams_covered_n; cross_team rank 5/20) with trust_rank 6/20 (role.network.trust_rank). He is rarely sought out explicitly as a reviewer, though: only 4 people requested his review (role.network.requested_by_n, 15/20). His own PRs almost never need correction in review (first_pass_rate 0.99, changes_requested_rate 0.01, role.network.first_pass_rate), but 7 were followed up by fixes and 1 was reverted after merge (role.network.fixes_received, role.network.reverts_received). 88 other authors later built on files he changed (role.network.built_on_by_n), above the median of 77."
+ },
+ "core_contributions": [
+  {
+   "workstream_id": "ws2",
+   "title": "Moving PostHog's own transactional email off Customer.io onto Workflows",
+   "what": "Built the full path for transactional email as real workflows: an `api` trigger type and versioned one-step email workflows (#117663), a send endpoint and cross-SDK contract (#123556), per-template sender/reply-to (#121871), flag-gated per-recipient routing with idempotency-keyed retries (#122019), mapping of all 35 internal templates (#122502), sensitive-data redaction (#120520), delivery-status tracking in ClickHouse (#124696), and fixes for duplicate sends after a Valkey outage (#123481) and silently dropped password resets (#123492).",
+   "why_it_matters": "These emails carry sign-up verification, password resets and invites for every PostHog user, so failures are account-access incidents; the migration also removes a third-party dependency and turns Workflows into a transactional email product that customers can use.",
+   "outcome": "Flag-gated rollout infrastructure is in place with region-split flags (#123060) and a real kill switch (#125322); 55 PRs mention transactional email or Customer.io, 51 of them merged in October. Full cutover is not visible in the window.",
+   "his_role": "lead",
+   "evidence_prs": [
+    117663,
+    121871,
+    122019,
+    122502,
+    123556,
+    120520,
+    123481,
+    123492,
+    125322
+   ],
+   "numbers": {
+    "transactional_prs": 55,
+    "october_prs": 51,
+    "major_prs": 10,
+    "top_P": 12.1
+   }
+  },
+  {
+   "workstream_id": "ws1",
+   "title": "Reliability of the CDP/Workflows execution pipeline",
+   "what": "Fixed failure modes in the shared Node CDP pipeline that runs every workflow and destination: saturating cyclotron job counters at all 13 increment sites so one row cannot stall a queue (#97591), batching cohort-trigger lookups to stop consumer OOM crashes (#118407), bounding tenant Liquid rendering with parse, time and memory limits (#94119), and treating transient DNS errors as retriable (#108193).",
+   "why_it_matters": "The cyclotron bug held up workflow email sending for over a day; the Liquid issue let one tenant's template stall or OOM shared workers. These are multi-tenant availability fixes, not feature polish.",
+   "outcome": "Two of his three highest deep-read scores (P 13.0 for #97591, 9.6 on-demand for #94119) come from this work; no follow-up fixes or reverts are recorded against these PRs.",
+   "his_role": "lead",
+   "evidence_prs": [
+    97591,
+    118407,
+    94119,
+    108193
+   ],
+   "numbers": {
+    "ws1_prs": 174,
+    "ws1_major": 21,
+    "P_97591": 13.0,
+    "P_94119": 9.62
+   }
+  },
+  {
+   "workstream_id": "misc",
+   "title": "Data correctness in realtime cohorts that gate flags and workflows",
+   "what": "Fixed realtime composed cohorts being certified ready with zero members (#121092, Rust), preserved the origin of cascaded membership changes so backfills do not re-trigger workflows (#118434), locked cohort criteria edits on cohorts used by active workflows after an incident (#118447), and added realtime cohort-membership workflow triggers (#116951).",
+   "why_it_matters": "A zero-member cohort makes feature flags, workflows and triggers silently match nobody, which is a cross-product data-correctness failure that users cannot detect.",
+   "outcome": "#121092 received the highest on-demand deep-read score of any of his PRs (P 16.0, V3 C3 N2).",
+   "his_role": "lead",
+   "evidence_prs": [
+    121092,
+    118434,
+    118447,
+    116951
+   ],
+   "numbers": {
+    "P_121092": 16.0,
+    "P_118447": 5.92,
+    "P_118434": 4.8
+   }
+  }
+ ],
+ "angles": {
+  "delivery": {
+   "grade": 8,
+   "rationale": "Delivery estimate 702.4 ranks 7/20 (percentile 68.4) with 28 major episodes (5/20). Quality of the work is higher than the rank suggests: the transactional-email migration touches every PostHog user's account emails, and several fixes are incident-grade (a day-long queue stall, OOM crashes, zero-member cohorts). No landmark-tier PRs and the migration is still flag-gated, so not 9.",
+   "claims": [
+    {
+     "statement": "He leads the Customer.io-to-Workflows transactional email migration end to end.",
+     "numbers": {
+      "transactional_prs": 55,
+      "major_prs": 10
+     },
+     "evidence_ids": [
+      117663,
+      122019,
+      122502,
+      "ws2"
+     ]
+    },
+    {
+     "statement": "Several deliveries are incident or correctness fixes in shared infrastructure, scored at the top of his deep reads.",
+     "numbers": {
+      "P_97591": 13.0,
+      "P_121092": 16.0,
+      "P_86989": 13.0
+     },
+     "evidence_ids": [
+      97591,
+      121092,
+      86989
+     ]
+    },
+    {
+     "statement": "Delivery estimate sits above the candidate median but well below the leaders.",
+     "numbers": {
+      "delivery": 702.41,
+      "median": 616.02,
+      "percentile": 68.4
+     },
+     "evidence_ids": [
+      "delivery",
+      "major_episodes"
+     ]
+    }
+   ]
+  },
+  "system": {
+   "grade": 7,
+   "rationale": "Builds platform-level mechanisms rather than just screens: an `api` trigger type and versioned workflow facade, background idempotency retry queue, Liquid resource budgets, Kafka batch processing, service-to-service JWT machinery, and a facade/sealing refactor that isolates messaging tests in CI. 88 downstream authors (6/20) built on his files. Several abstractions are still dormant or flag-gated (#82736 has no consumer yet), so the leverage is not yet proven company-wide.",
+   "claims": [
+    {
+     "statement": "Introduced reusable workflow primitives that the messaging product now builds on.",
+     "numbers": {
+      "P_117663": 12.1,
+      "L_117663": 2
+     },
+     "evidence_ids": [
+      117663,
+      117785,
+      "ws1"
+     ]
+    },
+    {
+     "statement": "Others continue on his code at an above-median rate.",
+     "numbers": {
+      "built_on_by_n": 88,
+      "percentile": 73.7
+     },
+     "evidence_ids": [
+      "role.network.built_on_by_n",
+      "downstream_authors"
+     ]
+    },
+    {
+     "statement": "Product-isolation refactor sealed messaging behind a facade so messaging PRs run only messaging tests.",
+     "numbers": {
+      "refactor_prs_2026_10_09": 11
+     },
+     "evidence_ids": [
+      114069,
+      113876,
+      113944
+     ]
+    }
+   ]
+  },
+  "quality": {
+   "grade": 6,
+   "rationale": "In review his PRs pass almost untouched (first_pass_rate 0.99, 2 change requests in 193 reviewed PRs), and deep reads give consistent Q=2 on major work. But peer behaviour after merge is weaker than his peers: quality_rate 0.95 ranks 16/20, with 1 revert and 6 follow-up-fixed PRs, including the August credential-masking incident area. With 290 PRs, many self-reviewed by a small loop, the near-perfect first-pass rate partly reflects reviewer familiarity rather than risk control.",
+   "claims": [
+    {
+     "statement": "Post-merge quality is below most candidates despite clean reviews.",
+     "numbers": {
+      "quality_rate": 0.95,
+      "percentile": 21.1,
+      "reverted": 1,
+      "followup_fixed": 6
+     },
+     "evidence_ids": [
+      "quality_rate",
+      "peer.reverted",
+      "peer.followup_fixed"
+     ]
+    },
+    {
+     "statement": "Review-time friction is near zero.",
+     "numbers": {
+      "first_pass_rate": 0.99,
+      "changes_requested_rate": 0.01,
+      "n": 193
+     },
+     "evidence_ids": [
+      "role.network.first_pass_rate",
+      "role.network.changes_requested_rate"
+     ]
+    },
+    {
+     "statement": "Follow-up-fixed PRs include high-stakes email and credential paths.",
+     "numbers": {
+      "affected_prs": 7,
+      "P_120171": 7.82
+     },
+     "evidence_ids": [
+      86989,
+      120171,
+      83059,
+      98358
+     ]
+    }
+   ]
+  },
+  "team": {
+   "grade": 7,
+   "rationale": "301 reviews on 263 PRs for 43 authors (team_leverage 1020, 7/19), approvals spanning 23 teams (5/20) and trust_rank 6/20. Review comments in the pack show real catches (a slack trigger evaluated against every internal event on #83765, SES tag format on #75097, a flag rollback that would break customer sign-ups on #123966) and lines changed afterwards. Held back by an approve-heavy pattern (265 approvals vs 1 change request) and only 4 people explicitly requesting his review.",
+   "claims": [
+    {
+     "statement": "Broad, trusted approver beyond his own team.",
+     "numbers": {
+      "reviews_given_prs": 263,
+      "authors": 43,
+      "teams": 23,
+      "trust_rank_pct": 73.7
+     },
+     "evidence_ids": [
+      "team_leverage",
+      "cross_team",
+      "trust_rank"
+     ]
+    },
+    {
+     "statement": "His review comments catch real defects that authors then fix.",
+     "numbers": {
+      "substantive_review_comments_shown": 4
+     },
+     "evidence_ids": [
+      83765,
+      75097,
+      123966,
+      123968
+     ]
+    },
+    {
+     "statement": "Few people seek him out as a reviewer and he almost never blocks a PR.",
+     "numbers": {
+      "requested_by_n": 4,
+      "changes_requested_given": 1,
+      "approvals_given": 265
+     },
+     "evidence_ids": [
+      "requested_by",
+      "role.network.events_given.changes_requested"
+     ]
+    }
+   ]
+  }
+ },
+ "overall": {
+  "grade": 7,
+  "confidence": "medium"
+ },
+ "key_numbers": [
+  {
+   "label": "Transactional email migration PRs",
+   "value": 55,
+   "metric_key": "ws.ws2.agg.prs_n"
+  },
+  {
+   "label": "Major episodes",
+   "value": 28,
+   "metric_key": "major_episodes"
+  },
+  {
+   "label": "Quality rate (16/20)",
+   "value": 0.95,
+   "metric_key": "quality_rate"
+  }
+ ],
+ "calibration": {
+  "ranks": {
+   "delivery": 68.4,
+   "quality_rate": 21.1,
+   "team_leverage": 66.7,
+   "trust_rank": 73.7
+  },
+  "note": "He sits in the upper-middle of the 20: 7th on delivery and team leverage, 6th on trust, but 16th on quality rate. The overall 7 matches that position. Delivery is graded one notch above its rank (8) because his top work is incident- and account-email-critical, which the volume-weighted estimate under-represents (stratified estimate 1539.9 vs 702.4 hat). Quality is graded 6, consistent with the low quality_rate rank. Team 7 follows trust_rank and cross_team, tempered by the low requested_by count."
+ },
+ "custom_analyses": [
+  {
+   "question": "Is his impact concentrated in one push, and does the October surge add real value or just PR count?",
+   "why": "His weekly PR count roughly triples from mid-October, which could be a launch push or a flood of sliced PRs.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio timeline",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio prs --since 2026-10-05 --tier major",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio prs --ws ws2",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio prs --ws ws3 --since 2026-10-12"
+   ],
+   "finding": "From the week of 2026-10-12 to 2026-10-26 he merged 44, 44 and 46 PRs per week (vs 10–19 earlier) with 17 major PRs, almost all on the transactional email migration (55 PRs mention transactional email or Customer.io, 51 in October). The week of 2026-10-05 is the exception: 32 PRs but 0 major, driven by 11 no-behavior-change facade moves on 2026-10-09 (#113926, #113944, #113890 ...). So the surge is a real launch push, but part of the PR count is mechanical slicing (16 mechanical and 60 routine PRs overall).",
+   "evidence_ids": [
+    113944,
+    113890,
+    114069,
+    122019,
+    117663,
+    "ws2"
+   ],
+   "effect": "delivery stays 8 rather than 9: the October launch is substantial but PR volume overstates it, and the migration is still flag-gated."
+  },
+  {
+   "question": "What are his follow-up-fixed and reverted PRs, and do they cluster in risky areas?",
+   "why": "quality_rate ranks 16/20, and the dossier lists 7 affected PRs; I need to know if they are cosmetic or touch high-stakes paths.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio pr 80639",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio pr 83059",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio pr 86731",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio pr 86989",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio pr 98358",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio pr 98531",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio pr 120171",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio deepread 86989",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio deepread 120171",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio pr 83804"
+   ],
+   "finding": "The affected PRs are mostly in email and credential paths: templated From overrides (#83059), the credential-replay banner for an August 18 masking incident (#86989, P 13.0, Q 1), HTML-escaping and header-injection handling in email subjects (#120171, P 7.82), and task-run failure handling (#98358). #83804 (same week) fixed masked re-saves wiping plaintext secrets that silently disabled webhook auth. The pack does not say which single PR was reverted. Deep reads still rate his fixes as well tested (Q 2 on #120171), but the pattern is fast iteration in high-stakes areas with follow-ups needed afterwards.",
+   "evidence_ids": [
+    83059,
+    86989,
+    120171,
+    98358,
+    83804,
+    80639,
+    86731,
+    98531
+   ],
+   "effect": "quality 7 → 6: the post-merge corrections sit in email-delivery and secrets code, not cosmetic areas."
+  },
+  {
+   "question": "Are his unsampled major PRs as strong as their tier suggests?",
+   "why": "Only 8 of 38 major PRs were deep-read in the stratified sample, and several unsampled ones claim incident fixes.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio deepread 123481",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio deepread 118447",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio deepread 121092",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio deepread 94119"
+   ],
+   "finding": "#121092 (zero-member realtime cohorts) scored P 16.0, the highest of any of his PRs; #94119 (Liquid render limits) scored 9.62 but Q 1; #123481 (duplicate sends after a Valkey outage) and #118447 (cohort lock) both scored 5.92 with Q 2. The unsampled majors average about the stratum mean (9.24), so the tier labels are not inflated.",
+   "evidence_ids": [
+    121092,
+    94119,
+    123481,
+    118447
+   ],
+   "effect": "Supports delivery 8 and adds the cohort-correctness line as a core contribution; no grade change."
+  },
+  {
+   "question": "Is his review activity real gatekeeping or rubber-stamping inside a small loop?",
+   "why": "265 approvals vs 1 change request, concentrated on two teammates, could mean low-scrutiny approvals.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio reviews-given --top 15",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio reviews-received --top 10",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio compare dmarchuk",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query mayteio rank requested_by"
+   ],
+   "finding": "53% of the PRs he reviewed belong to meikelmosby (80) and dmarchuk (60), and the same two reviewed 157 of his PRs: a closed loop. Outside it he still reviews for 41 more authors across 23 teams, more than dmarchuk (9 teams). The review comments in the dossier are substantive and led to code changes, but only 4 people requested his review (15/20).",
+   "evidence_ids": [
+    "role.top_reviewed",
+    "role.top_reviewers",
+    "cross_team",
+    "requested_by",
+    83765
+   ],
+   "effect": "team held at 7 rather than 8: breadth and comment quality are real, but he is not a sought-after gatekeeper."
+  }
+ ],
+ "insights": [
+  {
+   "insight": "He works top to bottom: product features in Workflows and Messaging, then follows the failures his product exposes down into shared Node CDP and Rust cohort code that other teams also depend on.",
+   "evidence_ids": [
+    97591,
+    121092,
+    118407,
+    "ws1",
+    "misc"
+   ]
+  },
+  {
+   "insight": "His and dmarchuk's output is almost mirror images: similar PR counts (290 vs 265) and delivery (702 vs 616), but he has more major PRs (38 vs 26) and wider review reach (23 vs 9 teams) at the cost of a lower quality rate (0.95 vs 0.99).",
+   "evidence_ids": [
+    "delivery",
+    "quality_rate",
+    "cross_team"
+   ]
+  },
+  {
+   "insight": "AI co-authorship is low (8 PRs, 3% share) with no AI-assisted PR reverted or fixed, so his volume is not explained by agent-generated PRs.",
+   "evidence_ids": [
+    "metrics.ai_coauthored_prs",
+    "ai_share"
+   ]
+  }
+ ],
+ "red_flags": [
+  {
+   "flag": "1 PR reverted and 6 follow-up-fixed after merge (quality_rate 0.95, 16/20); the affected PRs are #80639, #83059, #86731, #86989, #98358, #98531, #120171, concentrated in email-delivery, secrets and task-run code.",
+   "evidence_ids": [
+    80639,
+    83059,
+    86731,
+    86989,
+    98358,
+    98531,
+    120171,
+    "peer.reverted",
+    "peer.followup_fixed"
+   ]
+  },
+  {
+   "flag": "Two near-identical PRs with the same title for the push-registration fix merged 31 minutes apart; both are tiered major, so this fix is likely double counted in volume.",
+   "evidence_ids": [
+    83456,
+    83466
+   ]
+  },
+  {
+   "flag": "Review loop is closed: two teammates reviewed 157 of his 194 reviewed PRs, and only 4 people ever requested his review.",
+   "evidence_ids": [
+    "role.top_reviewers",
+    "requested_by"
+   ]
+  }
+ ],
+ "counter_evidence": "His own PR descriptions frame many changes as complete, well-tested fixes, and review-time signals agree (first_pass_rate 0.99). Peer behaviour after merge disagrees partly: 7 PRs needed follow-up fixes or a revert, so behaviour is weighted above self-description for the quality grade. On the other side, the delivery estimate (702.4, 7/20) understates him relative to the stratified estimate (1539.9) and to on-demand deep reads like #121092 (P 16.0). Part of the volume is mechanical: 11 no-behavior-change facade moves on a single day and 16 mechanical PRs. The team mapping is missing (role.team = unknown), so the 'Workflows' team label is inferred. 42% of sampled diffs were truncated, so some deep-read scores rest on partial diffs.",
+ "coverage": {
+  "sampled_prs": 19,
+  "ondemand_deepreads": 6,
+  "missing_data": [
+   "review_requested_by",
+   "issue_reactions",
+   "team",
+   "which_pr_was_reverted"
+  ],
+  "diff_truncated_share": 0.42
+ }
+}

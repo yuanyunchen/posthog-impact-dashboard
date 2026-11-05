@@ -1,0 +1,391 @@
+{
+ "cid": "fuziontech",
+ "positioning": "Senior warehouse-infrastructure engineer who authors rarely (9 PRs in 90 days) but steps in on production-critical failures, and who acts as the near-sole approval gate for the warehouse-sources team's highest-volume author (778 of his 854 reviewed PRs belong to Gilbert09).",
+ "role": {
+  "primary_role": "platform builder",
+  "team": "warehouse",
+  "how_they_create_impact": "Two channels. As an author he ships small, surgical fixes to fleet-wide data-pipeline failures (v3 loader stall, registration-worker OOMs, backfill reconnects, a kernel CVE precondition) plus three repo-wide CI speedups. As a reviewer he keeps Gilbert09's very high-volume warehouse-sources stream moving with a 0.18 h median first-review time, approving 912 times against 10 change requests.",
+  "network_summary": "Throughput approver for one author rather than a broadly trusted hub. He approved 10 distinct authors (role.network.approved_authors_n) across 7 teams (role.network.teams_covered_n, cross_team p2.6), but 91% of reviewed PRs are Gilbert09's (role.top_reviewed). Few people seek him out: 4 distinct requesters (role.network.requested_by_n, p18.4) and almost no approvals flowing to him, so trust_rank is the lowest of the 20 (role.network.trust_rank 0.001, p0). His own PRs pass cleanly (first_pass_rate 1.0, changes_requested_rate 0.0 over 9 PRs) and only 3 other authors later built on his files (role.network.built_on_by_n, downstream_authors p0). Community 5; bridge_rank unknown, so no bridging role can be claimed."
+ },
+ "core_contributions": [
+  {
+   "workstream_id": "ws2",
+   "title": "Restoring the stalled v3 warehouse-source loader",
+   "what": "Bounded the v3 reconcile sweep's failed-run scan with a state_changed_at predicate and single-flighted the sweep across pods with a CAS-acquired sentinel lease row, so the batch claim path stopped timing out; later fixed Postgres sources on managed-warehouse hosts failing to save and sync (#123219).",
+   "why_it_matters": "On 2026-08-09 the loader claimed zero batches fleet-wide on prod-us: customer warehouse syncs stopped landing and pods entered a self-sustaining restart loop. This is a data-delivery outage for every warehouse-sources customer.",
+   "outcome": "Merged 2026-08-10 within about a day of the stall, approved by a warehouse-sources reviewer after one comment round; validated on prod-us (266,561/266,561 sampled failed batches consistent). Highest-scored PR of the window (P=16.0, V3 C3 N2 L2 Q2) and no revert or follow-up fix recorded.",
+   "his_role": "lead",
+   "evidence_prs": [
+    80285,
+    123219
+   ],
+   "numbers": {
+    "prs": 2,
+    "max_P": 16.0,
+    "points_sum": 20.81
+   }
+  },
+  {
+   "workstream_id": "ws1",
+   "title": "Keeping managed-warehouse onboarding and backfills alive",
+   "what": "Raised the DuckLake registration worker memory from 16Gi to 32Gi with a floor-guard test (#92102), enrolled newly onboarded orgs in the shared Trino cell (#91098), and taught the events backfill DAG to treat the duckgres idle-session reap (sqlstate 57P05) as a dropped connection and retry (#95304, ws5).",
+   "why_it_matters": "OOM-killed registration workers surfaced to customers as lost-connection / data-source sync errors, and the idle-timeout reap failed the backfill's register step; both block customers from getting data into the managed warehouse.",
+   "outcome": "Four PRs in one burst (2026-08-28 to 2026-09-05), each small (35 to 109 lines) and approved without changes requested. #95304 scored P=13.0 but its Q quote failed verification.",
+   "his_role": "lead",
+   "evidence_prs": [
+    92102,
+    91098,
+    95304
+   ],
+   "numbers": {
+    "prs": 3,
+    "points_sum": 22.62,
+    "lines": 190
+   }
+  },
+  {
+   "workstream_id": "ws3",
+   "title": "Repo-wide CI wall-time cuts",
+   "what": "Replaced a full-history checkout with a sparse one in the ci-nodejs gate (#126087), restricted the duplication lint to formats a change set touches (#126727), and resized jest shards from 342 to 171 files (#126907).",
+   "why_it_matters": "These run on every Node/frontend PR in the monorepo, so the saving multiplies across the whole engineering org rather than one team.",
+   "outcome": "Reported savings: ~74 s per nodejs gate run, duplication lint ~5.2 to ~1.5 min, median frontend lane 11.2 to ~8-9 min. All three approved first pass by developer-experience reviewers (gantoine, rnegron). Merged in the last week of the window, so no downstream effect is observable yet.",
+   "his_role": "lead",
+   "evidence_prs": [
+    126087,
+    126727,
+    126907
+   ],
+   "numbers": {
+    "prs": 3,
+    "points_sum": 13.66,
+    "lines": 187
+   }
+  }
+ ],
+ "angles": {
+  "delivery": {
+   "grade": 5,
+   "rationale": "Every authored PR is a substantive or major fix of a production failure or a broadly felt cost, and #80285 alone ended a fleet-wide customer-facing outage. But the volume is the lowest of the 20 candidates (delivery 63.02, p0; median 616.02), there are no landmark PRs, no changelog entries, and seven consecutive weeks (2026-09-07 to 2026-10-19) with no authored PR. High criticality per PR, thin overall: stable effective contribution, not a team pillar on delivery.",
+   "claims": [
+    {
+     "statement": "His single most valuable PR restored customer warehouse syncs after a fleet-wide v3 loader stall.",
+     "numbers": {
+      "P": 16.0,
+      "V": 3,
+      "C": 3
+     },
+     "evidence_ids": [
+      80285,
+      "ws2"
+     ]
+    },
+    {
+     "statement": "Delivery volume is last among the 20 candidates.",
+     "numbers": {
+      "delivery": 63.02,
+      "delivery_percentile": 0.0,
+      "median": 616.02,
+      "major_episodes": 3
+     },
+     "evidence_ids": [
+      "delivery",
+      "major_episodes"
+     ]
+    },
+    {
+     "statement": "Four of his nine PRs address production failures with direct customer data impact (loader stall, OOM, backfill reconnect, CVE precondition).",
+     "numbers": {
+      "fix_prs": 5,
+      "major_prs": 3,
+      "prs": 9
+     },
+     "evidence_ids": [
+      80285,
+      92102,
+      95304,
+      126537
+     ]
+    }
+   ]
+  },
+  "system": {
+   "grade": 5,
+   "rationale": "Shows real systems judgment (single-flight lease row instead of N pods redoing global sweeps; module-wide plus per-listener MPTCP opt-out) and the CI work improves shared tooling for every frontend PR. But no new abstraction or platform others built on: only 3 later authors touched his files (downstream_authors p0) and the CI changes are too recent to show adoption.",
+   "claims": [
+    {
+     "statement": "Three CI changes cut wall time on shared pipelines used by all Node/frontend PRs.",
+     "numbers": {
+      "prs": 3,
+      "lint_min_before": 5.2,
+      "lint_min_after": 1.5,
+      "checkout_saving_s": 74
+     },
+     "evidence_ids": [
+      126087,
+      126727,
+      126907,
+      "ws3"
+     ]
+    },
+    {
+     "statement": "The loader fix introduced a CAS-acquired sentinel lease to single-flight fleet-wide sweeps, a reusable coordination pattern.",
+     "numbers": {
+      "N": 2,
+      "L": 2
+     },
+     "evidence_ids": [
+      80285
+     ]
+    },
+    {
+     "statement": "Little evidence that others build on his code.",
+     "numbers": {
+      "downstream_authors": 3,
+      "downstream_percentile": 0.0
+     },
+     "evidence_ids": [
+      "downstream_authors",
+      "role.network.built_on_by_n"
+     ]
+    }
+   ]
+  },
+  "quality": {
+   "grade": 7,
+   "rationale": "Clean peer record: 0 reverts, 0 follow-up fixes by others, 9/9 PRs approved with no changes requested, quality_rate 1.0 (rank 1/20). Fixes ship with guarding tests (memory floor test, MPTCP regression tests) and the loader fix was verified on prod data. Held below 8 because the base is tiny (4 mature PRs) and two deep reads could not verify their quality quote (#95304 Q=0, #126537), so the risk-control evidence is partly self-reported.",
+   "claims": [
+    {
+     "statement": "No peer had to revert or fix any of his PRs, and none drew a change request.",
+     "numbers": {
+      "reverted": 0,
+      "followup_fixed": 0,
+      "first_pass_rate": 1.0,
+      "changes_requested_rate": 0.0,
+      "prs": 9
+     },
+     "evidence_ids": [
+      "quality_rate",
+      "first_pass_rate",
+      "changes_requested_rate"
+     ]
+    },
+    {
+     "statement": "The perfect quality rate rests on a small sample.",
+     "numbers": {
+      "mature_prs": 4,
+      "quality_rate": 1.0
+     },
+     "evidence_ids": [
+      "quality_rate"
+     ]
+    },
+    {
+     "statement": "Two of nine deep reads failed to verify the quality quote; #95304 scored Q=0.",
+     "numbers": {
+      "quote_fail_prs": 2,
+      "Q_95304": 0,
+      "Q_126537": 1
+     },
+     "evidence_ids": [
+      95304,
+      126537
+     ]
+    }
+   ]
+  },
+  "team": {
+   "grade": 6,
+   "rationale": "He carries a large review load (928 reviews on 854 PRs, team_leverage 2124.59, rank 2/19) and responds fast (0.18 h median), which keeps the most prolific author in the repo unblocked. But the load is narrow and mostly non-blocking: 91% of reviewed PRs are Gilbert09's, 10 change requests out of 928 reviews (9 of them in one morning on 2026-08-04), up to 71 approvals in a single day, only 4 people request his review and trust_rank is p0. The sampled comments are concrete (cache sentinel unpickling bug, resume-cursor skipping a day) and 80% of his suggested changes were adopted, so the gate is not empty; it is shallow per PR and confined to one stream.",
+   "claims": [
+    {
+     "statement": "Second-highest review leverage among candidates, concentrated on one author.",
+     "numbers": {
+      "team_leverage": 2124.59,
+      "reviews_given_prs": 854,
+      "gilbert09_prs": 778
+     },
+     "evidence_ids": [
+      "team_leverage",
+      "role.top_reviewed"
+     ]
+    },
+    {
+     "statement": "His review comments that ask for changes are usually acted on.",
+     "numbers": {
+      "changes_adopted_rate": 0.8,
+      "n": 10
+     },
+     "evidence_ids": [
+      "role.network.changes_adopted_rate",
+      122358,
+      124584
+     ]
+    },
+    {
+     "statement": "Few peers seek his review and little approval flows back to him.",
+     "numbers": {
+      "requested_by": 4,
+      "requested_by_percentile": 18.4,
+      "trust_rank_percentile": 0.0,
+      "cross_team": 7
+     },
+     "evidence_ids": [
+      "requested_by",
+      "trust_rank",
+      "cross_team"
+     ]
+    }
+   ]
+  }
+ },
+ "overall": {
+  "grade": 5,
+  "confidence": "medium"
+ },
+ "key_numbers": [
+  {
+   "label": "Review leverage (rank 2 of 19)",
+   "value": 2124.59,
+   "metric_key": "team_leverage"
+  },
+  {
+   "label": "Delivery estimate (rank 20 of 20)",
+   "value": 63.02,
+   "metric_key": "delivery"
+  },
+  {
+   "label": "Quality rate (rank 1 of 20)",
+   "value": 1.0,
+   "metric_key": "quality_rate"
+  }
+ ],
+ "calibration": {
+  "ranks": {
+   "delivery": 0.0,
+   "quality_rate": 100.0,
+   "team_leverage": 94.4,
+   "trust_rank": 0.0
+  },
+  "note": "He is last of 20 on delivery and trust_rank, first on quality_rate and second on team_leverage. Grades follow this split but compress it: delivery 5 rather than 3 because his few PRs are production-critical (P=16.0 outage fix), quality 7 rather than 9 because a 100th percentile on 4 mature PRs is a small-sample ceiling, and team 6 rather than 8 because the p94.4 leverage is raw approval volume on one author with almost no blocking reviews, which trust_rank p0 and requested_by p18.4 corroborate. Overall 5 sits below the median candidate, consistent with the matrix."
+ },
+ "custom_analyses": [
+  {
+   "question": "Is his very high review volume a real quality gate or a pass-through for one author?",
+   "why": "team_leverage is p94.4 while trust_rank is p0 and requested_by p18.4; a reviewer who approves hundreds of PRs from one person could be either the team's most important gate or a rubber stamp, and that decides the team grade.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query fuziontech reviews-given --top 15",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query fuziontech compare Gilbert09",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query fuziontech rank requested_by",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query fuziontech rank cross_team"
+   ],
+   "finding": "928 reviews on 854 PRs: 912 APPROVED, 10 CHANGES_REQUESTED, 3 DISMISSED, 3 COMMENTED. Gilbert09 accounts for 778 PRs (827 approvals); Gilbert09 has 2939 window PRs and a 24.06 h median first review overall, versus his 0.18 h. From reviews.json in the pack: 9 of his 10 change requests hit Gilbert09 in one morning (2026-08-04, 08:26-11:31 UTC); after that, 816 approvals on Gilbert09 with zero blocking reviews. Volume rose sharply late in the window (233 reviews in the week of 2026-10-19; 69 and 71 approvals on 2026-10-20/21, 13 of the 70 gaps on 10-21 under one minute). The 10 sampled comments are specific and were mostly adopted (changes_adopted_rate 0.8), but they are all non-blocking. Gilbert09 never reviewed his PRs. Net: a fast, mostly approving gate for one high-volume stream, with occasional real catches.",
+   "evidence_ids": [
+    "team_leverage",
+    "role.top_reviewed",
+    "role.network.changes_adopted_rate",
+    122358,
+    124584,
+    "trust_rank"
+   ],
+   "effect": "team 8 -> 6: leverage volume is real but narrow (one author, 7 teams, 4 requesters) and per-PR depth is limited; the adopted comments keep it above 5."
+  },
+  {
+   "question": "Is his authored work planned roadmap or reactive firefighting, and how is it spread over the window?",
+   "why": "Nine PRs over 90 days is unusual for a top-20 candidate; whether they are incident responses explains the low volume and whether criticality should outweigh count.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query fuziontech timeline",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query fuziontech prs",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query fuziontech pr 80285",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query fuziontech pr 95304",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query fuziontech pr 92102",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query fuziontech pr 126537"
+   ],
+   "finding": "Five of nine PRs are typed fix, three perf, one feature; total 728 lines. Work arrives in two bursts: 2026-08-10 to 2026-09-05 (4 PRs, three of them production-failure fixes: loader stall #80285 merged the day after the 08-09 stall, OOM #92102, backfill reconnect #95304) and 2026-10-25 to 2026-11-02 (5 PRs: Postgres source fix, CVE-2026-98432 mitigation #126537 reviewed by four people across warehouse, security, web-analytics and customer-analytics within 45 minutes, and three CI speedups). Seven weeks in between have zero authored PRs while he kept reviewing 22-133 PRs per week. All 9 PRs are deep-read, so no on-demand deep reads were needed.",
+   "evidence_ids": [
+    80285,
+    92102,
+    95304,
+    126537,
+    126087,
+    "ws2",
+    "ws1",
+    "ws3"
+   ],
+   "effect": "delivery 4 -> 5: the PRs are responses to customer-facing or security incidents with high criticality (two at C3), which lifts per-PR value enough to offset rank 20/20 volume, but not to team-pillar level."
+  },
+  {
+   "question": "Does his CI work reach beyond his own team?",
+   "why": "System grade depends on whether his tooling changes benefit other teams; his area footprint is otherwise warehouse-only.",
+   "commands": [
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query fuziontech prs --area \"Repo config/CI/tooling\"",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query fuziontech reviews-received",
+    "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query fuziontech rank downstream_authors"
+   ],
+   "finding": "The three ws3 PRs touch shared CI (nodejs gate, jscpd duplication lint, jest sharding) and were each approved first pass by developer-experience reviewers (gantoine x2, rnegron), the team that owns CI. Reviews received span 7 teams overall. But they merged 2026-10-30 to 2026-11-02, so downstream_authors (3, p0) cannot yet reflect them.",
+   "evidence_ids": [
+    126087,
+    126727,
+    126907,
+    "downstream_authors"
+   ],
+   "effect": "system stays 5: org-wide benefit is plausible from the reported savings, but none of it is yet confirmed by others building on the changes."
+  }
+ ],
+ "insights": [
+  {
+   "insight": "His two halves score in opposite directions: as an author he is last on volume but writes high-criticality production fixes (#80285 is the top-scored PR in his pack at P=16.0); as a reviewer he is near the top on volume but near the bottom on how much others trust or seek him out. Treat him as an incident responder plus throughput approver, not a broad multiplier.",
+   "evidence_ids": [
+    80285,
+    "delivery",
+    "team_leverage",
+    "trust_rank"
+   ]
+  },
+  {
+   "insight": "44% of his PRs (4/9) carry AI co-author trailers, above the 0.16 candidate median, and none was reverted or fixed by others; the pack does not say which four, so no claim is made about AI quality beyond the clean record.",
+   "evidence_ids": [
+    "ai_share",
+    "metrics.ai_reverted_or_fixed"
+   ]
+  },
+  {
+   "insight": "The CVE mitigation drew four approvals from four different teams within 45 minutes, the broadest review he received, which suggests the org treated it as urgent and cross-cutting.",
+   "evidence_ids": [
+    126537,
+    "ws4"
+   ]
+  }
+ ],
+ "red_flags": [
+  {
+   "flag": "Dossier red flag: the quality quote for #95304 was not found in the PR (Q scored 0); the deep read cited a 'production wiring is missing' requirement it could not verify, so the fix's completeness is unconfirmed.",
+   "evidence_ids": [
+    95304
+   ]
+  },
+  {
+   "flag": "Dossier red flag: the quality quote for #126537 was not found; the claim that its regression test is the only meaningful assertion is unverified. The PR itself states it removes a precondition but does not close the CVE.",
+   "evidence_ids": [
+    126537
+   ]
+  },
+  {
+   "flag": "Review pattern risk: 816 consecutive approvals of one author's PRs with no blocking review after 2026-08-04, peaking at 71 approvals in one day, leaves that stream with little independent gating.",
+   "evidence_ids": [
+    "role.top_reviewed",
+    "team_leverage"
+   ]
+  }
+ ],
+ "counter_evidence": "Against the low delivery grade: the matrix sums episode points, so a single outage fix (#80285, P=16.0) counts like three routine PRs, and his seven-week authoring gap may reflect off-repo or leadership work invisible here. Against the review-depth concern: the sampled comments are concrete bugs that were fixed afterwards (pickled sentinel breaking the negative cache in #122358, resume cursor skipping a day in #124584) and 80% of his requested changes were adopted, so some approvals are informed. Against the quality grade: quality_rate 1.0 is computed on only 4 mature PRs, and two of nine deep reads could not verify the quality quote. Peer behaviour and the PR descriptions do not conflict anywhere: no revert, fix, or change request contradicts what his PRs claim.",
+ "coverage": {
+  "sampled_prs": 9,
+  "missing_data": [
+   "review_requested_by",
+   "issue_reactions",
+   "bridge_rank",
+   "changes_rounds_mean"
+  ],
+  "diff_truncated_share": 0.0
+ }
+}

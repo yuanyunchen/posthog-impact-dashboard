@@ -1,0 +1,202 @@
+{
+ "_method": {
+  "story": "Round one analysed 20 shortlisted engineers and picked Gilbert09, webjunkie, pauldambra, Piccirello and haacked. An independent audit then re-checked every input against the raw PR data and found that the shortlist had missed strong engineers (eli-r-ph and MattBro were added), a quality rate whose numerator and denominator used different PR sets, self-repair that the follow-up-fix metric could not see, and explanations that claimed more than the merged PRs show. We fixed the quality calculation, added self-repair and human versus AI-only approval counts, rewrote the claims to match what merged, and had two independent decisions, head-to-head comparisons and a devil's-advocate pass re-rank all 22 candidates. The top three held; rafaeelaudibert entered at 4th, haacked stayed 5th after beating Piccirello head-to-head in both presentation orders, and Piccirello fell to 6th.",
+  "changes_vs_round1": [
+   {"item": "rafaeelaudibert", "round1": "6th", "round2": "4th", "reason": "Both round-two decisions placed him in their top five (4th and 5th), and he beat Piccirello head-to-head in both presentation orders."},
+   {"item": "haacked", "round1": "5th", "round2": "5th", "reason": "Ranked 6th by both decisions; moved into 5th after beating Piccirello head-to-head in both presentation orders and passing every gate."},
+   {"item": "Piccirello", "round1": "4th", "round2": "6th", "reason": "Lost head-to-head to haacked and to rafaeelaudibert, each in both presentation orders."},
+   {"item": "eli-r-ph", "round1": "not analysed", "round2": "7th", "reason": "Added after the audit found the shortlist had missed him; 32 major episodes, tied third of 22."},
+   {"item": "MattBro", "round1": "not analysed", "round2": "19th", "reason": "Added after the audit; judged on the same standard as everyone else."},
+   {"item": "TueHaulund", "round1": "10th", "round2": "8th", "reason": "Re-ranked by the round-two decisions (9th and 8th)."},
+   {"item": "mayteio", "round1": "7th", "round2": "9th", "reason": "Second decision ranked him 12th, so he failed the gate requiring a top-7 place in both decisions."},
+   {"item": "tatoalo", "round1": "8th", "round2": "10th", "reason": "Both decisions ranked him 10th; lost head-to-head to pauldambra in both orders."},
+   {"item": "dmarchuk", "round1": "9th", "round2": "11th", "reason": "Dropped out of the top ten after eli-r-ph was added and the decisions were re-run."},
+   {"item": "Quality rate", "round1": "Affected PRs of all tiers divided by substantive-or-higher PRs", "round2": "Numerator and denominator use the same PR set", "reason": "pauldambra moved from 0.934 (lowest) to 0.952 (third lowest of 22)."},
+   {"item": "Gilbert09's lead", "round1": "6.5x the next candidate", "round2": "3.5x the next candidate (130 vs 37 major episodes)", "reason": "The old ratio was taken against a candidate who was second on a different metric."},
+   {"item": "Network labels", "round1": "trust, building on his work, adoption", "round2": "approval-network centrality, later same-file authors, change-request resolution proxy", "reason": "The metrics count graph positions and file edits, not trust, dependency or adoption."},
+   {"item": "New quality signals", "round1": "Peer follow-up fixes only", "round2": "Adds self-repaired PRs and human vs AI-only approval counts", "reason": "40% of human-authored window PRs were approved only by an AI bot, and self-repair chains were invisible."}
+  ]
+ },
+ "Gilbert09": {
+  "rank": 1,
+  "headline": "Warehouse-sources owner who also built PostHog's integrations credential platform",
+  "why": "Gilbert09 merged 2,939 PRs in the window, and 130 of his work episodes contain a major-tier PR, 3.5x the next candidate's 37. Most of that major work is on the shared warehouse sync pipeline, such as the claim-query fix after every V3 loader pod stopped loading batches for 30 minutes (#110610) and the end of duplicate rows from unfinished append runs (#113196). He also built an integrations SDK and moved the call sites of 21 products onto it (#125029), as groundwork for a separate credentials service.",
+  "keypoints": [
+   "130 major episodes, 3.5x the next candidate",
+   "Fixed a fleet-wide loader stall and duplicate rows",
+   "SDK call sites migrated across 21 products"
+  ],
+  "tags": ["Data pipeline", "Reliability", "Credentials platform"],
+  "key_facts_note": "Major episodes group related PRs; about 119 remain after removing roughly 870 templated add-source and add-table PRs.",
+  "caveats": [
+   "His August change later caused a two-hour credential-read outage, fixed by #122385",
+   "1,575 of his 2,939 PRs were approved only by an AI bot",
+   "The SDK migration merged in late October; no quality signal yet"
+  ],
+  "sources": [110610, 113196, 125029, 124844, 86546, 122385, "matrix.major_episodes", "recall.prs", "recall.ai_only_approved_prs", "recall.human_approved_prs"]
+ },
+ "webjunkie": {
+  "rank": 2,
+  "headline": "Developer-experience engineer who builds shared webhook, CI and ownership plumbing",
+  "why": "webjunkie created posthog/ingress, one inbound-webhook transport, and moved webhooks from eight providers onto it (#100292). When the Slack move exposed a path where a failed write still answered success, he made ingress return a retry status so providers redeliver (#101508). He also squashed old Django migrations so a fresh database migrates in about 5 minutes instead of about 20 (#91646).",
+  "keypoints": [
+   "One webhook transport now serves eight providers",
+   "Fresh-database migrations cut from ~20 to ~5 minutes",
+   "One shared reader for code-ownership files"
+  ],
+  "tags": ["Developer platform", "CI health", "Webhooks"],
+  "key_facts_note": "trust_rank is approval-network centrality; his 24 change requests on 22 PRs show resolution by proxy, not proven adoption.",
+  "caveats": [
+   "His dashboard-latency fix (#104208) reversed a regression from his own granian bump",
+   "213 of his 559 PRs were approved only by an AI bot",
+   "1000-row API list cap (#126411) merged too late to judge"
+  ],
+  "sources": [100292, 101508, 91646, 103852, 104208, 87830, 126411, 100417, 100876, 100892, 101487, 101488, 101558, 102246, 104023, "matrix.trust_rank", "roles.network.changes_adopted_rate", "recall.ai_only_approved_prs"]
+ },
+ "pauldambra": {
+  "rank": 3,
+  "headline": "Frontend-platform engineer cutting boot cost and hardening shared Django paths",
+  "why": "pauldambra moved the esbuild chunk map out of the HTML document into a static file, shrinking the built document from 544 KB to 10 KB (#94059). On the backend he changed refresh-token reuse handling after an OAuth incident in which /oauth/token p95 latency exceeded 300 seconds (#83929). He also stopped settings PATCH requests from wiping server-managed integration and widget-token state (#108163).",
+  "keypoints": [
+   "HTML document shrank from 544 KB to 10 KB",
+   "Fixed OAuth incident and integration-state loss bugs",
+   "CI check now blocks new upward frontend imports"
+  ],
+  "tags": ["Frontend platform", "Performance", "Backend hardening"],
+  "key_facts_note": "The 544 KB to 10 KB figure is the built template size reported in #94059, not a measured page-load change.",
+  "caveats": [
+   "Quality rate 0.952, third lowest of 22; 13 peer follow-up fixes",
+   "365 of his 652 PRs were approved only by an AI bot",
+   "ORM default change across 275 models merged November 2; untested"
+  ],
+  "sources": [94059, 83929, 108163, 126768, 126463, "matrix.quality_rate", "recall.reverted", "recall.followup_fixed", "recall.ai_only_approved_prs"]
+ },
+ "rafaeelaudibert": {
+  "rank": 4,
+  "headline": "Growth-team engineer whose major work centres on OAuth and MCP security",
+  "why": "rafaeelaudibert required client authentication on the ID-JAG jwt-bearer grant, so holding an ID-JAG is no longer enough to get a PostHog token (#113013). He then linked ID-JAG identities by IdP subject instead of email, closing a path where a reassigned address reached a departed employee's account (#113014). He also removed per-account data from advertised MCP prompts, which hosts cache and serve across customers (#105547).",
+  "keypoints": [
+   "Closed ID-JAG client and identity-linking gaps",
+   "Removed account data from cached MCP prompts",
+   "Highest betweenness in the review graph"
+  ],
+  "tags": ["Auth security", "OAuth", "MCP"],
+  "key_facts_note": "The security share of his 26 major PRs comes from the analyst's reading, not an automatic label.",
+  "caveats": [
+   "Quality rate 0.945, second lowest of 22; 7 peer follow-up fixes",
+   "86 PRs had one teammate as the only human approver",
+   "hog CLI port merged late October; posthog-cli not yet retired"
+  ],
+  "sources": [113013, 113014, 105547, 125164, "matrix.quality_rate", "recall.followup_fixed", "roles.network.bridge_rank", "triage.major_prs"]
+ },
+ "haacked": {
+  "rank": 5,
+  "headline": "Feature-flags engineer who led the flag_evaluations storage migration",
+  "why": "haacked built the path that lets an organization stop writing $feature_flag_called to the events table: ingestion skips that copy for organizations in FLAG_EVALUATIONS_ONLY mode (#110254). HogQL queries that ask events for flag calls now read flag_evaluations instead, within limits such as an 89-day lower time bound and query shapes it refuses with an error (#124397). He also made filtered deletion requests reach flag rows that have no events copy (#117395).",
+  "keypoints": [
+   "Flag calls can leave the events table",
+   "Deletion requests now reach the new table",
+   "15 engineers requested his review, third of 22"
+  ],
+  "tags": ["Data migration", "Feature flags", "Privacy"],
+  "key_facts_note": "Only 6 PRs carry AI co-author trailers, but 40 descriptions mention AI or agent help; trailers undercount AI use.",
+  "caveats": [
+   "Mode 2 is enabled per organization by staff (#106290)",
+   "Rewrite needed four of his own major fixes after October 20",
+   "Ranked 6th by both decisions; 5th after beating Piccirello head-to-head"
+  ],
+  "sources": [110254, 124397, 117395, 106290, 125115, 125267, 125649, 126076, "matrix.requested_by", "recall.ai_coauthored_prs", "decision.pairwise.C18-C16"]
+ },
+ "Piccirello": {
+  "rank": 6,
+  "headline": "Application-security engineer hardening permissions, warehouse connections and CSP",
+  "why": "Piccirello replaced hand-copied project-access precedence with one rule that API checks, User.teams and all_users_with_access share (#114423). He took the app's Content Security Policy from report-only to enforced, extending enforcement to shared and embedded documents while the bare /exporter document stays report-only (#116719). In the eMudhra CA response his Node bump crash-looped the MCP server, adboio pinned it back, and his #122294 moved it forward again.",
+  "keypoints": [
+   "37 major episodes, second of 22",
+   "One precedence rule for project access",
+   "Staged CSP from report-only to enforced"
+  ],
+  "tags": ["Application security", "Permissions", "CSP"],
+  "key_facts_note": "Merge records show the CA fixes; which services were actually redeployed is not in the data.",
+  "caveats": [
+   "CA incident credit is shared with adboio, who pinned MCP back (#121721)",
+   "About 24 CSP PRs repaired or relaxed the policy (analyst count)",
+   "Team leverage 350, third lowest of 22"
+  ],
+  "why_not_top5": "He lost head-to-head to haacked in both presentation orders: haacked led on delivery (697 vs 527), quality rate (0.980 vs 0.966) and team leverage (821 vs 350).",
+  "sources": [114423, 116719, 121580, 121721, 122294, "matrix.major_episodes", "matrix.team_leverage", "decision.pairwise.C18-C16", "decision.pairwise.C04-C18"]
+ },
+ "eli-r-ph": {
+  "rank": 7,
+  "headline": "Data-correctness engineer for the persons store and capture rate limiter",
+  "why": "eli-r-ph built persons_dedup, a command to clear about 782k duplicate person rows that blocked a planned UNIQUE (team_id, uuid) index (#81532). He stopped hand-run person tools from hard-deleting live rows or writing ClickHouse tombstones that Postgres never sees (#111380). In capture he fixed the global rate limiter dropping count updates on busy pods (#116680).",
+  "keypoints": [
+   "32 major episodes, tied third of 22",
+   "Person dedup, deletion and consistency tooling",
+   "Capture rate-limiter accuracy and failure handling"
+  ],
+  "tags": ["Data correctness", "Ingestion", "Persons"],
+  "key_facts_note": "Added in round two after the audit found the shortlist had missed him.",
+  "caveats": [
+   "Repair commands merged; no evidence they ran in production",
+   "16 of his PRs were later repaired by himself",
+   "Review sought by only 3 engineers"
+  ],
+  "why_not_top5": "Both decisions ranked him 7th, behind haacked, whose work crosses more teams and whose review is sought by 15 engineers versus his 3.",
+  "sources": [81532, 111380, 116680, 117445, "matrix.major_episodes", "matrix.requested_by", "recall.self_repaired_prs", "decision.primary", "decision.second"]
+ },
+ "TueHaulund": {
+  "rank": 8,
+  "headline": "Lead builder of Replay Vision, including its billing and privacy plumbing",
+  "why": "TueHaulund made Replay Vision's organization credit limit exact at admission, so concurrent scanners can no longer spend past it (#116148). In one September week he closed paths where a deleted recording's data survived, such as making every export of a deleted recording expire (#101932). He also restored scanner read metering in prod US and EU after an earlier change of his own had broken it (#86160).",
+  "keypoints": [
+   "Exact credit-limit admission for Replay Vision",
+   "Deleted recordings' exports and derived data removed",
+   "Quality rate 0.993, best of the top ten"
+  ],
+  "tags": ["Product builder", "Billing", "Privacy"],
+  "caveats": [
+   "His own #84098 broke prod read metering for about a day",
+   "Impact stays mostly inside one product",
+   "111 of his 238 PRs were approved only by an AI bot"
+  ],
+  "why_not_top5": "The decisions ranked him 9th and 8th: his impact stays mostly inside one product, and eli-r-ph's 32 versus 23 major episodes touch data every product reads.",
+  "sources": [116148, 101932, 86160, 84098, "matrix.quality_rate", "matrix.major_episodes", "recall.ai_only_approved_prs", "decision.second"]
+ },
+ "mayteio": {
+  "rank": 9,
+  "headline": "Workflows engineer moving PostHog's own transactional email onto Workflows",
+  "why": "mayteio built the path for PostHog's own transactional emails to send through Workflows instead of Customer.io: #122019 routed password_reset behind a flag for one production test, and #122502 mapped the other 35 templates. He also made cyclotron job counters saturate at all 13 increment sites, so one row can no longer take its queue down (#97591).",
+  "keypoints": [
+   "Transactional email path built behind a flag",
+   "Queue counters can no longer stall CDP jobs",
+   "Fixed realtime cohorts marked ready with zero members"
+  ],
+  "tags": ["Workflows", "CDP reliability", "Email migration"],
+  "caveats": [
+   "Full cutover from Customer.io is not visible in the window",
+   "Quality rate 0.957; 1 revert and 6 peer follow-up fixes",
+   "Most email work merged in October, with little quality signal"
+  ],
+  "why_not_top5": "He beat rafaeelaudibert head-to-head in both orders, but the two decisions ranked him 8th and 12th, so he failed the top-7-in-both gate.",
+  "sources": [122019, 122502, 97591, 121092, "matrix.quality_rate", "recall.reverted", "recall.followup_fixed", "decision.pairwise.C04-C20", "decision.devil"]
+ },
+ "tatoalo": {
+  "rank": 10,
+  "headline": "Leading builder of the cloud agent Tasks product and its sandboxes",
+  "why": "tatoalo keeps long cloud task runs from losing work: sandbox snapshot rotation now preserves active worktrees (#109870), and checkpointing keeps pending messages and workspace files (#116932). He also made cloud Pi sessions treat cloud checkouts as untrusted, so repository-defined startup resources do not load there (#120934).",
+  "keypoints": [
+   "Sandbox rotation preserves live worktrees",
+   "Checkpoints keep pending messages and files",
+   "Cloud checkouts treated as untrusted"
+  ],
+  "tags": ["Agent infrastructure", "Reliability", "Sandbox security"],
+  "caveats": [
+   "Rotation launch (#86676) was followed by six of his own follow-up PRs",
+   "7 of his PRs were later fixed by peers",
+   "Impact stays inside the Tasks product"
+  ],
+  "why_not_top5": "He lost head-to-head to pauldambra in both orders: similar major episodes (21 vs 20) but about half the delivery estimate (719 vs 1,405), and fixes contained in one product.",
+  "sources": [109870, 116932, 120934, 86676, "matrix.major_episodes", "matrix.delivery", "recall.followup_fixed", "decision.pairwise.C11-C08"]
+ }
+}

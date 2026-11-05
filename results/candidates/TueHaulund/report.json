@@ -1,0 +1,142 @@
+{
+  "cid": "TueHaulund",
+  "positioning": "Lead builder of Replay Vision (AI analysis of session recordings): he authors 76% of the area's PRs and also owns its billing, privacy and rasterizer plumbing, with an unusually clean quality record.",
+  "role": {
+    "primary_role": "product builder",
+    "team": "replay",
+    "how_they_create_impact": "Ships Replay Vision end to end, from scanner product features and the highlights feed to the billing meters, data-deletion cascade and video rasterizer they depend on. His biggest wins are correctness fixes in billing and customer-data handling, not headline features.",
+    "network_summary": "Go-to reviewer inside his own product group: 17 distinct people asked for his review, the most of any of the 20 candidates (role.network.requested_by_n). His reach stays narrow, though. He approved authors on 14 teams (role.network.teams_covered_n, rank 14/20), his approval-graph trust is below median (role.network.trust_rank 0.01, p26.3) and his bridge rank is 7 (role.network.bridge_rank). His own PRs almost never need correction: first-pass approval on 99% of 127 reviewed PRs (role.network.first_pass_rate), CHANGES_REQUESTED once (role.network.changes_requested_rate), zero reverts (role.network.reverts_received) and one follow-up fix (role.network.fixes_received). One teammate, fasyy612, reviewed 76 of his 129 reviewed PRs (role.top_reviewers), so his review loop leans on a single person."
+  },
+  "core_contributions": [
+    {
+      "workstream_id": "ws1",
+      "title": "Building Replay Vision into a billable, governed product",
+      "what": "Led the Replay Vision product across 182 PRs: historical backfill (#79085), Scouts (#86606), the programmatic scan-requests API (#113767), workflow steps (#115239), the highlights feed and its rebuild for speed, plus the billing pieces underneath: exact org credit-limit admission (#116148), spend projection in the usage report (#125102) and the read-metering repair (#86160).",
+      "why_it_matters": "Replay Vision spends real LLM money per scan. Getting admission, metering and billing forecasts exact decides whether the product can be sold without overspend or billing disputes, and the requests API opens it to other backend services.",
+      "outcome": "10 major PRs in this workstream, 716.97 tier points. Deep reads score #113767 at P=9.85 and #116148 at P=9.62. Metering that had silently stopped in prod US/EU was restored within about a day (#86160, P=10.56). He is the top author in the area (role.top_area_leader) among 46 authors.",
+      "his_role": "lead",
+      "evidence_prs": [79085, 86606, 113767, 115239, 116148, 125102, 86160],
+      "numbers": {"prs": 182, "major_prs": 10, "points_sum": 716.97, "top_area_share": 0.76, "area_authors": 46}
+    },
+    {
+      "workstream_id": "ws2",
+      "title": "Recording deletion and privacy cascade",
+      "what": "In one week (2026-09-14 to 09-18) he closed every path where a deleted recording's data survived. Exports (#101932), Replay Vision observations and rendered video (#101306), $recording_observed events through a new generic Event-type AsyncDeletion (#101472, #101473) and embeddings (#101775) are now all removed, and Gemini calls were switched to privacy mode (#101862). Earlier, #83017 closed cross-project and RBAC-bypassing authorization gaps in the export API.",
+      "why_it_matters": "These are customer-data compliance gaps. Deleted recordings stayed downloadable for 30 days, their PII stayed in scanner summaries, and recording content leaked into an internal analytics project. #83017 stopped one customer from downloading another project's recordings.",
+      "outcome": "8 major PRs in that one week. Deep reads: #83017 P=13.0, #101932 P=10.56, #101472 P=9.85, #101473 P=7.8, #101862 P=6.35. The AsyncDeletion Event type lets any Postgres writer queue ClickHouse event deletions.",
+      "his_role": "lead",
+      "evidence_prs": [83017, 101932, 101306, 101472, 101473, 101775, 101862],
+      "numbers": {"major_prs_in_week": 8, "prs_in_week": 25, "top_deepread_P": 13.0}
+    },
+    {
+      "workstream_id": "ws2",
+      "title": "Hardening the session-replay rasterizer",
+      "what": "A full service review of the rasterizer (#83928): Temporal cancellation, stall watchdog, poison-session quarantine, ffmpeg frame fixes. Then input size caps (#89010), pod-resource-aware worker pickup to stop OOM kills (#108389), connection draining on shutdown (#122879) and a measured video-clock timeline that fixes citation drift of up to minutes (#101761).",
+      "why_it_matters": "Every Replay Vision scan and video export depends on the rasterizer. OOM kills wiped out every render on a pod, and timestamp drift put citations on the wrong frame.",
+      "outcome": "#101761 is his highest-scored PR (P=16.0, V3 C3 N2 L2 Q2). #83928 scored P=7.82 on deep read. ws2 has 15 major PRs out of 35, the densest tier mix of any of his workstreams (Q_mean 1.62).",
+      "his_role": "lead",
+      "evidence_prs": [83928, 89010, 108389, 122879, 101761],
+      "numbers": {"prs": 35, "major_prs": 15, "top_P": 16.0}
+    }
+  ],
+  "angles": {
+    "delivery": {
+      "grade": 8,
+      "rationale": "On content he is a team core pillar who leans toward the critical end. 27 major PRs, more than pauldambra's 20, and many of them are billing correctness (#86160, #90010, #116148, #125102) or customer-data security and privacy (#83017, #111611, the deletion cascade). The matrix delivery estimate (p15.8) understates this. It collapses his 238 PRs into 61 episodes and scores only the top PR plus 25% of the rest, and his major episode count sits at the median (23, p57.9). Not 9 because the value mostly accrues to one product, not to many teams.",
+      "claims": [
+        {"statement": "Closed billing revenue and overspend gaps: mobile recordings from unlisted SDKs went unbilled, and concurrent scanners could overspend the org credit limit.", "numbers": {"P_90010": 7.82, "P_116148": 9.62, "P_86160": 10.56}, "evidence_ids": [90010, 116148, 86160, 125102]},
+        {"statement": "Closed cross-project export authorization and path-traversal gaps, and a PII leak in scan answers that affected about 2% of answers.", "numbers": {"P_83017": 13.0, "P_111611": 12.1, "pii_answer_share": 0.02}, "evidence_ids": [83017, 111611]},
+        {"statement": "27 major PRs and 23 major episodes, yet a delivery estimate of 508.35 because 238 PRs collapse into 61 episodes; the stratified estimate is 1334.35.", "numbers": {"major_prs": 27, "major_episodes": 23, "delivery_hat": 508.35, "delivery_stratified": 1334.35, "episodes": 61}, "evidence_ids": ["delivery", "major_episodes", "estimate.delivery_stratified"]}
+      ]
+    },
+    "system": {
+      "grade": 6,
+      "rationale": "He does solid infrastructure work for his own product: rasterizer resilience, a generic Event-type AsyncDeletion, a programmatic requests API, and node server connection draining. Some pieces help beyond Replay Vision, such as the cached Temporal test-server downloader for many backend suites (#124628) and per-commit CI concurrency (#114491). But other people building on his code is only middling (75 downstream authors, p42.1), and core_share is 0.09, so this is effective product platform work, not a company platform.",
+      "claims": [
+        {"statement": "Built reusable mechanisms that outlive a single feature: a generic Event AsyncDeletion any Postgres writer can use, and a scan-requests API with idempotency keys for backend callers.", "numbers": {"P_101472": 9.85, "P_113767": 9.85}, "evidence_ids": [101472, 113767]},
+        {"statement": "Downstream reuse is near median: 75 other authors later changed files he touched, against a median of 77.", "numbers": {"downstream_authors": 75, "percentile": 42.1, "core_share": 0.09}, "evidence_ids": ["downstream_authors", "metrics.core_share"]},
+        {"statement": "Fixed shared test and CI reliability outside his product.", "numbers": {"ws4_prs": 5}, "evidence_ids": [124628, 114491, "ws4"]}
+      ]
+    },
+    "quality": {
+      "grade": 8,
+      "rationale": "Behaviour from peers is very clean: zero reverts, one follow-up fix by someone else, CHANGES_REQUESTED on 1 of 127 reviewed PRs, quality_rate 0.99 (2/20), and 25 AI-co-authored PRs with none reverted or fixed. He also adds guard tests after incidents, such as the unmocked ClickHouse test in #86160. Two things keep this at 8. The worst incident was his own: #84098 broke prod read metering and #86160 repaired it the next day. And 76 of his 129 reviewed PRs were approved by one teammate, which makes the first-pass rate a weaker signal.",
+      "claims": [
+        {"statement": "Near-zero corrective peer behaviour on 238 PRs.", "numbers": {"reverts_received": 0, "fixes_received": 1, "changes_requested_rate": 0.01, "quality_rate": 0.99, "quality_rate_percentile": 94.7}, "evidence_ids": ["quality_rate", "role.network.reverts_received", "role.network.fixes_received"]},
+        {"statement": "Self-inflicted prod incident: #84098 shadowed a SQL alias, halting scanner read metering in US/EU from 2026-08-19 13:00 UTC until his fix #86160 merged on 2026-08-20.", "numbers": {"outage_hours_approx": 22, "P_86160": 10.56}, "evidence_ids": [84098, 86160]},
+        {"statement": "AI-assisted output holds up: 25 AI-co-authored PRs, none reverted or follow-up fixed.", "numbers": {"ai_coauthored_prs": 25, "ai_reverted_or_fixed": 0}, "evidence_ids": ["metrics.ai_coauthored_prs", "metrics.ai_reverted_or_fixed"]}
+      ]
+    },
+    "team": {
+      "grade": 6,
+      "rationale": "His review comments are high-signal. They catch real defects: PATCH partial updates wiping JSON fields (#78514), an exception handler that can never fire (#81980), stale filters gaining creator permissions (#83362), billing-meter drift (#89874). 17 people requested his review, the most of anyone. But his volume and reach are low. team_leverage is p16.7, he gave only 6 CHANGES_REQUESTED, adoption is 4 of 6 (0.67), 80 of his 142 reviewed PRs belong to three close teammates, and trust_rank is p26.3. He matters inside the Replay Vision group and is not yet a cross-org multiplier.",
+      "claims": [
+        {"statement": "Most-requested reviewer among the 20 candidates.", "numbers": {"requested_by": 17, "percentile": 100.0, "median": 5}, "evidence_ids": ["requested_by", "role.network.requested_by_n"]},
+        {"statement": "Review comments identify concrete correctness bugs, and the commented lines changed afterwards.", "numbers": {"changes_requested_given": 6, "changes_adopted_rate": 0.67}, "evidence_ids": [78514, 81980, 83362, 89874, "role.network.changes_adopted_rate"]},
+        {"statement": "Review leverage and graph trust are below median: 214 reviews on 142 PRs, with 80 of those PRs from ksvat, arnohillen and fasyy612.", "numbers": {"team_leverage": 536.01, "team_leverage_percentile": 16.7, "trust_rank_percentile": 26.3, "cross_team": 14}, "evidence_ids": ["team_leverage", "trust_rank", "cross_team"]}
+      ]
+    }
+  },
+  "overall": {"grade": 7, "confidence": "medium"},
+  "key_numbers": [
+    {"label": "Major-tier PRs", "value": 27, "metric_key": "tier_counts.major"},
+    {"label": "Quality rate (2/20)", "value": 0.99, "metric_key": "quality_rate"},
+    {"label": "People requesting his review (1/20)", "value": 17, "metric_key": "requested_by"}
+  ],
+  "calibration": {
+    "ranks": {"delivery": 15.8, "quality_rate": 94.7, "team_leverage": 16.7, "trust_rank": 26.3},
+    "note": "The matrix places him low on delivery (17/20), team leverage (16/19) and trust (15/20), and near the top on quality (2/20). My delivery grade of 8 is deliberately higher than the delivery percentile. The episode estimator compresses a long iterative series inside one product into 61 episodes, while his major episode count (p57.9), his 27 major PRs and the content of his deep-read PRs (P up to 16.0, several billing and security fixes) put him in the upper half. Team 6 and system 6 agree with the low leverage, trust and downstream ranks. Quality 8 agrees with p94.7, minus one notch for the self-caused metering outage and single-reviewer concentration. Overall 7: a core pillar of one product team, not yet multi-team."
+  },
+  "custom_analyses": [
+    {
+      "question": "Is his low delivery percentile real, or an artifact of how the estimator groups 238 PRs inside one product?",
+      "why": "He has more major PRs than a p94.7 delivery peer (pauldambra), yet sits at p15.8. Deciding whether to trust the estimator determines the delivery grade.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query TueHaulund rank delivery",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query TueHaulund rank major_episodes",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query TueHaulund compare pauldambra",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query TueHaulund prs --tier major"
+      ],
+      "finding": "Against pauldambra: 27 vs 20 major PRs, 23 vs 20 major episodes, 1 vs 46 mechanical PRs, 3 vs 42 trivial. Yet his delivery estimate is 508.35 vs 1404.87, because 238 PRs fold into 61 episodes; his stratified estimate is 1334.35. Of his 27 major PRs, 17 are correctness fixes in billing, privacy or the rasterizer. Six on-demand deep reads of unsampled majors all scored high (#83017 13.0, #113767 9.85, #116148 9.62, #90010 7.82, #83928 7.82, #101862 6.35).",
+      "evidence_ids": [83017, 113767, 116148, 90010, 83928, 101862, "delivery", "major_episodes"],
+      "effect": "delivery 6 → 8: the content of his major work is billing- and security-critical, and the low percentile comes from the episode estimator penalising a long single-product series."
+    },
+    {
+      "question": "Was the data-deletion/privacy work a coordinated push, and what came before it?",
+      "why": "The timeline shows a zero-PR week (2026-09-07) followed by his peak major-PR week. That pattern fits a planned compliance sweep, not scattered fixes.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query TueHaulund timeline",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query TueHaulund prs --since 2026-09-14 --until 2026-09-20"
+      ],
+      "finding": "The week of 2026-09-14 has 25 PRs, 8 of them major (130.7 points), and nearly all close deletion and retention gaps: exports (#101932, #101123, #101930), observations and video (#101306, #101314), events via a new AsyncDeletion type (#101472, #101473), embeddings (#101775), Gemini privacy mode (#101862) and retiring long-term storage reads so deleted recordings 404 (#102120). This is a deliberate sweep he led, not a reaction to a single bug.",
+      "evidence_ids": [101932, 101306, 101472, 101473, 101775, 101862, 102120, "ws2"],
+      "effect": "Supports delivery 8 (compliance-critical), and the ws2 contribution is classed as lead, not contributor."
+    },
+    {
+      "question": "Where does his review weight actually land, and how does it square with low team_leverage?",
+      "why": "He is #1 in requested_by but p16.7 in team_leverage, so it matters whether his reviewing is broad or concentrated.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query TueHaulund reviews-given --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query TueHaulund reviews-received --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query TueHaulund rank requested_by",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query TueHaulund rank cross_team"
+      ],
+      "finding": "Given: 214 reviews on 142 PRs from 32 authors. 80 of those PRs come from three teammates (ksvat 32, arnohillen 27, fasyy612 21), plus fivestarspicy 14 on error-tracking. By state: 112 APPROVED, 94 COMMENTED, 6 CHANGES_REQUESTED, all 6 on ksvat or arnohillen. Received: fasyy612 reviewed 76 of his 129 reviewed PRs. The review loop is a tight two-way pair inside the Replay Vision group. Several of his comments are tagged as agent-drafted and then reviewed by him (#94238, #89874, #107183), and they still find concrete defects.",
+      "evidence_ids": [78514, 81980, 94238, 89874, 107183, "requested_by", "cross_team", "team_leverage"],
+      "effect": "team stays at 6: high-trust and high-signal inside his group (requested_by p100) but narrow (cross_team p28.9, trust_rank p26.3); the single-reviewer dependency also trims quality from 9 to 8."
+    }
+  ],
+  "insights": [
+    {"insight": "His highest-value work is invisible plumbing under his own product: billing meters, credit admission, deletion cascades and the rasterizer. Feature PRs alone would undersell him.", "evidence_ids": [86160, 90010, 116148, 101761, "ws2"]},
+    {"insight": "Volume is bursty and iterative. The week of 2026-10-26 has 46 PRs, mostly highlights-feed performance and renames (e.g. cold load 19.2s → 0.65s in #125500), but only 2 major. Count-based metrics overstate that week, while the episode estimator understates the long series as a whole.", "evidence_ids": [125500, 125981, 125108, "ws1"]},
+    {"insight": "He uses AI tools in both writing and reviewing (25 AI-co-authored PRs, agent-drafted review comments he signs off on) with no measurable quality cost.", "evidence_ids": ["metrics.ai_coauthored_prs", 94238, 107183]}
+  ],
+  "red_flags": [
+    {"flag": "One of his PRs received a follow-up fix from someone else (peer.followup_fixed = 1); which PR is not identified in the pack.", "evidence_ids": ["peer.followup_fixed"]},
+    {"flag": "#86160: the deep-read quote supporting the novelty score N was not found in the diff (N scored 0).", "evidence_ids": [86160]},
+    {"flag": "#101932: the deep-read quote supporting the quality score Q was not found in the diff.", "evidence_ids": [101932]},
+    {"flag": "Self-caused prod incident: #84098 broke scanner read metering in US/EU for about 22 hours before his own fix #86160.", "evidence_ids": [84098, 86160]}
+  ],
+  "counter_evidence": "PR descriptions frame #86160 as a heroic catch, but peer behaviour and history show the outage came from his own #84098 the day before; credit goes to fast detection and the guard test, not to rescuing others. The very high first-pass rate (0.99 on 127) is partly a function of one teammate (fasyy612) reviewing 76 of his PRs; it is not broad external validation. Team-graph trust (p26.3) and cross-team approvals (p28.9) contradict any reading of him as an org-wide reviewer despite ranking first on requested_by. On the other side, the matrix delivery percentile (p15.8) contradicts the content of his major PRs; I side with the content, using the six on-demand deep reads and the major-episode rank as support.",
+  "coverage": {"sampled_prs": 19, "ondemand_deepreads": 6, "missing_data": ["review_requested_by", "issue_reactions"], "diff_truncated_share": 0.32}
+}

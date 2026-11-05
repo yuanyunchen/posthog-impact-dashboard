@@ -1,0 +1,234 @@
+{
+  "cid": "danielcarletti",
+  "positioning": "The second-largest author in Warehouse sources (232 PRs, 94% in one area) who owns the reliability of Postgres CDC and warehouse ingestion: most of his major work fixes silent data loss, duplicated rows and billing errors in customer syncs, shipped at high AI-assisted volume and mostly signed off by a bot approver rather than a human.",
+  "role": {
+    "primary_role": "product builder",
+    "team": "warehouse-sources (inferred; team_map has no entry for him)",
+    "how_they_create_impact": "He finds and closes data-correctness gaps in the warehouse import pipeline: CDC ordering and delete enrichment, replication slot and WAL safety, resumable-sync duplication, Stripe webhook data loss, OOM-looping rewrites, plus a run of SSRF and injection hardening on source connections. In October he added roughly 30 alpha source connectors. He is also the fastest and most frequent approver of the area lead's PRs.",
+    "network_summary": "Close working pair with the area lead Gilbert09 rather than a broadly trusted approver. 205 of the 257 PRs he reviewed are Gilbert09's (role.top_reviewed) and Gilbert09 reviewed 50 of his 75 human-reviewed PRs (role.top_reviewers). Only 2 people ever requested his review (role.network.requested_by_n) and his approval-graph PageRank is 19th of 20 (role.network.trust_rank, matrix.trust_rank p5.3). His approvals reach 20 authors across 11 teams (role.network.approved_authors_n, role.network.teams_covered_n), but 211 of those PRs are inside warehouse-sources. 52 other authors later built on files he changed (role.network.built_on_by_n), which is 15.8th percentile among the 20. Importance flow is almost entirely from his own authorship (role.network.importance_flow.author 1230.11 of 1245). He is not a bridge between communities (role.network.bridge_rank unknown, community 5). He rarely needs correction: 2 changes-requested reviews on 75 human-reviewed PRs (role.network.changes_requested_rate 0.03), and 0 reverts."
+  },
+  "core_contributions": [
+    {
+      "workstream_id": "ws1",
+      "title": "Buffered Postgres CDC made safe: ordering, deletes, resets and slot hygiene",
+      "what": "He built the pre-write CDC load-resolution layer (ordering guard, keep-highest dedupe, delete-enrichment verification, fail-closed flag) that unblocked buffered S3 ingress, then added buffered ingress itself, forced the v3 pipeline for buffered schemas, routed CDC snapshots through the buffer, and closed a long list of failure modes: reset races that wiped tables, truncates silently ignored, primary-key changes leaving stale rows, quiet runs letting WAL build up until the slot dropped, expired buffer files and ETag-based buffer deletion to stop double-counted billable rows.",
+      "why_it_matters": "CDC is the path customers use for live Postgres replication into the warehouse. Each bug class here produced wrong data with no error (lost deletes, duplicated or stale rows), customer database WAL growth, or billing for rows that were never new.",
+      "outcome": "43 PRs mention CDC or replication slots (23 major), peaking in September (24). Deep reads score the core pieces at the top of his range: #82568 P=16.0, #90152 P=9.6, #105139 P=9.6, #108591 P=7.3. 12 major ws1 PRs landed in the single week of 2026-09-21 alone. No CDC PR was reverted.",
+      "his_role": "lead",
+      "evidence_prs": [82568, 83333, 90152, 91635, 105139, 106270, 106621, 106149, 108577, 108591, 106964, 123543],
+      "numbers": {"cdc_prs": 43, "cdc_major_prs": 23, "deepread_P_82568": 16.0, "major_ws1_prs_week_2026_09_21": 12}
+    },
+    {
+      "workstream_id": "ws1",
+      "title": "Silent data-loss and billing fixes across SaaS and SQL sources",
+      "what": "He fixed data that customers were losing or being charged for without knowing: Stripe webhook upserts overwriting complete invoice rows with partial payloads, Stripe basil API breakage and tie-breaking that left paid invoices open, Help Scout syncs missing conversation statuses, Postgres replica re-reads duplicating and dropping rows, xmin wraparound dropping rows, resumable syncs duplicating rows after worker rotations, a lost-update race that resurrected soft-deleted table links, and repartition rewrites that OOM-killed workers forever (an incident affecting 16 customers).",
+      "why_it_matters": "Revenue analytics reads these Stripe tables directly, and a warehouse that silently duplicates or drops rows breaks every downstream join, insight and billing count without anyone seeing an error.",
+      "outcome": "Five of these are deep-read at P=13.0 or higher (#98817, #118548, #123458, #93764 at 13.0; #86717 at 16.0). Two shipped as public changelog entries (Complete Help Scout conversation syncs, Keep Stripe data available). The replica re-read fix #93764 needed a same-week regression fix (see red flags).",
+      "his_role": "lead",
+      "evidence_prs": [118548, 98817, 123458, 93764, 86717, 85687, 98762, 94533, 98651, 113207],
+      "numbers": {"prs_P_ge_13": 5, "deepread_P_86717": 16.0, "customers_in_oom_incident": 16, "changelog_prs": 10}
+    },
+    {
+      "workstream_id": "ws3",
+      "title": "Credential and injection hardening on source connections",
+      "what": "A run of security fixes: escaping column names in the ClickHouse s3()/deltaLake() structure argument (expression injection), validating Google token_uri against Google's endpoints for BigQuery and then generalising the check across every Google Cloud key-file integration and export, pinning validated addresses against DNS rebinding for Redshift/MySQL/PlanetScale/Postgres, MySQL and database TLS certificate verification, and per-view edit checks closing an authorization bypass in data modeling.",
+      "why_it_matters": "Warehouse sources accept customer-supplied hosts, key files and column names; each of these was a path to SSRF, credential exfiltration or query injection against PostHog infrastructure.",
+      "outcome": "8 security PRs, 7 major. #102485 applies one shared check across service-account, Pub/Sub, Cloud Storage, Firebase, BigQuery batch-export and warehouse paths (deep read P=7.8, L=2); #91115 deep read P=7.8.",
+      "his_role": "lead",
+      "evidence_prs": [91115, 98498, 102485, 97454, 98656, 116576, 123506],
+      "numbers": {"security_prs": 8, "security_major_prs": 7, "deepread_P_102485": 7.82}
+    }
+  ],
+  "angles": {
+    "delivery": {
+      "grade": 7,
+      "rationale": "Team-core delivery for warehouse ingestion. The work is dominated by data correctness, billing and security in customer syncs, which is the critical end of the scale, and his major-episode count is 89.5th percentile. The episode-compressed delivery estimate sits mid-pack (10th of 20) because many fixes cluster into the same episodes and Gilbert09 dwarfs everyone in this area; it does not reach 9 because the impact stays inside one product area and the October connector burst adds breadth rather than criticality.",
+      "claims": [
+        {
+          "statement": "76 of his 232 PRs are triaged major and they form 32 major episodes, 89.5th percentile among the 20, while the episode-based delivery estimate is 52.6th percentile.",
+          "numbers": {"tier_counts.major": 76, "major_episodes": 32, "major_episodes_pct": 89.5, "delivery": 677.07, "delivery_pct": 52.6},
+          "evidence_ids": ["tier_counts.major", "major_episodes", "delivery"]
+        },
+        {
+          "statement": "Deep-read major PRs average P=9.68 and his top PRs are customer data-loss fixes scored V3 C3: Stripe webhook data loss, Help Scout sync, schema PATCH race, replica re-read duplication.",
+          "numbers": {"major_mean_P": 9.68, "P_118548": 13.0, "P_123458": 13.0, "P_98817": 13.0, "P_93764": 13.0},
+          "evidence_ids": [118548, 123458, 98817, 93764, "estimate.strata.major+landmark.mean_P"]
+        },
+        {
+          "statement": "10 PRs reached the public changelog, 94.4th percentile, including Safer incremental sync setup and Ten new warehouse sources.",
+          "numbers": {"changelog_prs": 10, "changelog_pct": 94.4},
+          "evidence_ids": ["changelog_prs", 91162, 99664, 113777, 123458]
+        }
+      ]
+    },
+    "system": {
+      "grade": 6,
+      "rationale": "He builds real pipeline mechanisms rather than one-off patches: the CDC pre-write resolution layer, buffered ingress, a shared egress-proxy error classifier for all sources, a shared Google token_uri check, and a GIL-free Rust restore path for loader pods. Deep-read L averages 1.73 of 3. But reuse by others is weak: 52 downstream authors is 15.8th percentile, so the platform effect of his abstractions is not yet visible in who builds on them.",
+      "claims": [
+        {
+          "statement": "The CDC load-resolution layer is a reusable pre-write contract that holds regardless of write engine and was the prerequisite for buffered S3 ingress.",
+          "numbers": {"P": 16.0, "L": 2, "lines": 1099},
+          "evidence_ids": [82568, 83333, "ws1"]
+        },
+        {
+          "statement": "He consolidated cross-source concerns into shared handlers: egress-proxy blips classified once for every warehouse source, and one Google key-file check applied to six integration and export paths.",
+          "numbers": {"L_100509": 3, "L_102485": 2},
+          "evidence_ids": [100509, 102485]
+        },
+        {
+          "statement": "Few people build on his files compared with peers: 52 downstream authors versus 106 for the area lead.",
+          "numbers": {"downstream_authors": 52, "downstream_authors_pct": 15.8, "estimate.L": 1.73},
+          "evidence_ids": ["downstream_authors", "role.network.built_on_by_n", "estimate.L"]
+        }
+      ]
+    },
+    "quality": {
+      "grade": 6,
+      "rationale": "Clean on the hard signals: 0 reverts, quality_rate 0.97 (57.9th percentile), and only 2 changes-requested reviews. Deep reads show tests that reproduce the customer symptom. Two things hold it at 6. Five PRs were explicitly fixed by others within 14 days, including a chain where a data-correctness fix needed his own regression fix the next day and a third fix the day after. And peer testing is thin: only 75 of 232 PRs got any human review, and 46 of 76 major PRs were merged on a bot approval alone, so first_pass_rate rests on a minority of his work.",
+      "claims": [
+        {
+          "statement": "No reverts and a quality rate of 0.97 over 196 mature PRs.",
+          "numbers": {"metrics.reverted": 0, "quality_rate": 0.97, "quality_rate_pct": 57.9, "metrics.mature_prs": 196},
+          "evidence_ids": ["metrics.reverted", "quality_rate", "metrics.mature_prs"]
+        },
+        {
+          "statement": "Five PRs were follow-up fixed by others, all AI co-authored; the replica re-read fix #93764 was followed by his own regression fix #94379 a day later and both were then fixed again on 2026-09-04 for offset resume duplicating and skipping rows.",
+          "numbers": {"peer.followup_fixed": 5, "metrics.ai_reverted_or_fixed": 5, "days_93764_to_94379": 1},
+          "evidence_ids": [93764, 94379, 118547, 117739, 86772, "peer.followup_fixed"]
+        },
+        {
+          "statement": "Human review covered 75 of 232 PRs; first_pass_rate 0.973 and changes_requested_rate 0.027 are measured on that subset only.",
+          "numbers": {"human_reviewed_prs": 75, "prs": 232, "first_pass_rate": 0.973, "first_pass_rate_pct": 10.5, "changes_requested_rate": 0.027},
+          "evidence_ids": ["first_pass_rate", "changes_requested_rate", "role.reviews_received_prs"]
+        }
+      ]
+    },
+    "team": {
+      "grade": 5,
+      "rationale": "High review volume (269 reviews, 20 authors, 5.0h median first response) but concentrated: 80% of reviewed PRs belong to Gilbert09, 260 of 319 reviews are approvals, and only 2 people ever asked for his review, so he is the area lead's fast second pair of eyes rather than a sought-after reviewer. Where review text exists, his comments are substantive and catch real defects, which keeps the grade at 5 rather than lower.",
+      "claims": [
+        {
+          "statement": "Team leverage sits exactly at the median and trust rank near the bottom of the 20.",
+          "numbers": {"team_leverage": 831.49, "team_leverage_pct": 50.0, "trust_rank_pct": 5.3, "requested_by": 2, "requested_by_pct": 2.6},
+          "evidence_ids": ["team_leverage", "trust_rank", "requested_by"]
+        },
+        {
+          "statement": "205 of the 257 PRs he reviewed are Gilbert09's, and his reviews are 260 approvals, 56 comments and 3 changes-requested.",
+          "numbers": {"reviewed_prs": 257, "gilbert09_prs": 205, "approved": 260, "commented": 56, "changes_requested": 3},
+          "evidence_ids": ["role.top_reviewed", "role.reviews_given_prs", "metrics.reviews_given"]
+        },
+        {
+          "statement": "His inline comments flag concrete blockers that were then changed: billable unbounded reimports on Google Ads reset, an append rollback that deletes completed rows, credentials leaking through mount control entries.",
+          "numbers": {"prs_with_inline_comments": 12, "inline_comments": 90, "blocker_comments": 8, "long_comments_outdated_after": 56},
+          "evidence_ids": [84015, 113196, 79462, 108390, 95376]
+        }
+      ]
+    }
+  },
+  "overall": {"grade": 7, "confidence": "medium"},
+  "key_numbers": [
+    {"label": "Major episodes", "value": 32, "metric_key": "major_episodes"},
+    {"label": "Quality rate", "value": 0.97, "metric_key": "quality_rate"},
+    {"label": "AI co-authored share", "value": 0.88, "metric_key": "ai_share"}
+  ],
+  "calibration": {
+    "ranks": {"delivery": 52.6, "quality_rate": 57.9, "team_leverage": 50.0, "trust_rank": 5.3},
+    "note": "He sits in the middle of the 20 on delivery (10th), quality rate (9th) and team leverage (10th of 19), and near the bottom on trust rank (19th). The overall 7 sits above the delivery percentile on purpose: the episode estimate compresses his many related CDC fixes, while major_episodes (p89.5) and changelog_prs (p94.4) show the work is unusually critical and visible, and the deep reads confirm V3 C3 customer data-loss fixes. The team grade of 5 matches the median leverage and low trust rank. The quality grade of 6 tracks the mid quality rate and is not higher because most of his critical PRs were never human-reviewed."
+  },
+  "custom_analyses": [
+    {
+      "question": "Who actually signs off on his work, and how much of his quality record is peer-tested?",
+      "why": "He ships 232 PRs at an 88% AI co-authored share, yet only 80 human reviews were received on his PRs; first_pass_rate and changes_requested_rate are only meaningful if humans reviewed the critical PRs.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query danielcarletti reviews-received --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query danielcarletti prs --tier major",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query danielcarletti compare Gilbert09"
+      ],
+      "finding": "94 human reviews on 75 PRs from 17 reviewers; Gilbert09 alone covers 50. Joining the pack's reviews.json to his PR list: 30 of 76 major PRs, 41 of 134 substantive and 4 of 19 routine had any human reviewer. The raw review records show the rest were approved by the stamphog bot (171 bot approvals on his PRs), and 221 of 223 review threads opened on his PRs came from bots. Major unreviewed examples include #98817, #118548, #90152, #102485 and #111998. The pattern is flat over time (14 of 43 in August, 29 of 85 in September, 31 of 103 in October).",
+      "evidence_ids": [98817, 118548, 90152, 102485, 111998, "role.reviews_received_prs", "first_pass_rate"],
+      "effect": "quality 7 → 6 because the clean first-pass record covers only 32% of his PRs and two thirds of his major PRs had no human check; overall confidence lowered to medium."
+    },
+    {
+      "question": "Is his heavy review volume real scrutiny or rubber-stamping for the area lead?",
+      "why": "269 reviews look like strong team leverage, but 205 reviewed PRs belong to one person and changes-requested is 3 of 319.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query danielcarletti reviews-given --top 15",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query danielcarletti rank team_leverage",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query danielcarletti compare Gilbert09"
+      ],
+      "finding": "Review text exists for 82 of the 257 PRs he reviewed. On those, he left inline comments on 12 PRs (90 comments, 87 longer than 200 characters), tagged [blocker] 8 times on 4 PRs (#79462, #84015, #102914, #113196) and [should-fix] 32 times; 56 of the 87 long comment threads were outdated afterwards, i.e. the author changed the line. 41 comments are prefixed 'AI review' or 'AI reply', so part of this depth is AI-assisted. On the other 70 PRs with text he only approved. His median first review is 5.0h against 24.1h for Gilbert09, which fits a fast-approval partner role.",
+      "evidence_ids": [79462, 84015, 102914, 113196, 108390, "metrics.first_review_median_h", "role.top_reviewed"],
+      "effect": "team 4 → 5 because when he engages the comments catch real data-loss and billing bugs and are acted on; capped at 5 because most volume is approvals for one colleague and only 2 people request his review."
+    },
+    {
+      "question": "What do the follow-up fixes on his PRs say about risk control in data-correctness work?",
+      "why": "The dossier lists 5 follow-up-fixed PRs, all AI co-authored, and two of them are major data-correctness changes, so the severity matters more than the count.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query danielcarletti pr 93764",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query danielcarletti pr 94379",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query danielcarletti deepread 93764",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query danielcarletti pr 118547",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query danielcarletti deepread 118547",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query danielcarletti pr 86772"
+      ],
+      "finding": "#93764 (2026-09-02, deep read P=13.0, keyset paging to stop replica re-reads duplicating rows) introduced a seek gate that rejected every real table; his own #94379 the next day restored ingestion for all regular tables, and on 2026-09-04 a PR from the posthog automation account fixed offset resume still duplicating and skipping rows, citing both. #118547 (opt-in Stripe balance-transaction sweep, deep read P=4.49) was fixed 10 days later by snitkdan-ph's #125264 for resumed sweeps duplicating rows, which he reviewed. #117739 (Crisp windowed backfill) was followed by a fix rejecting incremental sync without an incremental field. #86772 was followed by a logger-kwargs fix in another workflow, minor. None of the five was reverted.",
+      "evidence_ids": [93764, 94379, 118547, 125264, 117739, 86772, "peer.followup_fixed"],
+      "effect": "quality held at 6 rather than 7: the fixes are fast and he owns the regressions, but two incidents were duplicated or dropped rows in exactly the class of bug his work exists to remove."
+    },
+    {
+      "question": "Is the CDC buildout a concentrated, deliberate push and how critical is its core?",
+      "why": "Delivery percentile is only 52.6 while major episodes are 89.5; the timeline and the unsampled core PRs decide which signal to trust.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query danielcarletti timeline",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query danielcarletti prs --ws ws1 --tier major --since 2026-09-21 --until 2026-09-28",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query danielcarletti deepread 82568",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query danielcarletti deepread 86717",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query danielcarletti deepread 102485",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query danielcarletti deepread 91115"
+      ],
+      "finding": "Output is steady (10 to 33 PRs a week across 16 active weeks) with two peaks: late August to September, when major PRs run 5 to 10 a week and the CDC work lands (12 major ws1 PRs in the week of 2026-09-21: reset races, truncates, schedule pauses, buffer expiry), and the week of 2026-10-19 (33 PRs), driven by the alpha connector burst. On-demand deep reads of unsampled core PRs score at the top of his range: #82568 CDC load-resolution layer P=16.0, #86717 OOM-looping rewrite fix P=16.0, #102485 Google token_uri check P=7.8, #91115 ClickHouse injection fix P=7.8.",
+      "evidence_ids": [82568, 86717, 102485, 91115, 104543, 98762, "ws1", "major_episodes"],
+      "effect": "delivery 6 → 7 because the unsampled core is as critical as the sampled top PRs and the September CDC push is a sustained, owned body of work, not scattered fixes."
+    }
+  ],
+  "insights": [
+    {
+      "insight": "His output is AI-assisted end to end: 88% of PRs are AI co-authored, most are approved by a bot reviewer, and part of his review commentary is labelled AI review. The resulting quality is good on average (0 reverts, Q mean 1.83) but all five follow-up-fixed PRs are AI co-authored, so the human checkpoint is the weak link, not the code generation.",
+      "evidence_ids": ["ai_share", "metrics.ai_reverted_or_fixed", "estimate.Q", 93764, 118547]
+    },
+    {
+      "insight": "He is the area's number-two author and Gilbert09's main review partner (205 PRs reviewed one way, 50 the other). His standing depends on that pairing: outside warehouse-sources he is barely requested and his trust rank is 19th of 20.",
+      "evidence_ids": ["role.top_area_rank", "role.top_reviewed", "role.top_reviewers", "trust_rank"]
+    },
+    {
+      "insight": "Counting PRs overstates the October burst and understates September. Roughly 30 alpha connector PRs landed 2026-10-16 to 2026-10-22, mostly substantive with no deep read, while the fewer September CDC PRs carry the highest-value work.",
+      "evidence_ids": [118138, 118154, 118204, 82568, 106621, "ws1"]
+    }
+  ],
+  "red_flags": [
+    {
+      "flag": "Five PRs were explicitly follow-up fixed by others within 14 days (peer.followup_fixed=5), all AI co-authored, including a duplicate-and-skip rows regression chain on Postgres full refresh (#93764 then #94379) and duplicated rows from the new Stripe balance-transaction sweep (#118547).",
+      "evidence_ids": [86772, 93764, 94379, 117739, 118547, "peer.followup_fixed"]
+    },
+    {
+      "flag": "#116588: the deep-read quote for the Q score was not found in the source, so that PR's Q score is unverified.",
+      "evidence_ids": [116588]
+    },
+    {
+      "flag": "46 of 76 major PRs merged with no human review, approved only by a bot; the low changes-requested rate does not cover them.",
+      "evidence_ids": [98817, 118548, 102485, "role.reviews_received_prs"]
+    }
+  ],
+  "counter_evidence": "His PR descriptions frame many changes as critical fixes, and the deep reads mostly agree (V3 C3 on several), but peer behaviour is weaker than the self-description: few people build on his files (52 downstream authors, p15.8), only 2 people request his review, and most critical PRs were never examined by a human, so their quality is asserted by tests and bots rather than shown by colleagues. Against the red flags: there are 0 reverts, the regressions were fixed within one to ten days, and he reviewed the fix to his own Stripe change. The trivial #116361 deep-read at P=13.0 is an outlier from scoring an admin-text change and should not be read as major delivery; similarly the stratified delivery estimate (1765) is inflated by the trivial stratum calibration gap (6.33), so the episode estimate (677) is the safer number.",
+  "coverage": {
+    "sampled_prs": 25,
+    "missing_data": [
+      "issue_reactions",
+      "review_requested_by",
+      "team (team_map has no entry; team inferred)",
+      "review text for 175 of the 257 PRs he reviewed",
+      "6 of the 25 deep reads are on-demand and outside the stratified estimate"
+    ],
+    "diff_truncated_share": 0.53
+  }
+}

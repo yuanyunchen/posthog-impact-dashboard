@@ -1,0 +1,160 @@
+{
+  "cid": "frankh",
+  "positioning": "Hands-on owner of PostHog's observability stack (metrics, logs, tracing) on the APM team: he builds the storage, ingestion and query layers end to end and keeps the logs pipeline from losing or mis-billing data, but his review footprint is narrow and his own fast-moving work needs frequent follow-up fixes.",
+  "role": {
+    "primary_role": "product builder",
+    "team": "apm",
+    "how_they_create_impact": "Ships a high volume of full-stack observability work himself: ClickHouse storage generations (metrics2 to metrics4), the Rust capture-apm-metrics service, Prometheus/Loki-compatible query endpoints, PromQL/SQL in metrics insights, trace retention, and a long run of logs-ingestion data-loss and billing-correctness fixes. Impact flows almost entirely through his own PRs (importance_flow 816.8 as author vs 1.2 as reviewer).",
+    "network_summary": "Trusted author inside a small APM/ClickHouse cluster rather than a hub: his PRs pass first review 99% of the time (role.network.first_pass_rate 0.99, n=101) and he is approved mainly by jonmcwest, DanielVisca, rorylshanks and orian (role.top_reviewers). Approval-graph trust is mid-pack (role.network.trust_rank 0.01, 8/20). As a reviewer he is close to a single-partner approver: 45 of his 76 reviewed PRs belong to jonmcwest, 76 of 78 reviews are approvals, only 7 teams covered (role.network.teams_covered_n, 19/20) and 5 people request his review (role.network.requested_by_n). 60 other authors later built on files he touched (role.network.built_on_by_n), below the candidate median of 77. He is not a bridge between communities (role.network.bridge_rank unknown, single community 4)."
+  },
+  "core_contributions": [
+    {
+      "workstream_id": "ws1",
+      "title": "Metrics product: storage layer and query languages",
+      "what": "Built the metrics4 ClickHouse storage layer (parallel-array samples, 30-day default retention), migrated HogQL metrics queries onto it and dropped the duplicate metrics2/metrics3 ingestion path; then added Builder/PromQL/SQL query languages to metrics insights, Grafana dashboard and screenshot import, AI-suggested dashboards and dashboard variables.",
+      "why_it_matters": "Metrics is a new paid product line; the storage cut-over determines cost and correctness for every metrics customer, and PromQL/Grafana compatibility is the migration path for teams leaving Prometheus/Grafana.",
+      "outcome": "88 PRs over 81 days with 13 major; the top deep reads score P=12.1 (#113477) and P=9.2 (#113938). Most user-facing pieces are still behind feature flags, and the dashboard metric-widget feature (#119821) was reverted the same day it merged.",
+      "his_role": "lead",
+      "evidence_prs": [102433, 106767, 109221, 113477, 113938, 114255, 118636, 87077],
+      "numbers": {"prs": 88, "major_prs": 13, "points_sum": 369.96, "top_P": 12.1}
+    },
+    {
+      "workstream_id": "ws2",
+      "title": "Logs ingestion reliability and retention billing correctness",
+      "what": "A sustained run of fixes to the logs/traces Kafka consumer: quadratic PII-scrub stall (#92334), DLQ quarantine vs retry semantics (#91829, #95200, #100345, #128013), corrupt avro containers poisoning the buffer pool (#127604); plus re-modelling logs retention billing as byte-days (#93515), removing double-counting (#96452) and billing custom retention month by month (#109787).",
+      "why_it_matters": "These are data-loss and billing-correctness paths: a stalled partition halts log ingestion for every team on it, wrong DLQ routing silently drops valid customer data, and retention billing errors either under-charge or double-charge customers.",
+      "outcome": "14 major PRs in this workstream; on-demand deep reads of the reliability fixes score high on criticality (#128013 P=9.6, C=3; #92334 P=7.8, C=3), and billing deep reads score P=7.3 and 7.8 with C=2-3.",
+      "his_role": "lead",
+      "evidence_prs": [92334, 91829, 95200, 100345, 128013, 127604, 93515, 96452, 109787],
+      "numbers": {"prs": 46, "major_prs": 14, "points_sum": 224.06}
+    },
+    {
+      "workstream_id": "ws4",
+      "title": "capture-apm-metrics Rust ingestion service and tracing retention",
+      "what": "Stood up the capture-apm-metrics Rust binary for Prometheus remote-write, fixed a histogram series-fingerprint collision that made most histogram series-hours unreadable (#105202), added a Redis label gate to cut storage cost, zstd support and probe isolation; in tracing (ws3) added trace-specific retention rules decoupled from logs (#104593).",
+      "why_it_matters": "This is the ingestion edge for the metrics product and its data correctness; the histogram fix and trace retention are among the highest-scored PRs in his whole window.",
+      "outcome": "11 Rust PRs (1 major) and 17 tracing PRs (4 major); #105202 deep-read P=13.0 (V3 C3), #104593 P=16.0 (V3 C3 N2 L2 Q2), his top-scored PR.",
+      "his_role": "lead",
+      "evidence_prs": [105202, 96726, 96468, 120229, 104593, 113474],
+      "numbers": {"rust_prs": 11, "tracing_prs": 17, "top_P": 16.0}
+    }
+  ],
+  "angles": {
+    "delivery": {
+      "grade": 7,
+      "rationale": "He is the core builder of the observability product line, with 33 major PRs and 24 major episodes (7/20), and a large share of them sit on data-loss and billing paths. The stratified delivery estimate ranks him only 16/20 among an already strong pool, and much of the metrics UI ships behind flags, so this is a team pillar rather than company-wide impact.",
+      "claims": [
+        {"statement": "Major-tier output is above the candidate median despite a below-median delivery estimate.", "numbers": {"major_episodes": 24, "major_episodes_position": 7, "delivery": 512.18, "delivery_position": 16}, "evidence_ids": ["estimate.delivery_hat", "tier_counts.major"]},
+        {"statement": "His highest-value PRs are correctness and data-loss fixes with top criticality scores.", "numbers": {"P_104593": 16.0, "P_105202": 13.0, "P_128013": 9.62, "C_max": 3}, "evidence_ids": [104593, 105202, 128013, 92334]},
+        {"statement": "He built the Prometheus/Loki-compatible endpoints and PromQL/SQL editing that let Grafana users adopt PostHog metrics.", "numbers": {"P_113477": 12.1, "P_99207": 6.06}, "evidence_ids": [113477, 99207, 113938, "ws1"]}
+      ]
+    },
+    "system": {
+      "grade": 7,
+      "rationale": "He owns platform-level layers: two ClickHouse storage generations, a new Rust ingestion service, a query proxy, and cross-cutting infra such as a ~450ms django.setup() speedup for every backend process and CI sparse checkout. Reuse by others is moderate (60 downstream authors, 16/20), so the abstractions mostly serve his own team.",
+      "claims": [
+        {"statement": "Builds storage and ingestion platform pieces, not just features.", "numbers": {"ws1_prs": 88, "ws4_prs": 11, "L_mean_ws1": 1.38}, "evidence_ids": [102433, 95391, 96726, "ws1", "ws4"]},
+        {"statement": "Cross-cutting performance and CI work benefits every engineer.", "numbers": {"startup_ms_saved": 450, "P_105006": 4.49, "checkout_files_before": 45000, "checkout_files_after": 23}, "evidence_ids": [105006, 86463, 114522]},
+        {"statement": "Downstream reuse of his files is below the candidate median.", "numbers": {"downstream_authors": 60, "median": 77, "position": 16}, "evidence_ids": ["role.network.built_on_by_n", "peer.downstream_authors"]}
+      ]
+    },
+    "quality": {
+      "grade": 5,
+      "rationale": "Reviewers almost never push back (first-pass 0.99, 2 change requests on 101 reviewed PRs), but behaviour after merge tells a different story: 7 PRs were follow-up fixed and 1 reverted, giving quality_rate 0.94 (19/20). Several majors needed rework within days, often by himself, which shows ownership but also that work ships before it is settled. Only about half of his 197 PRs carry any recorded human review.",
+      "claims": [
+        {"statement": "Post-merge correction rate is the second worst among the 20 candidates.", "numbers": {"quality_rate": 0.94, "position": 19, "followup_fixed": 7, "reverted": 1}, "evidence_ids": ["metrics.followup_fixed", "metrics.reverted", 87128, 93515, 105006, 105202, 109838, 114255]},
+        {"statement": "A trace-list rewrite caused production 60s timeouts and he patched it about three hours later.", "numbers": {"hours_to_fix": 3, "P_113474": 9.85}, "evidence_ids": [112738, 113474]},
+        {"statement": "The 6k-line metric widgets feature was reverted the same day it merged.", "numbers": {"lines": 6038, "hours_to_revert": 5}, "evidence_ids": [119821, 127286]},
+        {"statement": "Pre-merge review signals are clean.", "numbers": {"first_pass_rate": 0.99, "changes_requested_rate": 0.02, "n": 101}, "evidence_ids": ["role.network.first_pass_rate", "role.network.changes_requested_rate"]}
+      ]
+    },
+    "team": {
+      "grade": 4,
+      "rationale": "Team leverage is the lowest of the 19 measured candidates and cross-team reach is 19/20. His reviews are fast (median first review 4.2h) and the few written comments are substantive (ClickHouse primary key and engine choices that the author then changed), but 76 of 78 reviews are approvals and 45 go to a single colleague, so his multiplier effect is local.",
+      "claims": [
+        {"statement": "Review leverage is the lowest in the candidate pool.", "numbers": {"team_leverage": 220.99, "position": 19, "of": 19, "reviews_given": 78, "authors_served": 16}, "evidence_ids": ["metrics.team_leverage", "metrics.authors_served"]},
+        {"statement": "Reviews are concentrated on one partner and almost always approvals.", "numbers": {"jonmcwest_prs": 45, "approvals": 76, "changes_requested": 1, "teams_covered": 7}, "evidence_ids": ["role.top_reviewed", "role.network.teams_covered_n"]},
+        {"statement": "When he does comment, the comments catch real ClickHouse design issues that get adopted.", "numbers": {"comments_with_line_changed": 2}, "evidence_ids": [89478, 107167, 89178]}
+      ]
+    }
+  },
+  "overall": {"grade": 6, "confidence": "medium"},
+  "key_numbers": [
+    {"label": "Major-tier episodes", "value": 24, "metric_key": "major_episodes"},
+    {"label": "Quality rate (19/20)", "value": 0.94, "metric_key": "quality_rate"},
+    {"label": "Team leverage (lowest of 19)", "value": 220.99, "metric_key": "team_leverage"}
+  ],
+  "calibration": {
+    "ranks": {"delivery": 21.1, "quality_rate": 5.3, "team_leverage": 0.0, "trust_rank": 63.2},
+    "note": "Among the 20 candidates he sits low on the delivery estimate (16/20), near the bottom on quality_rate (19/20) and last on team_leverage (19/19), mid-pack on trust_rank (8/20). My grades sit above these percentiles on delivery and system (7) because the pool is the top 20 of PostHog and his major-episode count (7/20) and deep-read criticality are strong; on the absolute anchor he is a core pillar of the APM team. Quality (5) and team (4) agree with the low percentiles. Overall 6: a strong, very productive product builder whose impact is concentrated in his own team and whose shipping speed costs follow-up fixes."
+  },
+  "custom_analyses": [
+    {
+      "question": "How much of his rework is self-inflicted iteration on his own recent work, and how fast does he close it?",
+      "why": "quality_rate is 19/20 with 7 follow-up fixes; the question is whether others clean up after him or he fixes his own regressions quickly.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query frankh pr 112738",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query frankh pr 113474",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query frankh prs --ws ws2 --tier major",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query frankh pr 119821",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query frankh pr 127286"
+      ],
+      "finding": "Several of his majors are corrections of his own work shortly after it landed: the trace-list top-K rewrite #112738 (merged 13:52) caused 60s timeouts and #113474 fixed it at 16:46 the same day; logs billing went #93515 (Sep 4) to #96452 double-count fix (Sep 8) to #109787 month-by-month billing (Oct 19); DLQ semantics went quarantine #91829 (Sep 1) to fail-batch #95200 (Sep 4) to #100345 to replay-on-produce-error #128013 (Nov 3); metric widgets #119821 was reverted by #127286 about five hours later. Peer network data agrees that others rarely clean up for him: reverts_received 0, fixes_received 6.",
+      "evidence_ids": [112738, 113474, 93515, 96452, 109787, 91829, 95200, 128013, 119821, 127286, "role.network.reverts_received"],
+      "effect": "quality stays at 5 rather than 4: the correction rate is real, but he owns and closes his own regressions within hours to days rather than leaving them to others."
+    },
+    {
+      "question": "Where does his review weight actually land, and does it extend beyond his immediate partner?",
+      "why": "team_leverage is last in the pool; I wanted to know whether that is low volume or narrow scope, and whether the reviews he gives are substantive.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query frankh reviews-given",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query frankh reviews-received",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query frankh rank cross_team",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query frankh compare jonmcwest"
+      ],
+      "finding": "Volume is not the problem (78 reviews, similar to jonmcwest's 82) but scope is: 45 of 76 reviewed PRs are jonmcwest's, 62 of 76 are by authors with no mapped team, and he covers only 7 teams (19/20). 76 of 78 reviews are approvals. Reviews flow both ways with jonmcwest (41 of his PRs reviewed by jonmcwest), so this is a two-person review pair inside APM. His first-review median is 4.2h versus jonmcwest's 23.6h, and his rare written comments (#89478 primary key, #107167 merge-tree engine) led to line changes.",
+      "evidence_ids": ["role.top_reviewed", "role.top_reviewers", "role.network.teams_covered_n", "metrics.first_review_median_h", 89478, 107167],
+      "effect": "team set at 4 (local contribution): reviews are fast and occasionally catch real design issues, but they do not multiply anyone beyond one partner."
+    },
+    {
+      "question": "Do his unsampled major PRs hold up under deep reading, especially the reliability fixes?",
+      "why": "Only 8 of 33 major PRs were in the stratified sample, and many unsampled majors are ingestion and data-correctness fixes whose value the tier label alone may misstate.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query frankh deepread 99207",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query frankh deepread 114255",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query frankh deepread 128013",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query frankh deepread 92334",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query frankh deepread 105202",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query frankh deepread 105006"
+      ],
+      "finding": "The six on-demand reads average P=8.0 (13.0, 9.62, 7.82, 6.96, 6.06, 4.49), close to the sampled major-stratum mean of 9.22. The three reliability fixes score highest on criticality (C=3 each: histogram fingerprint collision #105202, Kafka produce-error replay #128013, quadratic PII scrub #92334). The feature majors score lower: AI-suggested dashboards #114255 has C=0 and Prometheus/Loki endpoints #99207 has N=0.",
+      "evidence_ids": [105202, 128013, 92334, 114255, 99207, 105006],
+      "effect": "delivery confirmed at 7: his strongest value is data-correctness work in the ingestion path, not the large flagged feature PRs."
+    },
+    {
+      "question": "Is his output concentrated around a single launch push?",
+      "why": "Weekly volume is uneven; a burst can signal a launch, and a launch burst often explains follow-up fixes.",
+      "commands": [
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query frankh timeline",
+        "IMPACT_OUT=out_full .venv/bin/python -m impact.fine.query frankh prs --since 2026-10-05 --until 2026-10-11"
+      ],
+      "finding": "Active in all 14 weeks, but the week of Oct 5 carries 38 PRs and 154.3 points (19% of his window points), centred on the metrics insight builder, PromQL/SQL switch (#113477), tracing list fixes and hogbox preview tooling. Four of the eight PRs in his affected-PR list (#109838, #113473, #114616, #114255) cluster within a week of this push.",
+      "evidence_ids": [113477, 113473, 114616, 114255, 109838, "metrics.affected_prs"],
+      "effect": "no grade change; it explains part of the quality_rate dip as launch-week churn rather than a steady pattern."
+    }
+  ],
+  "insights": [
+    {"insight": "His most valuable work is invisible plumbing: data-loss and billing-correctness fixes in the logs/metrics ingestion path score the highest criticality in his window, above the flashy AI dashboard features.", "evidence_ids": [105202, 128013, 92334, 109787, "ws2"]},
+    {"insight": "He works as a tight two-person loop with jonmcwest (45 PRs reviewed by him, 41 of his reviewed by jonmcwest); both have nearly identical team_leverage, so the APM review culture rather than one person explains the low team score.", "evidence_ids": ["role.top_reviewed", "role.top_reviewers", "metrics.team_leverage"]},
+    {"insight": "Breadth is unusual for a product builder: 31 areas, spanning Rust ingestion, ClickHouse schemas, Django startup, CI sharding and preview environments, while 55% of weighted work stays in core areas.", "evidence_ids": ["metrics.areas", "metrics.core_share", "ws4", "ws5", "ws6"]}
+  ],
+  "red_flags": [
+    {"flag": "One PR reverted: the 6,038-line metric widgets feature #119821 was reverted by his own #127286 about five hours after merge, with no stated incident.", "evidence_ids": [119821, 127286, "metrics.reverted"]},
+    {"flag": "Seven PRs explicitly follow-up fixed, quality_rate 0.94 (19/20); the affected-PR list covers billing (#93515), ingestion correctness (#105202, #109838), startup (#105006) and metrics UI (#87128, #113473, #114255, #114616).", "evidence_ids": [87128, 93515, 105006, 105202, 109838, 113473, 114255, 114616, "metrics.followup_fixed"]},
+    {"flag": "Self-inflicted production regression: trace-list rewrite #112738 caused 60s timeouts on busy projects, fixed by #113474 the same day.", "evidence_ids": [112738, 113474]},
+    {"flag": "A logs JSON-parse optimization was reverted (#93996) with no stated reason; the data does not say whose change it was.", "evidence_ids": [93996]},
+    {"flag": "Deep read of #86426 could not verify the quote behind its Q score; that trivial-tier P=4.6 is unreliable.", "evidence_ids": [86426]}
+  ],
+  "counter_evidence": "Peer behaviour contradicts the clean pre-merge picture: reviewers approve 99% of his PRs on first pass, yet 7 PRs needed follow-up fixes and one was reverted, so reviewer approval here is a weak quality signal (reviews come mostly from one partner). Roughly half of his 197 PRs (101 reviewed) have no recorded human review. On the positive side, nobody else reverted his work (reverts_received 0) and most corrections are his own. Several high-tier feature PRs (#113938 Q=0, #114255 C=0) are AI-powered, flag-gated features not yet proven with users, so their size overstates delivered value. The stratified delivery estimate (902.87) is much higher than delivery_hat (512.18); I relied on delivery_hat and the deep reads.",
+  "coverage": {"sampled_prs": 25, "missing_data": ["review_requested_by", "issue_reactions"], "diff_truncated_share": 0.47}
+}
