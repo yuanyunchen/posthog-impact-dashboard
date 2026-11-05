@@ -13,7 +13,8 @@
 
 ### [Dashboard](https://yuanyunchen.github.io/posthog-impact-dashboard/) &nbsp;·&nbsp; [Team network](https://yuanyunchen.github.io/posthog-impact-dashboard/network.html) &nbsp;·&nbsp; [How it works](https://yuanyunchen.github.io/posthog-impact-dashboard/method/explainer-en.html) &nbsp;·&nbsp; [Session log](session/conversation.md)
 
-<a href="https://yuanyunchen.github.io/posthog-impact-dashboard/"><img src="docs/assets/dashboard.png" width="900" alt="Dashboard: the top 5 engineers, each with a one-line role, three evidence-backed points and four angle scores"></a>
+<a href="https://yuanyunchen.github.io/posthog-impact-dashboard/"><img src="docs/assets/dashboard.png" width="100%" alt="Dashboard: the top 5 engineers, each with a one-line role, three evidence-backed points and four angle scores"></a><br/>
+<sub><b>Dashboard</b>: the top 5, each with a one-line role, three evidence-backed points and four angle scores</sub>
 
 </div>
 
@@ -42,44 +43,22 @@ A team event graph over all 18,715 merged PRs records who approves, corrects, re
 **3. A funnel that spends judgment where it matters.**
 Rules on all 208 people, a cheap model on all 16,318 human-authored PRs, an agentic analyst for each of 22 finalists, then two blind decisions, head-to-head checks, a devil's-advocate round and an independent audit. Total LLM cost about $8.
 
-**The funnel**: who runs each stage, and how many people survive it.
+<p align="center"><a href="https://yuanyunchen.github.io/posthog-impact-dashboard/method/explainer-en.html"><img src="docs/assets/architecture.png" width="100%" alt="Architecture: merged PRs flow through recall, coarse rank, analysts and the final decision to the top 5, with the recall audit, team event graph and company brief as side channels"></a><br/><sub><b>Architecture</b>: one main chain (Merged PRs → Recall → Coarse rank → Analysts → Final decision → Top 5), two side channels</sub></p>
 
 ```mermaid
 flowchart LR
-    A["208 people<br/>18,715 PRs"] --> R["Recall · rules<br/>→ 82 people<br/>script · $0"]
-    R --> C["Coarse · Flash<br/>16,318 PRs triaged<br/>→ 22 finalists"]
-    C --> F["Fine · Claude<br/>analyst × 22<br/>399 deep reads"]
-    F --> D(["Claude × 2<br/>blind decisions<br/>→ Top 5"])
+    L0["L0<br/>rules"] --> L1["L1<br/>PR reads"] --> L2["L2<br/>workstreams<br/>+ role"] --> L3["L3<br/>analyst ×22"] --> L4["L4<br/>decisions ×2"] --> K["checks<br/>pairwise · devil<br/>gates · audit"] --> T(["Top 5"])
+    M[("comparison<br/>matrix")] -.-> L4
 ```
-
-**Fine-ranking layers**: each layer up sees less detail and makes more judgment; only the numbers bypass the chain.
-
-```mermaid
-flowchart BT
-    L0["L0 · rules and raw events<br/>script"] --> L1["L1 · PR reads<br/>Flash triage + deep-read sample"]
-    L1 --> L2["L2 · workstreams, role profile<br/>script · $0"]
-    L2 --> L3["L3 · analyst × 22<br/>Claude · one report each"]
-    L3 --> L4["L4 · decisions × 2<br/>Claude · blind C01–C22"]
-    L4 --> G["pairwise · devil's advocate<br/>gates · independent audit"]
-    G --> T(["Top 5"])
-    L0 -. "numbers skip the chain" .-> M[("matrix<br/>22 × 14")] -.-> L4
-```
+<p align="center"><sub><b>Fine-stage layers</b>: each layer up sees less detail and makes more judgment; the comparison matrix feeds the deciders directly</sub></p>
 
 ## Screenshots
 
-<table>
-  <tr>
-    <td width="50%"><a href="https://yuanyunchen.github.io/posthog-impact-dashboard/#candidate=Gilbert09"><img src="docs/assets/candidate-drawer.png" alt="Candidate detail drawer for Gilbert09"></a><br/><sub><b>Candidate drawer</b>: the full case, core contributions and their lead PRs</sub></td>
-    <td width="50%"><a href="https://yuanyunchen.github.io/posthog-impact-dashboard/network.html"><img src="docs/assets/network.png" alt="Team network graph overview"></a><br/><sub><b>Team network</b>: review communities, bridges and the top 5's position</sub></td>
-  </tr>
-  <tr>
-    <td width="50%"><a href="https://yuanyunchen.github.io/posthog-impact-dashboard/network.html"><img src="docs/assets/network-focus.png" alt="Team network focused on webjunkie"></a><br/><sub><b>Focus view</b>: webjunkie's 30 strongest relations, who gates whose work</sub></td>
-    <td width="50%"><a href="https://yuanyunchen.github.io/posthog-impact-dashboard/method/explainer-en.html"><img src="docs/assets/architecture.png" alt="System architecture diagram from the explainer"></a><br/><sub><b>Architecture</b>: one main chain, two side channels</sub></td>
-  </tr>
-  <tr>
-    <td colspan="2" align="center"><a href="https://yuanyunchen.github.io/posthog-impact-dashboard/method/explainer-en.html"><img src="docs/assets/funnel.png" width="70%" alt="Three-stage funnel diagram from the explainer"></a><br/><sub><b>Funnel</b>: fewer people at each stage, deeper reading of each PR</sub></td>
-  </tr>
-</table>
+<p align="center"><a href="https://yuanyunchen.github.io/posthog-impact-dashboard/#candidate=Gilbert09"><img src="docs/assets/candidate-drawer.png" width="100%" alt="Candidate detail drawer for Gilbert09"></a><br/><sub><b>Candidate drawer</b> (Gilbert09): the full case, core contributions and their lead PRs</sub></p>
+
+<p align="center"><a href="https://yuanyunchen.github.io/posthog-impact-dashboard/network.html"><img src="docs/assets/network.png" width="100%" alt="Team network graph overview"></a><br/><sub><b>Team network</b>: review communities, bridges and where the top 5 sit</sub></p>
+
+<p align="center"><a href="https://yuanyunchen.github.io/posthog-impact-dashboard/network.html"><img src="docs/assets/network-focus.png" width="100%" alt="Team network focused on webjunkie, with the side panel"></a><br/><sub><b>Focus view</b> (webjunkie): his 30 strongest relations, and who gates whose work</sub></p>
 
 ## Key numbers
 
