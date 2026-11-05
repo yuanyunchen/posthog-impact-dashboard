@@ -45,12 +45,7 @@ Rules on all 208 people, a cheap model on all 16,318 human-authored PRs, an agen
 
 <p align="center"><a href="https://yuanyunchen.github.io/posthog-impact-dashboard/method/explainer-en.html"><img src="docs/assets/architecture.png" width="100%" alt="Architecture: merged PRs flow through recall, coarse rank, analysts and the final decision to the top 5, with the recall audit, team event graph and company brief as side channels"></a><br/><sub><b>Architecture</b>: one main chain (Merged PRs → Recall → Coarse rank → Analysts → Final decision → Top 5), two side channels</sub></p>
 
-```mermaid
-flowchart LR
-    L0["L0<br/>rules"] --> L1["L1<br/>PR reads"] --> L2["L2<br/>workstreams<br/>+ role"] --> L3["L3<br/>analyst ×22"] --> L4["L4<br/>decisions ×2"] --> K["checks<br/>pairwise · devil<br/>gates · audit"] --> T(["Top 5"])
-    M[("comparison<br/>matrix")] -.-> L4
-```
-<p align="center"><sub><b>Fine-stage layers</b>: each layer up sees less detail and makes more judgment; the comparison matrix feeds the deciders directly</sub></p>
+<p align="center"><a href="https://yuanyunchen.github.io/posthog-impact-dashboard/method/explainer-en.html"><img src="docs/assets/fine-layers.png" width="100%" alt="Fine-stage layers: L0 rules, L1 PR reads, L2 workstreams and role profile, L3 analyst ×22, L4 decisions ×2, then checks (pairwise, devil's advocate, gates, audit) and the top 5; the comparison matrix feeds L4 directly"></a><br/><sub><b>Fine-stage layers</b>: each layer up sees less detail and makes more judgment; the comparison matrix feeds the deciders directly</sub></p>
 
 ## Screenshots
 
